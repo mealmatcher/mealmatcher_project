@@ -11,6 +11,10 @@ http://pydev.org/manual_101_root.html
 Simple git tutorial:
 http://www.tangowithdjango.com/book17/chapters/git.html#git-crash-course
 
+CAS documentation:
+https://sp.princeton.edu/oit/sdp/CAS/Wiki%20Pages/Anatomy%20of%20CAS.aspx
+
+
 git add [myfile]        # add to commit list
 git commit -m "message" # commit to local repo
 git pull                # pulls changes from remote repo
@@ -19,3 +23,4 @@ git status
 git mv [myfile] # moves file
 git cp [myfile] # make copy of file/dir
 git rm [myfile] # add remove request to local index
+
