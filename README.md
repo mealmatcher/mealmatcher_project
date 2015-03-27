@@ -1,2 +1,2 @@
 # mealmatcher_main
-# Kevin has finished this git setup
+Kevin has finished this git setup
