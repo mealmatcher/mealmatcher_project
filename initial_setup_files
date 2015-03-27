@@ -1,3 +1,6 @@
+Github: 
+https://github.com/mealmatcher/mealmatcher_main
+
 Setting up Django:
 http://www.tangowithdjango.com/book17/chapters/requirements.html
 Note: I'm using the newest version of Django, 1.7.7 not 1.7 as indicated here
@@ -8,3 +11,11 @@ http://pydev.org/manual_101_root.html
 Simple git tutorial:
 http://www.tangowithdjango.com/book17/chapters/git.html#git-crash-course
 
+git add [myfile]        # add to commit list
+git commit -m "message" # commit to local repo
+git pull                # pulls changes from remote repo
+git push origin master  # push to update remote repo
+git status 
+git mv [myfile] # moves file
+git cp [myfile] # make copy of file/dir
+git rm [myfile] # add remove request to local index
