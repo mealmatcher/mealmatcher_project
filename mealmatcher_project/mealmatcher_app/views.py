@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
-import CASClient, urllib2, re
+import urllib2, re
 
 # index is the app homepage
 @login_required
@@ -63,3 +63,6 @@ def site_login(request):
 				#return HttpResponse('failure')
 				return HttpResponseRedirect('https://fed.princeton.edu/cas/login?service=http://localhost:8000/mealmatcher_app/login/')
 
+@login_required
+def site_logout(request):
+	return HttpResponse('logout')
