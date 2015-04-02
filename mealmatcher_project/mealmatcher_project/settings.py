@@ -70,9 +70,9 @@ WSGI_APPLICATION = 'mealmatcher_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'NAME': 'mealmatcher_db',
-        #'USER': 'mealmatcher_user',
-        #'PASSWORD': 'thefattestchicken',
+        'NAME': 'mealmatcher_db',
+        'USER': 'mealmatcher_user',
+        'PASSWORD': 'thefattestchicken',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
