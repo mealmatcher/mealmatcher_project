@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
 import urllib2, re
@@ -65,4 +65,5 @@ def site_login(request):
 
 @login_required
 def site_logout(request):
-	return HttpResponse('logout')
+	logout(request) # Log user out of our system
+	return HttpResponseRedirect('https://fed.princeton.edu/cas/logout') # Log user out of CAS system
