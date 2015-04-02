@@ -96,3 +96,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Redirects non-logged in users to this
+LOGIN_URL = '/mealmatcher_app/login/'
