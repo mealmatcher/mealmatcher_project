@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- PARTIALLY GENERATED WITH LAYOUTIT -->
+  <title>MealMatcher</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
+  <!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
+  <!--script src="js/less-1.3.3.min.js"></script-->
+  <!--append ‘#!watch’ to the browser URL, then refresh the page. -->
+  
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+  <![endif]-->
+
+  <!-- Fav and touch icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-57-precomposed.png">
+  <link rel="shortcut icon" href="img/favicon.png">
+  
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/scripts.js"></script>
+</head>
+
+<body>
+<div class="container">
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">MealMatcher</a>
+        </div>
+        
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active">
+              <a href="#">Find a Meal</a>
+            </li>
+            <li>
+              <a href="#">My Meals</a>
+            </li>
+            </li>
+          </ul>
+          <!-- <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input class="form-control" type="text">
+            </div> <button type="submit" class="btn btn-default">Submit</button>
+          </form> -->
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="#">Logout</a>
+            </li>
+            <!-- <li class="dropdown">
+               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="#">Action</a>
+                </li>
+                <li>
+                  <a href="#">Another action</a>
+                </li>
+                <li>
+                  <a href="#">Something else here</a>
+                </li>
+                <li class="divider">
+                </li>
+                <li>
+                  <a href="#">Separated link</a>
+                </li>
+              </ul>
+            </li> -->
+          </ul>
+        </div>
+        
+      </nav>
+
+      <h1>Find a Meal</h1>
+
+      <form role="form">
+        <div class="dropdown">
+          <label for="dateDropdown">Date</label>
+          <select id="dateDropdown">
+            <option value="Date">dates in next two weeks generated in JS and entered here</option>
+          </select>
+        </div>
+
+      <form role="form">
+        <label for="mealDropdown">Meal</label>
+        <select class="form-control" id="mealDropdown">
+          <option value="Breakfast">Breakfast</option>
+          <option value="Lunch">Lunch</option>
+          <option value="Dinner">Dinner</option>        
+        </select>
+        <!-- <div class="mealDropdown">
+          <label for="mealDropdown">Meal</label>
+          <select>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+          </select> 
+        </div> -->
+      <form role="form">
+        <label for="timeDropdown">Time</label>
+        <select class="form-control" id="timeDropdown"></select>
+        <!-- <div class="dropdown">
+          <select id="timeDropdown">
+            TODO need to populate these based on chosen meal
+            <option value="12pm">12:00 pm - 12:45 pm</option>
+          </select>
+        </div> -->
+
+
+        <label>Location</label>
+        <div class="checkbox">
+           <label><input type="checkbox">Whitman</label>
+        </div> 
+        <div class="checkbox">
+           <label><input type="checkbox">Rocky/Mathey</label>
+        </div> 
+        <div class="checkbox">
+           <label><input type="checkbox">Butler/Wilson</label>
+        </div> 
+        <div class="checkbox">
+           <label><input type="checkbox">Forbes</label>
+        </div> 
+
+        <div class="input-group">
+           <label for="dressInput">Dress</label>
+           <span class="input-group-addon">I'll be wearing</span>
+           <input class="form-control" id="dressInput" placeholder="jeans and a tshirt" type="dress" aria-describedby="basic-addon1">
+        </div>
+
+        <button type="submit" class="btn btn-default">Match me!</button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  var meal_timess = {
+    // NOTE(drew): these keys must match the options in the meal selection dropdown
+    Breakfast: [
+      ["7:30", "8:00"],
+      ["8:00", "8:30"],
+      ["8:30", "9:00"],
+      ["9:00", "9:30"],
+      ["9:30", "10:00"],
+      ["10:00", "10:30"],
+      ["10:30", "11:00"],
+    ],
+    Lunch: [
+      ["11:00", "11:45"],
+      ["11:45", "12:30"],
+      ["12:30", "1:15"],
+      ["1:15", "2:00"],
+    ],
+    Dinner: [
+      ["5:00", "5:45"],
+      ["5:45", "6:30"],
+      ["6:30", "7:15"],
+      ["7:15", "8:00"],
+    ],
+  };
+
+  var updateTimes = function() {
+      var meal = $('.mealDropdown').find(":selected").text();
+
+      var meal_times = meal_timess[meal];
+      console.log(meal_times, meal);
+
+      $("select#timeDropdown").empty();
+      for (var i = 0; i < meal_times.length; i++) {
+        $("select#timeDropdown").append( $("<option>")
+            .val("value")
+            .html(meal_times[i][0] + " - " + meal_times[i][1])
+        );
+      }
+
+      return false;
+  };
+  $('.mealDropdown').change(updateTimes);
+  updateTimes();
+
+  // set up dates dropdown:
+  // NOTE: the date should only ever come from a time variable (not a string). Potential security risk otherwise
+  // TODO: hook these up in view and make sure names are correct
+  var month_lengths = [
+    31,
+    28,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31,
+  ];
+  var today_month = 4;//Number("{% date.month %}");
+  var today_day = 27;//Number("{% date.day %}");
+
+  var days_to_show = 14;
+  $("select#dateDropdown").empty();
+  for (var i = 0; i < days_to_show; i++) {
+    $("select#dateDropdown").append( $("<option>")
+        .val("value")
+        .html(today_month.toString() + "/" + today_day.toString())
+    );
+
+    // TODO leap year support
+    // TODO display weekdays
+    today_day++;
+    if (today_day > month_lengths[today_month-1]) {
+      today_day = "1";
+      today_month++;
+      if (today_month > 12)
+        today_month = "1";
+    }
+  }
+
+</script> 
+
+</body>
+</html>
