@@ -13,6 +13,16 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
+
+# templates
+TEMPLATE_DIRS = ( 
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    TEMPLATE_PATH,
+    )
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -60,9 +70,9 @@ WSGI_APPLICATION = 'mealmatcher_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mealmatcher_db',
-        'USER': 'mealmatcher_user',
-        'PASSWORD': 'thefattestchicken',
+        #'NAME': 'mealmatcher_db',
+        #'USER': 'mealmatcher_user',
+        #'PASSWORD': 'thefattestchicken',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
