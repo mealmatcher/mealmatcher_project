@@ -24,3 +24,13 @@ git mv [myfile] # moves file
 git cp [myfile] # make copy of file/dir
 git rm [myfile] # add remove request to local index
 
+to help set up postgresql
+http://killtheyak.com/use-postgresql-with-django-flask/
+http://postgresapp.com/
+
+Postgres commands:
+\list to see list of databases
+\du to see list of users
+CREATE DATABASE
+CREATE USER
+
