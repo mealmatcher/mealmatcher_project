@@ -207,8 +207,8 @@
     30,
     31,
   ];
-  var today_month = 4;//Number("{% date.month %}");
-  var today_day = 27;//Number("{% date.day %}");
+  var today_month = Number("{{ date.month }}");
+  var today_day = Number("{{ date.day }}");
 
   var days_to_show = 14;
   $("select#dateDropdown").empty();

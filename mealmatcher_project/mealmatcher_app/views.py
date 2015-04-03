@@ -17,17 +17,18 @@ def index(request):
 	return render(request, 'mealmatcher_app/index.html', context_dict)
 
 # find-meals page
+'''
 @login_required
 def find_meals(request):
 	context_dict = {
-		'date': {month: "4", day: "10"},
+		'date': {'month': "4", 'day': "10"},
 	}
 	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
 	# return HttpResponse("Find meals")
-
+'''
 
 @login_required
-def find_meals1(request):
+def find_meals(request):
 	username = request.user.username
 	my_user_profile = UserProfile.objects.filter(user=request.user)
 	if request.method == 'POST': # http post, process the data
