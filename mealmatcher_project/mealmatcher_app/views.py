@@ -82,7 +82,8 @@ def find_meals(request):
 # view-meals page
 @login_required
 def view_meals(request):
-	context_dict = {}
+	meals = Meal.objects.filter(users__user=request.user)
+	context_dict = {'username':request.user.username, 'meals':meals}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
 

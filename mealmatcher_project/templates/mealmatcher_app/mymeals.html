@@ -81,17 +81,16 @@
           <tbody>
             {% for meal in meals %}
             <tr class=
-            {% if meal.matched %}
+            {% if meal.is_matched %}
             "success"
             {% else %}
             "danger"
             {% endif %}
             >
               <td>{{ meal.date }}</td>
-              <td>{{ meal.meal }}</td>
-              <td>{{ meal.time }}</td>
-              <td>{{ meal.place }}</td>
-              <td>{{ meal.matched }}</td>
+              <td>{{ meal.meal_time }}</td>
+              <td>{{ meal.location }}</td>
+              <td>{{ meal.is_matched }}</td>
             </tr>
             {% endfor %}
 
