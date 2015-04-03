@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
+from mealmatcher_app.forms import MealForm
+import datetime, random
+from django.utils import timezone
 import urllib2, re
 
 # index is the app homepage
@@ -16,7 +19,63 @@ def index(request):
 # find-meals page
 @login_required
 def find_meals(request):
-	return HttpResponse("Find meals")
+	context_dict = {
+		'date': {month: "4", day: "10"},
+	}
+	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
+	# return HttpResponse("Find meals")
+
+@login_required
+def find_meals1(request):
+	username = request.user.username
+	my_user_profile = UserProfile.objects.filter(user=request.user)
+	if request.method == 'POST': # http post, process the data
+		form = MealForm(request.POST)
+		year = 2015
+		date_md = form.date_mdy.split('/')
+		month = int(date_md[0])
+		day = int(date_md[1])
+
+		date_time = form.date_time.split('-')[0].split(':')
+		hour = int(date_time[0])
+		minute = int(date_time[1])
+
+		datetime_obj = datetime.datetime(year, month, day, hour, minute)
+
+		location = form.location
+		meal_time = form.meal_time
+		attire1 = form.attire1
+
+		possible_matches = Meal.objects.filter(date=datetime_obj, location=location, meal_time=meal_time)
+
+		# there are potential matches, remove already matched ones or unmatched identical ones
+		if possible_matches:                        
+			for match in possible_matches:
+				if match.is_matched: 				# this meal is already matched
+					possible_matches.remove(match)
+				else:
+					usernames = match.users.all()   # remove unmatched identical meals
+					for username in usernames:
+						if username.user == request.user:
+							possible_matches.remove(match)
+
+		# if there are still possible_matches, make the match, 				
+		if possible_matches:
+			matched_meal = random.choice(possible_matches)
+			matched_meal.attire2 = attire1
+			matched_meal.users.add(my_user_profile)
+			return HttpResponse('Made a match!')
+		else: # no matches, make a new Meal and add it to the database
+			new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
+			new_meal.users.add(my_user_profile)
+			new_meal.save()
+			return HttpResponse('Made a new meal!')
+	else:
+		form = MealForm()
+		today = timezone.now()
+		context_dict = {'form':form, 'date': {'month':today.month, 'day':today.day}}
+		return render(request, 'mealmatcher_app/findmeal.html', context_dict)
+		# return HttpResponse("Find meals")
 
 # view-meals page
 @login_required
@@ -67,3 +126,4 @@ def site_login(request):
 def site_logout(request):
 	logout(request) # Log user out of our system
 	return HttpResponseRedirect('https://fed.princeton.edu/cas/logout') # Log user out of CAS system
+
