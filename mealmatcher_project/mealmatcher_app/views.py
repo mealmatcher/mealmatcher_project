@@ -25,6 +25,7 @@ def find_meals(request):
 	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
 	# return HttpResponse("Find meals")
 
+
 @login_required
 def find_meals1(request):
 	username = request.user.username
@@ -80,7 +81,9 @@ def find_meals1(request):
 # view-meals page
 @login_required
 def view_meals(request):
-	return HttpResponse("View meals")
+	context_dict = {}
+	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
+	# return HttpResponse("View meals")
 
 # login page
 def site_login(request):

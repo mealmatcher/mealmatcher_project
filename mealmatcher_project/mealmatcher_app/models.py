@@ -18,12 +18,12 @@ class Meal(models.Model):
 
 	date = models.DateTimeField('Date of meal')
 
-	TIMES = (
+	MEALS = (
 		('B', 'Breakfast'),
 		('L', 'Lunch'),
 		('D', 'Dinner'),
 	)
-	time = models.CharField(max_length=1, choices=TIMES)
+	meal_time = models.CharField(max_length=1, choices=MEALS)
 
 	LOCATIONS = (
 		('WH', 'Whitman'),
@@ -55,5 +55,5 @@ class Meal(models.Model):
 	is_expired.short_description = 'Has the meal expired?'
 
 	def __unicode__(self):
-		return self.date.strftime("%Y-%m-%d") + " " + self.location + " " + self.time
+		return self.date.strftime("%Y-%m-%d") + " " + self.location + " " + self.meal_time + " "
 
