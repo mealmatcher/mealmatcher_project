@@ -94,22 +94,15 @@
             <option value="Date">dates in next two weeks generated in JS and entered here</option>
           </select>
         </div>
-
       <form role="form">
-        <label for="mealDropdown">Meal</label>
-        <select class="form-control" id="mealDropdown">
-          <option value="Breakfast">Breakfast</option>
-          <option value="Lunch">Lunch</option>
-          <option value="Dinner">Dinner</option>        
-        </select>
-        <!-- <div class="mealDropdown">
+        <div class="mealDropdown">
           <label for="mealDropdown">Meal</label>
           <select>
             <option value="Breakfast">Breakfast</option>
             <option value="Lunch">Lunch</option>
             <option value="Dinner">Dinner</option>
           </select> 
-        </div> -->
+        </div>
       <form role="form">
         <label for="timeDropdown">Time</label>
         <select class="form-control" id="timeDropdown"></select>
@@ -136,12 +129,12 @@
         </div> 
 
         <div class="input-group">
-           <label for="dressInput">Dress</label>
+           <!-- <label for="dressInput">Dress</label> -->
            <span class="input-group-addon">I'll be wearing</span>
            <input class="form-control" id="dressInput" placeholder="jeans and a tshirt" type="dress" aria-describedby="basic-addon1">
         </div>
 
-        <button type="submit" class="btn btn-default">Match me!</button>
+        <button class="btn btn-default" id="matchButton">Match me!</button>
       </form>
 
     </div>
@@ -178,12 +171,11 @@
       var meal = $('.mealDropdown').find(":selected").text();
 
       var meal_times = meal_timess[meal];
-      console.log(meal_times, meal);
 
       $("select#timeDropdown").empty();
       for (var i = 0; i < meal_times.length; i++) {
         $("select#timeDropdown").append( $("<option>")
-            .val("value")
+            .val(meal_times[i][0] + "-" + meal_times[i][1])
             .html(meal_times[i][0] + " - " + meal_times[i][1])
         );
       }
@@ -231,6 +223,14 @@
         today_month = "1";
     }
   }
+
+  $( "#matchButton" ).click(function(e) {
+    e.preventDefault();
+    var date = $('#dateDropdown :selected').text(); // 4/1
+    var times = $('#timeDropdown :selected').val(); // 7:30-8:00
+    var meal = $('.mealDropdown').find(":selected").text().substring(0, 1); //'B', 'L', or 'D'
+    console.log(date, times, meal);
+  });
 
 </script> 
 
