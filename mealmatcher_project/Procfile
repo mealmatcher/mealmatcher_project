@@ -1,0 +1,1 @@
+web: gunicorn mealmatcher_project.wsgi --log-file -

@@ -9,3 +9,4 @@ mealmatcher.sublime-workspace
 mealmatcher_project/.idea/mealmatcher_project.iml
 mealmatcher_project/.idea/workspace.xml
 *.pyc
+staticfiles
