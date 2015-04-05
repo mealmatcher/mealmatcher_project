@@ -121,6 +121,7 @@ def site_login(request):
 					newuser.save()
 					profile = UserProfile(user = newuser)
 					profile.save()
+					newuser = authenticate(username=username, password=password)
 					django_login(request, newuser)
 					return HttpResponseRedirect('/mealmatcher_app/')
 			else: # redirect to try again
