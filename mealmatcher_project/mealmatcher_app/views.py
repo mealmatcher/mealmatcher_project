@@ -34,45 +34,48 @@ def find_meals(request):
 	if request.method == 'POST': # http post, process the data
 		print 'received a post'
 		form = MealForm(request.POST)
-		year = 2015
-		date_md = form.date_mdy.split('/')
-		month = int(date_md[0])
-		day = int(date_md[1])
+		if form.is_valid():
+			year = 2015
+			date_md = form.date_mdy.split('/')
+			month = int(date_md[0])
+			day = int(date_md[1])
 
-		date_time = form.date_time.split('-')[0].split(':')
-		hour = int(date_time[0])
-		minute = int(date_time[1])
+			date_time = form.date_time.split('-')[0].split(':')
+			hour = int(date_time[0])
+			minute = int(date_time[1])
 
-		datetime_obj = datetime.datetime(year, month, day, hour, minute)
+			datetime_obj = datetime.datetime(year, month, day, hour, minute)
 
-		location = form.location
-		meal_time = form.meal_time
-		attire1 = form.attire1
+			location = form.location
+			meal_time = form.meal_time
+			attire1 = form.attire1
 
-		possible_matches = Meal.objects.filter(date=datetime_obj, location=location, meal_time=meal_time)
+			possible_matches = Meal.objects.filter(date=datetime_obj, location=location, meal_time=meal_time)
 
-		# there are potential matches, remove already matched ones or unmatched identical ones
-		if possible_matches:                        
-			for match in possible_matches:
-				if match.is_matched: 				# this meal is already matched
-					possible_matches.remove(match)
-				else:
-					usernames = match.users.all()   # remove unmatched identical meals
-					for username in usernames:
-						if username.user == request.user:
-							possible_matches.remove(match)
+			# there are potential matches, remove already matched ones or unmatched identical ones
+			if possible_matches:                        
+				for match in possible_matches:
+					if match.is_matched: 				# this meal is already matched
+						possible_matches.remove(match)
+					else:
+						usernames = match.users.all()   # remove unmatched identical meals
+						for username in usernames:
+							if username.user == request.user:
+								possible_matches.remove(match)
 
-		# if there are still possible_matches, make the match, 				
-		if possible_matches:
-			matched_meal = random.choice(possible_matches)
-			matched_meal.attire2 = attire1
-			matched_meal.users.add(my_user_profile)
-			return HttpResponse('Made a match!')
-		else: # no matches, make a new Meal and add it to the database
-			new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
-			new_meal.users.add(my_user_profile)
-			new_meal.save()
-			return HttpResponse('Made a new meal!')
+			# if there are still possible_matches, make the match, 				
+			if possible_matches:
+				matched_meal = random.choice(possible_matches)
+				matched_meal.attire2 = attire1
+				matched_meal.users.add(my_user_profile)
+				return HttpResponse('Made a match!')
+			else: # no matches, make a new Meal and add it to the database
+				new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
+				new_meal.users.add(my_user_profile)
+				new_meal.save()
+				return HttpResponse('Made a new meal!')
+		else:
+			print form.errors
 	else:
 		print 'received a GET'
 		form = MealForm()
