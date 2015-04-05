@@ -234,14 +234,32 @@
     var date = $('#dateDropdown :selected').text(); // 4/1
     var times = $('#timeDropdown :selected').val(); // 7:30-8:00
     var meal = $('.mealDropdown').find(":selected").val(); //'B', 'L', or 'D'
+    var attire = $('#dressInput').val(); // what you'll be wearing...
+
     console.log(date, times, meal);
-    /* TODO send form with:
+    /* TODO(drew) send form with:
       date_mdy
       date_time
       meal_time
       location
       attire1
     */
+    var newForm = jQuery('<form>', {
+        'method': 'POST', // needed to make sure its a post
+        'action': '/mealmatcher_app/find-a-meal/', // internal URL
+        'target': '_top', // also not sure about this
+    }).append(jQuery('<input>', {
+        'date_mdy': date,
+        'date_time': times,
+        'meal_time': meal,
+        'location': 'WH', // TODO
+        'attire1': attire, 
+
+    }));
+
+    // for compatibility:
+    newForm.hide().appendTo("body").submit();
+    // newForm.submit();
   });
 
 </script> 

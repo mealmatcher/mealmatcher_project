@@ -32,6 +32,7 @@ def find_meals(request):
 	username = request.user.username
 	my_user_profile = UserProfile.objects.filter(user=request.user)
 	if request.method == 'POST': # http post, process the data
+		print 'received a post'
 		form = MealForm(request.POST)
 		year = 2015
 		date_md = form.date_mdy.split('/')
@@ -73,6 +74,7 @@ def find_meals(request):
 			new_meal.save()
 			return HttpResponse('Made a new meal!')
 	else:
+		print 'received a GET'
 		form = MealForm()
 		today = timezone.now()
 		context_dict = {'form':form, 'date': {'month':today.month, 'day':today.day}}
