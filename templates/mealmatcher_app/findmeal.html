@@ -193,9 +193,10 @@
   var days_to_show = 14;
   $("select#dateDropdown").empty();
   for (var i = 0; i < days_to_show; i++) {
+    dateStr = today_month.toString() + "/" + today_day.toString()
     $("select#dateDropdown").append( $("<option>")
-        .val("value")
-        .html(today_month.toString() + "/" + today_day.toString())
+        .val(dateStr)
+        .html(dateStr)
     );
 
     // TODO leap year support
