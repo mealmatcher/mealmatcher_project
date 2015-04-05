@@ -22,7 +22,7 @@ class MealForm(forms.ModelForm):
   
   meal_time = forms.ChoiceField(
     widget = forms.Select(attrs={'id': 'mealDropdown', 'name': 'mealDropdown'}),
-    help_text = "I want to get ",
+    help_text = "I want to get",
     choices = (
       ('B', 'Breakfast'),
       ('L', 'Lunch'),
@@ -31,7 +31,7 @@ class MealForm(forms.ModelForm):
   )
 
   location = forms.ChoiceField(
-    help_text = "at ",
+    help_text = "at",
     choices = (
       ('WH', 'Whitman'),
       ('RM', 'Rocky/Mathey'),
@@ -40,15 +40,15 @@ class MealForm(forms.ModelForm):
     )
   )
 
-  attire1 = models.CharField(
-     help_text = "and I'll be wearing...",
-     max_length=100,  
+  attire1 = forms.CharField(
+     help_text = "and I'll be wearing",
+     max_length=100,
    )
 
 
   class Meta:
     model = Meal
-    fields = ('meal_time', 'location', 'date_mdy', 'date_time', 'attire1',)
+    fields = ('meal_time', 'date_time', 'date_mdy', 'location', 'attire1',)
     exclude = ('date', 'attire2', 'users',)
 
 
