@@ -35,20 +35,21 @@ def find_meals(request):
 		print 'received a post'
 		form = MealForm(request.POST)
 		if form.is_valid():
+			data = form.cleaned_data
 			year = 2015
-			date_md = form.date_mdy.split('/')
+			date_md = data['date_mdy'].split('/')
 			month = int(date_md[0])
 			day = int(date_md[1])
 
-			date_time = form.date_time.split('-')[0].split(':')
+			date_time = data['date_time'].split('-')[0].split(':')
 			hour = int(date_time[0])
 			minute = int(date_time[1])
 
 			datetime_obj = datetime.datetime(year, month, day, hour, minute)
 
-			location = form.location
-			meal_time = form.meal_time
-			attire1 = form.attire1
+			location = data['location']
+			meal_time = data['meal_time']
+			attire1 = data['attire1']
 
 			possible_matches = Meal.objects.filter(date=datetime_obj, location=location, meal_time=meal_time)
 
@@ -71,6 +72,7 @@ def find_meals(request):
 				return HttpResponse('Made a match!')
 			else: # no matches, make a new Meal and add it to the database
 				new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
+				new_meal.save()                        # bug somewhere here
 				new_meal.users.add(my_user_profile)
 				new_meal.save()
 				return HttpResponse('Made a new meal!')
