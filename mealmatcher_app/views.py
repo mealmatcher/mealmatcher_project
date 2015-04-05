@@ -30,7 +30,7 @@ def find_meals(request):
 @login_required
 def find_meals(request):
 	username = request.user.username
-	my_user_profile = UserProfile.objects.filter(user=request.user)
+	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 	if request.method == 'POST': # http post, process the data
 		print 'received a post'
 		form = MealForm(request.POST)
@@ -38,6 +38,7 @@ def find_meals(request):
 			data = form.cleaned_data
 			year = 2015
 			date_md = data['date_mdy'].split('/')
+			print date_md[0]
 			month = int(date_md[0])
 			day = int(date_md[1])
 
@@ -69,21 +70,22 @@ def find_meals(request):
 				matched_meal = random.choice(possible_matches)
 				matched_meal.attire2 = attire1
 				matched_meal.users.add(my_user_profile)
-				return HttpResponse('Made a match!')
+				#return HttpResponse('Made a match!')
 			else: # no matches, make a new Meal and add it to the database
 				new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
 				new_meal.save()                        # bug somewhere here
 				new_meal.users.add(my_user_profile)
 				new_meal.save()
-				return HttpResponse('Made a new meal!')
+				#return HttpResponse('Made a new meal!')
 		else:
 			print form.errors
 	else:
 		print 'received a GET'
 		form = MealForm()
-		today = timezone.now()
-		context_dict = {'form':form, 'date': {'month':today.month, 'day':today.day}}
-		return render(request, 'mealmatcher_app/findmeal.html', context_dict)
+		confirmed = False
+	today = timezone.now()
+	context_dict = {'form':form, 'date': {'month':today.month, 'day':today.day}}
+	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
 		# return HttpResponse("Find meals")
 
 # view-meals page
