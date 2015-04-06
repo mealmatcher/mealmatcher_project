@@ -52,19 +52,14 @@ def find_meals(request):
 			meal_time = data['meal_time']
 			attire1 = data['attire1']
 
-			possible_matches = Meal.objects.filter(date=datetime_obj, location=location, meal_time=meal_time)
-
-			# there are potential matches, remove already matched ones or unmatched identical ones
+			possible_matches = Meal.objects.filter(date=datetime_obj, location=location, meal_time=meal_time).exclude(users__user=User.objects.filter(username=username))
+			filtered_matches = []
+			# there are potential matches, remove already matched ones
 			if possible_matches:                        
 				for match in possible_matches:
-					if match.is_matched: 				# this meal is already matched
-						possible_matches.remove(match)
-					else:
-						usernames = match.users.all()   # remove unmatched identical meals
-						for username in usernames:
-							if username.user == request.user:
-								possible_matches.remove(match)
-
+					if not (match.is_matched()):  # this meal is not matched
+						filtered_matches.append(match)
+			possible_matches = filtered_matches
 			# if there are still possible_matches, make the match, 				
 			if possible_matches:
 				matched_meal = random.choice(possible_matches)
