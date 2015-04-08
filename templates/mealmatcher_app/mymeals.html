@@ -76,34 +76,67 @@
               <th>Meal</th>
               <th>Time</th>
               <th>Location</th>
+              <th>My Attire</th>
               <th>Matched?</th>
             </tr>
           </thead>
           <tbody>
             {% for meal in meals %}
             <tr class=
-            {% if meal.is_matched %}
-            "success"
+            {% if meal == new_meal %}
+              "warning"
             {% else %}
-            "danger"
+              {% if meal.is_matched %}
+              "success"
+              {% else %}
+              "danger"
+              {% endif %}
             {% endif %}
             >
-              <td>{{ meal.date.month}}/{{ meal.date.day }}</td>
-              <td>{{ meal.meal_time }}</td>
-              <td>{{ meal.date.hour}}:{{meal.date.minute}}</td>
-              <td>{{ meal.location }}</td>
-              <td>{{ meal.is_matched }}</td>
+              <td>
+              {% if meal.date.weekday == 0 %} Monday
+              {% elif meal.date.weekday == 1 %} Tuesday
+              {% elif meal.date.weekday == 2 %} Wednesday
+              {% elif meal.date.weekday == 3 %} Thursday
+              {% elif meal.date.weekday == 4 %} Friday
+              {% elif meal.date.weekday == 5 %} Saturday
+              {% elif meal.date.weekday == 6 %} Sunday
+              {% endif %}
+              {{ meal.date.month}}/{{ meal.date.day }}
+              </td>
+
+              <td>
+              {% if meal.meal_time == "B" %} Breakfast
+              {% elif meal.meal_time == "L" %} Lunch
+              {% elif meal.meal_time == "D" %} Dinner
+              {% endif %}
+              </td>
+
+              <td>{{ meal.date|date:"g:i A" }}</td>
+              <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
+
+              <td>
+              {% if meal.location == "WH" %} Whitman
+              {% elif meal.location == "BW" %} Butler/Wilson
+              {% elif meal.location == "RM" %} Rocky/Mathey
+              {% elif meal.location == "F" %} Forbes
+              {% endif %}
+              </td>
+
+              <td>{% if meal.attire1 %} {{ meal.attire1 }} {% else %} ??? {% endif %}</td>
+
+              <td>{% if meal.is_matched %} Yes! {% else %} Not yet :( {% endif %}</td>
             </tr>
             {% endfor %}
 
             <!-- EXAMPLE: -->
-            <tr class="danger">
+            <!-- <tr class="danger">
               <td>Sunday 4/1</td>
               <td>Lunch</td>
               <td>12:30-1:00</td>
               <td>Whitman</td>
               <td>Not yet :(</td>
-            </tr>
+            </tr> -->
           </tbody>
         </table>
         {% else %}
