@@ -7,7 +7,8 @@ from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
 from mealmatcher_app.forms import MealForm
 import datetime, random
-from django.utils import timezone
+#import pytz
+from django.utils import timezone as django_timezone
 import urllib2, re
 
 # index is the app homepage
@@ -44,10 +45,17 @@ def find_meals(request):
 
 			date_time = data['date_time'].split('-')[0].split(':')
 			hour = int(date_time[0])
+			# hack for timezone to avoid confusion of objects -- DANGER
+			#hour = int(date_time[0]) - 4 
+			#if hour < 0: hour = hour + 12
 			minute = int(date_time[1])
+			
 
 			datetime_obj = datetime.datetime(year, month, day, hour, minute)
-
+			#eastern = pytz.timezone('US/Eastern') # attempt at timezones, did not work
+			#fmt = '%Y-%m-%d %H:%M %Z%z'
+			#datetime_obj = eastern.localize(datetime_obj)
+			#print datetime_obj.strftime(fmt)
 			location = data['location']
 			meal_time = data['meal_time']
 			attire1 = data['attire1']
@@ -80,13 +88,31 @@ def find_meals(request):
 		print 'received a GET'
 		form = MealForm()
 		confirmed = False
-	today = timezone.now()
+	today = django_timezone.now()
 	context_dict = {'form':form, 'date': {'month':today.month, 'day':today.day}}
 	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
 		# return HttpResponse("Find meals")
 
 # view-meals page
 @login_required
+'''
+def view_meals(request):
+	meals = Meal.objects.filter(users__user=request.user).order_by('date')
+	newmeals = []
+	for meal in meals:
+		day_of_week = meal.date.strftime('%A')
+		month_day = meal.date.strftime('%m/%d')
+		meal_dict =  {'B': 'Breakfast', 'L': 'Lunch', 'D': 'Dinner'}
+		meal_time = meal_dict[meal.meal_time]
+		meal_hourmin = (meal.date - datetime.timedelta(hours=4)).strftime('%H:%M') # hack to get around no time zones
+		location_dict = {'WH': 'Whitman', 'RM': 'Rocky/Mathey', 'BW': 'Butler/Wilson', 'F': 'Forbes'}
+		location = location_dict[meal.location]
+		is_matched = meal.is_matched()
+		newmeal = {'day_of_week': day_of_week, 'month_day': month_day, 'meal_time': meal_time,
+					 'meal_hourmin': meal_hourmin, 'location': location, 'is_matched': is_matched}
+		newmeals.append(newmeal)
+	context_dict = {'username':request.user.username, 'meals':newmeals}
+'''
 def view_meals(request, new_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
 	meals = Meal.objects.filter(users__user=request.user)
 	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal}
