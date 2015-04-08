@@ -80,6 +80,8 @@ def find_meals(request):
 				new_meal.users.add(my_user_profile)
 				new_meal.save()
 				#return HttpResponse('Made a new meal!')
+
+			return view_meals(request, new_meal)  # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
 		else:
 			print form.errors
 	else:
@@ -93,6 +95,7 @@ def find_meals(request):
 
 # view-meals page
 @login_required
+'''
 def view_meals(request):
 	meals = Meal.objects.filter(users__user=request.user).order_by('date')
 	newmeals = []
@@ -109,6 +112,10 @@ def view_meals(request):
 					 'meal_hourmin': meal_hourmin, 'location': location, 'is_matched': is_matched}
 		newmeals.append(newmeal)
 	context_dict = {'username':request.user.username, 'meals':newmeals}
+'''
+def view_meals(request, new_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
+	meals = Meal.objects.filter(users__user=request.user)
+	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
 
