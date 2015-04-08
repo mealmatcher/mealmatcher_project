@@ -93,13 +93,13 @@
               {% endif %}
             {% endif %}
             >
-<<<<<<< HEAD
+<!--
               <td>{{ meal.day_of_week}} {{ meal.month_day }}</td>
               <td>{{ meal.meal_time }}</td>
               <td>{{ meal.meal_hourmin }}</td>
               <td>{{ meal.location }}</td>
               <td>{{ meal.is_matched }}</td>
-=======
+-->
               <td>
               {% if meal.date.weekday == 0 %} Monday
               {% elif meal.date.weekday == 1 %} Tuesday
@@ -133,7 +133,6 @@
               <td>{% if meal.attire1 %} {{ meal.attire1 }} {% else %} ??? {% endif %}</td>
 
               <td>{% if meal.is_matched %} Yes! {% else %} Not yet :( {% endif %}</td>
->>>>>>> f9a54383fb89b33bc1dc171a3e7de55118425997
             </tr>
             {% endfor %}
 

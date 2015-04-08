@@ -94,7 +94,7 @@ def find_meals(request):
 		# return HttpResponse("Find meals")
 
 # view-meals page
-@login_required
+
 '''
 def view_meals(request):
 	meals = Meal.objects.filter(users__user=request.user).order_by('date')
@@ -113,6 +113,7 @@ def view_meals(request):
 		newmeals.append(newmeal)
 	context_dict = {'username':request.user.username, 'meals':newmeals}
 '''
+@login_required
 def view_meals(request, new_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
 	meals = Meal.objects.filter(users__user=request.user)
 	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal}
