@@ -88,9 +88,9 @@
             "danger"
             {% endif %}
             >
-              <td>{{ meal.date.month}}/{{ meal.date.day }}</td>
+              <td>{{ meal.day_of_week}} {{ meal.month_day }}</td>
               <td>{{ meal.meal_time }}</td>
-              <td>{{ meal.date.hour}}:{{meal.date.minute}}</td>
+              <td>{{ meal.meal_hourmin }}</td>
               <td>{{ meal.location }}</td>
               <td>{{ meal.is_matched }}</td>
             </tr>
