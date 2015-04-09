@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mealmatcher_app',
+    "post_office",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -80,7 +81,7 @@ DATABASES = {
         'NAME': 'mealmatcher_db',
         'USER': 'mealmatcher_user',
         'PASSWORD': 'thefattestchicken',
-        'HOST': '127.0.0.1',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -98,6 +99,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+## Added the Email Backend
+EMAIL_BACKEND = 'post_office.EmailBackend'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -107,7 +111,7 @@ STATIC_URL = '/static/'
 # Redirects non-logged in users to this
 LOGIN_URL = '/mealmatcher_app/login/'
 
-
+'''
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
 DATABASES['default'] =  dj_database_url.config()
@@ -127,3 +131,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+'''
