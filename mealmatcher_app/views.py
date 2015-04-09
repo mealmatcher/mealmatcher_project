@@ -33,7 +33,6 @@ def find_meals(request):
 	username = request.user.username
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 	if request.method == 'POST': # http post, process the data
-		print 'received a post'
 		form = MealForm(request.POST)
 		if form.is_valid():
 			data = form.cleaned_data
@@ -60,37 +59,44 @@ def find_meals(request):
 			meal_time = data['meal_time']
 			attire1 = data['attire1']
 
-			possible_matches = Meal.objects.filter(date=datetime_obj, location=location, meal_time=meal_time).exclude(users__user=User.objects.filter(username=username))
-			filtered_matches = []
-			# there are potential matches, remove already matched ones
-			if possible_matches:                        
-				for match in possible_matches:
-					if not (match.is_matched()):  # this meal is not matched
-						filtered_matches.append(match)
-			possible_matches = filtered_matches
-			# if there are still possible_matches, make the match, 				
-			if possible_matches:
-				matched_meal = random.choice(possible_matches)
-				matched_meal.attire2 = attire1
-				matched_meal.users.add(my_user_profile)
-				new_meal = None
-				#return HttpResponse('Made a match!')
-			else: # no matches, make a new Meal and add it to the database
-				new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
-				new_meal.save()                     
-				new_meal.users.add(my_user_profile)
-				new_meal.save()
-				#return HttpResponse('Made a new meal!')
+			# check for multiple meals at the same mealtime -- prevent signup 
+			same_time = Meal.objects.filter(date=datetime_obj, meal_time=meal_time, users__user=User.objects.filter(username=username))
+			if same_time:
+				print 'Attempted signup at a time that already has a meal the user is in.'
+				badTime = True
 
-			return view_meals(request, new_meal)  # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
-		else:
+			else:
+				possible_matches = Meal.objects.filter(date=datetime_obj, location=location, 
+									meal_time=meal_time).exclude(users__user=User.objects.filter(username=username))
+				filtered_matches = []
+				# there are potential matches, remove already matched ones
+				if possible_matches:                        
+					for match in possible_matches:
+						if not (match.is_matched()):  # this meal is not matched
+							filtered_matches.append(match)
+				possible_matches = filtered_matches
+				# if there are still possible_matches, make the match, 				
+				if possible_matches:
+					matched_meal = random.choice(possible_matches)
+					matched_meal.attire2 = attire1
+					matched_meal.users.add(my_user_profile)
+					new_meal = None
+					#return HttpResponse('Made a match!')
+				else: # no matches, make a new Meal and add it to the database
+					new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
+					new_meal.save()                     
+					new_meal.users.add(my_user_profile)
+					new_meal.save()
+					#return HttpResponse('Made a new meal!')
+
+				return view_meals(request, new_meal)  # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
+		else: # for debugging only
 			print form.errors
 	else:
-		print 'received a GET'
 		form = MealForm()
-		confirmed = False
+		badTime = False
 	today = django_timezone.now()
-	context_dict = {'form':form, 'date': {'month':today.month, 'day':today.day}}
+	context_dict = {'form':form, 'date': {'month':today.month, 'day':today.day}, 'badTime': badTime}
 	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
 		# return HttpResponse("Find meals")
 
