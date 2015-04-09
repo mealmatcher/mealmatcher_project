@@ -133,6 +133,25 @@
               <td>{% if meal.attire1 %} {{ meal.attire1 }} {% else %} ??? {% endif %}</td>
 
               <td>{% if meal.is_matched %} Yes! {% else %} Not yet :( {% endif %}</td>
+              <!-- TODO(drew) use a button group or a dropdown or something? -->
+              <!-- TODO(drew) disable edit if meal is too soon -->
+              <td><button type="submit" class="btn btn-default" id="editButton_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
+              <td>
+                <form role="form" method="POST" action="/mealmatcher_app/delete-meal/">
+                  {% csrf_token %}
+                  <!-- <input class="form-control" id="idToDeleteTextbox_{{ meal.id }}" aria-describedby="basic-addon1"> -->
+                  <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
+                  <!-- {% for hidden in deleteForm.hidden_fields %}
+                    {{ hidden }}
+                  {% endfor %}
+                  {% for field in deleteForm.visible_fields %}
+                    {{ field.errors }}
+                    {{ field.help_text }}
+                    {{ field }}
+                  {% endfor %} -->
+                  <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}" {% if meal.is_matched %} disabled=true {% endif %}><span class="glyphicon glyphicon-trash"></span></button>
+                </form>
+              </td>
             </tr>
             {% endfor %}
 
@@ -153,5 +172,28 @@
     </div>
   </div>
 </div>
+
+
+<script>
+  {% if username %}
+    {% if meals %}
+      {% for meal in meals %}
+      $( "#editButton_{{ meal.id }}" ).click(function(e) { 
+        e.preventDefault();
+        console.log("meal edited: " + "{{meal.id}}")
+      });
+
+      // $( "#deleteSubmitButton_{{ meal.id }}" ).click(function(e) { 
+      //   // e.preventDefault();
+      //   $('#idToDeleteTextbox_{{ meal.id }}' ).val("{{ meal.id }}");
+      //   console.log("meal deleted: " + "{{meal.id}}")
+      // });
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+</script> 
+
+
+
 </body>
 </html>

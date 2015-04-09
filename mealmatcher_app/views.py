@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
-from mealmatcher_app.forms import MealForm
+from mealmatcher_app.forms import MealForm, DeleteMealForm
 import datetime, random
 #import pytz
 from django.utils import timezone as django_timezone
@@ -130,6 +130,27 @@ def view_meals(request, new_meal=None): # HACK(drew) new_meal extra arg so we ca
 	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
+
+@login_required
+def delete_meal(request):
+	if request.method == 'POST': # http post, process the data
+		print 'received a delete meal post'
+		form = DeleteMealForm(request.POST)
+		if form.is_valid():
+			data = form.cleaned_data
+			print(data['idToDelete'])
+			matchingMeals = Meal.objects.filter(id=data['idToDelete'])
+			if len(matchingMeals) >= 1:
+				mealToDelete = matchingMeals[0]
+				if not mealToDelete.is_matched():
+					mealToDelete.delete()
+				# TODO(drew) only allow dropping out if meal isn't too soon
+				else:
+					myProfile = UserProfile.objects.filter(user=request.user)[0]
+					mealToDelete.users.remove(myProfile)
+		else:
+			print form.errors
+	return view_meals(request)
 
 # login page
 def site_login(request):
