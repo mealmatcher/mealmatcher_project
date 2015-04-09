@@ -79,8 +79,10 @@ def find_meals(request):
 				if possible_matches:
 					matched_meal = random.choice(possible_matches)
 					matched_meal.attire2 = attire1
+					print matched_meal.attire2
 					matched_meal.users.add(my_user_profile)
-					new_meal = None
+					new_meal = matched_meal
+					new_meal.save()
 					#return HttpResponse('Made a match!')
 				else: # no matches, make a new Meal and add it to the database
 					new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
