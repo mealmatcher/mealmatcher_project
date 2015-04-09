@@ -73,12 +73,11 @@ def find_meals(request):
 				matched_meal = random.choice(possible_matches)
 				matched_meal.attire2 = attire1
 				matched_meal.users.add(my_user_profile)
+				new_meal = None
 				#return HttpResponse('Made a match!')
 			else: # no matches, make a new Meal and add it to the database
 				new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
-				new_meal.save()                        # bug somewhere here
-				new_meal.users.add(my_user_profile)
-				new_meal.save()
+
 				#return HttpResponse('Made a new meal!')
 
 			return view_meals(request, new_meal)  # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
@@ -113,9 +112,16 @@ def view_meals(request):
 		newmeals.append(newmeal)
 	context_dict = {'username':request.user.username, 'meals':newmeals}
 '''
+
 @login_required
 def view_meals(request, new_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
-	meals = Meal.objects.filter(users__user=request.user)
+	meals = list(Meal.objects.filter(users__user=request.user).order_by('date'))
+	if new_meal:
+		my_user_profile = UserProfile.objects.filter(user=request.user)[0]
+		new_meal.save()                     
+		new_meal.users.add(my_user_profile)
+		new_meal.save()
+		meals.insert(0, new_meal)
 	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
