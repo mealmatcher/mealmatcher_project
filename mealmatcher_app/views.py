@@ -124,10 +124,11 @@ def view_meals(request):
 @login_required
 def view_meals(request, new_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
 	meals = list(Meal.objects.filter(users__user=request.user).order_by('date'))
+	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 	if new_meal:
 		meals.remove(new_meal)
 		meals.insert(0, new_meal)
-	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal}
+	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'user_profile': my_user_profile}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
 
@@ -147,6 +148,11 @@ def delete_meal(request):
 				# TODO(drew) only allow dropping out if meal isn't too soon
 				else:
 					myProfile = UserProfile.objects.filter(user=request.user)[0]
+
+					# make sure the remaining user is shifted to user1, i.e. shift the attire
+					if mealToDelete.users.all()[0] == myProfile:
+						mealToDelete.attire1 = mealToDelete.attire2
+					mealToDelete.attire2 = None
 					mealToDelete.users.remove(myProfile)
 		else:
 			print form.errors

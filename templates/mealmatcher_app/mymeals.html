@@ -129,7 +129,18 @@
               {% endif %}
               </td>
 
-              <td>{% if meal.attire1 %} {{ meal.attire1 }} {% else %} ??? {% endif %}</td>
+              <td>{% if meal.is_matched %} 
+                    {% with meal.users.all.0 as user1 %}
+                      {% if user1 == user_profile %}
+                        {{ meal.attire1 }} 
+                      {% else %}
+                        {{ meal.attire2 }} 
+                      {% endif %}
+                    {% endwith %}
+                  {% else %} 
+                    {{ meal.attire1 }} 
+                  {% endif %}
+              </td>
 
               <td>{% if meal.is_matched %} Yes! {% else %} Not yet :( {% endif %}</td>
               <!-- TODO(drew) use a button group or a dropdown or something? -->
