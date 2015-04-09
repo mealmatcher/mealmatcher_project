@@ -78,28 +78,27 @@
               <th>Location</th>
               <th>My Attire</th>
               <th>Matched?</th>
+              <th></th> <!-- edit button column -->
+              <th></th> <!-- delete button column -->
             </tr>
           </thead>
           <tbody>
             {% for meal in meals %}
             <tr class=
-            {% if meal == new_meal %}
+              {% if meal == new_meal %}
               "warning"
-            {% else %}
-              {% if meal.is_matched %}
-              "success"
               {% else %}
-              "danger"
+                {% if meal.is_expired %}
+                "info"
+                {% else %}
+                  {% if meal.is_matched %}
+                  "success"
+                  {% else %}
+                  "danger"
+                  {% endif %}
+                {% endif %}
               {% endif %}
-            {% endif %}
             >
-<!--
-              <td>{{ meal.day_of_week}} {{ meal.month_day }}</td>
-              <td>{{ meal.meal_time }}</td>
-              <td>{{ meal.meal_hourmin }}</td>
-              <td>{{ meal.location }}</td>
-              <td>{{ meal.is_matched }}</td>
--->
               <td>
               {% if meal.date.weekday == 0 %} Monday
               {% elif meal.date.weekday == 1 %} Tuesday
@@ -133,19 +132,29 @@
               <td>{% if meal.attire1 %} {{ meal.attire1 }} {% else %} ??? {% endif %}</td>
 
               <td>{% if meal.is_matched %} Yes! {% else %} Not yet :( {% endif %}</td>
+
+              <!-- TODO(drew) use a button group or a dropdown or something? -->
+              <!-- TODO(drew) disable edit if meal is too soon -->
+              <td><button class="btn btn-default" id="editButton_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
+              <td><button class="btn btn-danger" id="submitButton_{{ meal.id }}" {% if meal.is_matched %} disabled=true {% endif %}><span class="glyphicon glyphicon-trash"></span></button></td>
             </tr>
             {% endfor %}
 
-            <!-- EXAMPLE: -->
-            <!-- <tr class="danger">
-              <td>Sunday 4/1</td>
-              <td>Lunch</td>
-              <td>12:30-1:00</td>
-              <td>Whitman</td>
-              <td>Not yet :(</td>
-            </tr> -->
           </tbody>
         </table>
+
+        <form role="form" id="deleteMealForm" method="POST" action="/mealmatcher_app/delete-meal/">
+          {% csrf_token %}
+          {% for hidden in deleteForm.hidden_fields %}
+            {{ hidden }}
+          {% endfor %}
+          {% for field in deleteForm.visible_fields %}
+            {{ field.errors }}
+            {{ field.help_text }}
+            {{ field }}
+          {% endfor %}
+        </form>
+
         {% else %}
         <h2>No meals proposed! Choose "Find a Meal" to make one.</h2>
         {% endif %}
@@ -153,5 +162,27 @@
     </div>
   </div>
 </div>
+
+
+<script>
+  {% if username %}
+    {% if meals %}
+      {% for meal in meals %}
+      $( "#editButton_{{ meal.id }}" ).click(function(e) { 
+        e.preventDefault();
+        console.log("meal edited: " + "{{meal.id}}")
+      });
+
+      $( "#submitButton_{{ meal.id }}" ).click(function(e) { 
+        e.preventDefault();
+        console.log("meal deleted: " + "{{meal.id}}")
+      });
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+</script> 
+
+
+
 </body>
 </html>
