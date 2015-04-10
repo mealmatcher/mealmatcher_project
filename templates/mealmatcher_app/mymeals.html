@@ -66,6 +66,15 @@
       </nav>
 
       <h1>My Meals</h1>
+      {% if deleted_meal %}
+      <h3>Deleted meal at 
+        {% if deleted_meal.meal_time == "B" %} Breakfast
+        {% elif deleted_meal.meal_time == "L" %} Lunch
+        {% elif deleted_meal.meal_time == "D" %} Dinner
+        {% endif %}
+        on {{ deleted_meal.date|date:"l n/j" }}
+      </h3>
+      {% endif %}
       {% if username %}
         {% if meals %}
         <table class="table">

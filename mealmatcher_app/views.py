@@ -92,7 +92,7 @@ def find_meals(request):
 					new_meal.save()
 					#return HttpResponse('Made a new meal!')
 
-				return view_meals(request, new_meal)  # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
+				return view_meals(request, new_meal=new_meal)  # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
 		else: # for debugging only
 			print form.errors
 	else:
@@ -125,13 +125,13 @@ def view_meals(request):
 '''
 
 @login_required
-def view_meals(request, new_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
+def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
 	meals = list(Meal.objects.filter(users__user=request.user).order_by('date'))
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 	if new_meal:
 		meals.remove(new_meal)
 		meals.insert(0, new_meal)
-	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'user_profile': my_user_profile}
+	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'deleted_meal':deleted_meal, 'user_profile': my_user_profile}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
 
@@ -157,9 +157,10 @@ def delete_meal(request):
 						mealToDelete.attire1 = mealToDelete.attire2
 					mealToDelete.attire2 = None
 					mealToDelete.users.remove(myProfile)
+				return view_meals(request, deleted_meal=mealToDelete)
 		else:
 			print form.errors
-	return view_meals(request)
+		return view_meals(request)
 
 # login page
 def site_login(request):
