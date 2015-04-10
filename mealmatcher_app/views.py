@@ -34,6 +34,7 @@ def find_meals(request):
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 	if request.method == 'POST': # http post, process the data
 		form = MealForm(request.POST)
+		badTime = False
 		if form.is_valid():
 			data = form.cleaned_data
 			year = 2015
