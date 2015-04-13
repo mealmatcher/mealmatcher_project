@@ -50,9 +50,15 @@ class Meal(models.Model):
 	# True if the meal has already occured
 	def is_expired(self):
 		now = timezone.now()
-		return (now >= self.date + datetime.timedelta(days=1))
+		return ((now - datetime.timedelta(hours=1)) > self.date )
 	is_expired.boolean = True
-	is_expired.short_description = 'Has the meal expired?'
+	is_expired.short_description = 'Has the meal occurred?'
+
+	def to_be_removed(self):
+		now = timezone.now()
+		return ((now - datetime.timedelta(days=7)) > self.date )
+	to_be_removed.boolean = True
+	to_be_removed.short_description = 'Should the meal be removed (occurred over a week ago)?'
 
 	def __unicode__(self):
 		return self.date.strftime("%Y-%m-%d") + " " + self.location + " " + self.meal_time + " "

@@ -67,7 +67,11 @@
       </nav>
 
       <h1>Find a Meal</h1>
-
+      {% if badTime %}
+      <h3>
+        Cannot sign up for a new meal at a mealtime that already has a meal.
+      </h3>
+      {% endif %}
       <form role="form" id="findMealForm" method="POST" action="/mealmatcher_app/find-a-meal/">
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}

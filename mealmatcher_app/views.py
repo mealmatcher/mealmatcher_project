@@ -18,16 +18,6 @@ def index(request):
 	return render(request, 'mealmatcher_app/index.html', context_dict)
 
 # find-meals page
-'''
-@login_required
-def find_meals(request):
-	context_dict = {
-		'date': {'month': "4", 'day': "10"},
-	}
-	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
-	# return HttpResponse("Find meals")
-'''
-
 @login_required
 def find_meals(request):
 	username = request.user.username
@@ -61,7 +51,10 @@ def find_meals(request):
 			attire1 = data['attire1']
 
 			# check for multiple meals at the same mealtime -- prevent signup 
-			same_time = Meal.objects.filter(date=datetime_obj, meal_time=meal_time, users__user=User.objects.filter(username=username))
+			same_time = list(Meal.objects.filter(meal_time=meal_time, users__user=User.objects.filter(username=username)))
+			for meal in same_time:
+				if not (meal.date.month == month and meal.date.day == day):
+					same_time.remove(meal)
 			if same_time:
 				print 'Attempted signup at a time that already has a meal the user is in.'
 				badTime = True
@@ -127,11 +120,22 @@ def view_meals(request):
 @login_required
 def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
 	meals = list(Meal.objects.filter(users__user=request.user).order_by('date'))
+	expired_meals = []
+	removed_meals = []
+	for meal in meals:
+		if meal.to_be_removed():
+			meals.remove(meal)
+			removed_meals.append(meal)
+		elif meal.is_expired():
+			meals.remove(meal)
+			expired_meals.append(meal)
+
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 	if new_meal:
 		meals.remove(new_meal)
 		meals.insert(0, new_meal)
-	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'deleted_meal':deleted_meal, 'user_profile': my_user_profile}
+	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'deleted_meal':deleted_meal, 
+					'user_profile': my_user_profile, 'expired_meals': expired_meals, 'removed_meals': removed_meals}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
 
