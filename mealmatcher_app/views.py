@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
-from mealmatcher_app.forms import MealForm
+from mealmatcher_app.forms import MealForm, DeleteMealForm
 import datetime, random
 #import pytz
 from django.utils import timezone as django_timezone
@@ -22,22 +22,13 @@ def index(request):
 	return render(request, 'mealmatcher_app/index.html', context_dict)
 
 # find-meals page
-'''
-@login_required
-def find_meals(request):
-	context_dict = {
-		'date': {'month': "4", 'day': "10"},
-	}
-	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
-	# return HttpResponse("Find meals")
-'''
-
 @login_required
 def find_meals(request):
 	username = request.user.username
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 	if request.method == 'POST': # http post, process the data
 		form = MealForm(request.POST)
+		badTime = False
 		if form.is_valid():
 			data = form.cleaned_data
 			year = 2015
@@ -64,7 +55,10 @@ def find_meals(request):
 			attire1 = data['attire1']
 
 			# check for multiple meals at the same mealtime -- prevent signup 
-			same_time = Meal.objects.filter(date=datetime_obj, meal_time=meal_time, users__user=User.objects.filter(username=username))
+			same_time = list(Meal.objects.filter(meal_time=meal_time, users__user=User.objects.filter(username=username)))
+			for meal in same_time:
+				if not (meal.date.month == month and meal.date.day == day):
+					same_time.remove(meal)
 			if same_time:
 				print 'Attempted signup at a time that already has a meal the user is in.'
 				badTime = True
@@ -116,6 +110,11 @@ def find_meals(request):
 						priority='now',
 					)
 
+					print matched_meal.attire2
+					matched_meal.users.add(my_user_profile)
+					new_meal = matched_meal
+					new_meal.save()
+
 					#return HttpResponse('Made a match!')
 				else: # no matches, make a new Meal and add it to the database
 					new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
@@ -124,7 +123,7 @@ def find_meals(request):
 					new_meal.save()
 					#return HttpResponse('Made a new meal!')
 
-				return view_meals(request, new_meal)  # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
+				return view_meals(request, new_meal=new_meal)  # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
 		else: # for debugging only
 			print form.errors
 	else:
@@ -157,14 +156,53 @@ def view_meals(request):
 '''
 
 @login_required
-def view_meals(request, new_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
+def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
 	meals = list(Meal.objects.filter(users__user=request.user).order_by('date'))
+	expired_meals = []
+	removed_meals = []
+	for meal in meals:
+		if meal.to_be_removed():
+			meals.remove(meal)
+			removed_meals.append(meal)
+		elif meal.is_expired():
+			meals.remove(meal)
+			expired_meals.append(meal)
+
+	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 	if new_meal:
 		meals.remove(new_meal)
 		meals.insert(0, new_meal)
-	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal}
+	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'deleted_meal':deleted_meal, 
+					'user_profile': my_user_profile, 'expired_meals': expired_meals, 'removed_meals': removed_meals}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
+
+@login_required
+def delete_meal(request):
+	if request.method == 'POST': # http post, process the data
+		print 'received a delete meal post'
+		form = DeleteMealForm(request.POST)
+		if form.is_valid():
+			data = form.cleaned_data
+			print(data['idToDelete'])
+			matchingMeals = Meal.objects.filter(id=data['idToDelete'])
+			if len(matchingMeals) >= 1:
+				mealToDelete = matchingMeals[0]
+				if not mealToDelete.is_matched():
+					mealToDelete.delete()
+				# TODO(drew) only allow dropping out if meal isn't too soon
+				else:
+					myProfile = UserProfile.objects.filter(user=request.user)[0]
+
+					# make sure the remaining user is shifted to user1, i.e. shift the attire
+					if mealToDelete.users.all()[0] == myProfile:
+						mealToDelete.attire1 = mealToDelete.attire2
+					mealToDelete.attire2 = None
+					mealToDelete.users.remove(myProfile)
+				return view_meals(request, deleted_meal=mealToDelete)
+		else:
+			print form.errors
+		return view_meals(request)
 
 # login page
 def site_login(request):

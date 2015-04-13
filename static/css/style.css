@@ -1,0 +1,15 @@
+.centered
+{
+	text-align: center;
+	color: white;
+}
+
+.resize
+{
+    background-size: contain;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+}

@@ -38,7 +38,7 @@
   <script type="text/javascript" src="{% static "js/scripts.js" %}"></script>
 </head>
 
-<body background="{% static "img/kevin.jpg" %}">
+<body background="{% static "img/chick.jpg" %}" class="resize"> 
 <div class="container">
   <div class="row clearfix">
     <div class="col-md-12 column">
@@ -55,7 +55,7 @@
             <li>
               <a href="/mealmatcher_app/my-meals/">My Meals</a>
             </li>
-            </li>
+            
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li>
@@ -67,7 +67,11 @@
       </nav>
 
       <h1>Find a Meal</h1>
-
+      {% if badTime %}
+      <h3>
+        Cannot sign up for a new meal at a mealtime that already has a meal.
+      </h3>
+      {% endif %}
       <form role="form" id="findMealForm" method="POST" action="/mealmatcher_app/find-a-meal/">
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}

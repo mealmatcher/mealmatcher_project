@@ -5,6 +5,17 @@ from django.contrib.auth.models import User
 import datetime
 from django.db import models
 
+class DeleteMealForm(forms.Form):
+  idToDelete = forms.CharField(
+    widget = forms.TextInput(attrs={'id': "idToDeleteTextbox"}),
+    max_length = 3,  
+  )
+
+  class Meta:
+    fields = ('idToDelete',)
+    exclude = ()
+
+
 class MealForm(forms.ModelForm):
   # filled in by JS, mm/dd but not necessarily leading 0s
   date_mdy = forms.CharField(
