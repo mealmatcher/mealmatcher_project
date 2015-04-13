@@ -57,13 +57,11 @@ def find_meals(request):
 			# check for multiple meals at the same mealtime -- prevent signup 
 			same_time = list(Meal.objects.filter(meal_time=meal_time, users__user=User.objects.filter(username=username)))
 			for meal in same_time:
-				if not (meal.date.month == month and meal.date.day == day):
-					same_time.remove(meal)
-			if same_time:
-				print 'Attempted signup at a time that already has a meal the user is in.'
-				badTime = True
+				if (meal.date.month == month and meal.date.day == day):
+					print 'Attempted signup at a time that already has a meal the user is in.'
+					badTime = True
 
-			else:
+			if not badTime:
 				possible_matches = Meal.objects.filter(date=datetime_obj, location=location, 
 									meal_time=meal_time).exclude(users__user=User.objects.filter(username=username))
 				filtered_matches = []
