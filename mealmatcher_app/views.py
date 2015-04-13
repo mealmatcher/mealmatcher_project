@@ -10,6 +10,10 @@ import datetime, random
 #import pytz
 from django.utils import timezone as django_timezone
 import urllib2, re
+# mailer lib
+from post_office.models import EmailTemplate
+from post_office import mail
+from django.template.loader import render_to_string
 
 # index is the app homepage
 @login_required
@@ -79,8 +83,39 @@ def find_meals(request):
 				if possible_matches:
 					matched_meal = random.choice(possible_matches)
 					matched_meal.attire2 = attire1
+
+					#mailer user
+					user2 = matched_meal.users.all()[0].user.username
+
 					matched_meal.users.add(my_user_profile)
 					new_meal = None
+
+					'''if not EmailTemplate.objects.all():
+						EmailTemplate.objects.create(
+							name='match_email',
+							subject='Good Day, {{ name }}!',
+							content='MEAL INCOMING, {{ name }}!',
+							html_content='MEAL INCOMING, {{ name }}! DATE - {{ datetime }} MEAL - {{ meal }} LOCATION - {{ location }} YOUR GUEST ATTIRE - {{ attire }}',
+						)'''
+
+					#html_content=render_to_string('match_email_html.html'),
+
+					#mailer view
+					mail.send(
+						[username + '@princeton.edu'],
+						'princeton.meal.matcher@gmail.com',
+						template='match_email',
+						context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+						priority='now',
+					)
+					mail.send(
+						[user2 + '@princeton.edu'],
+						'princeton.meal.matcher@gmail.com',
+						template='match_email',
+						context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+						priority='now',
+					)
+
 					#return HttpResponse('Made a match!')
 				else: # no matches, make a new Meal and add it to the database
 					new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
@@ -171,6 +206,8 @@ def site_login(request):
 			else: # redirect to try again
 				#return HttpResponse('failure')
 				return HttpResponseRedirect('https://fed.princeton.edu/cas/login?service=http://localhost:8000/mealmatcher_app/login/')
+
+
 
 @login_required
 def site_logout(request):

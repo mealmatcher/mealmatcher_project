@@ -99,8 +99,17 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+
 ## Added the Email Backend
 EMAIL_BACKEND = 'post_office.EmailBackend'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.mandrillapp.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'princeton.meal.matcher@gmail.com'
+EMAIL_HOST_PASSWORD = 'i8wsuHLt5PmaXkxB8Ok7qg'
+
 
 
 # Static files (CSS, JavaScript, Images)
