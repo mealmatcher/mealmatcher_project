@@ -71,13 +71,16 @@
 
       <h1>My Meals</h1>
       {% if deleted_meal %}
-      <h3>Deleted meal at 
-        {% if deleted_meal.meal_time == "B" %} Breakfast
-        {% elif deleted_meal.meal_time == "L" %} Lunch
-        {% elif deleted_meal.meal_time == "D" %} Dinner
-        {% endif %}
-        on {{ deleted_meal.date|date:"l n/j" }}
-      </h3>
+      <div class="alert alert-danger">
+      
+        <h3>Deleted meal at 
+          {% if deleted_meal.meal_time == "B" %} Breakfast
+          {% elif deleted_meal.meal_time == "L" %} Lunch
+          {% elif deleted_meal.meal_time == "D" %} Dinner
+          {% endif %}
+          on {{ deleted_meal.date|date:"l n/j" }}
+        </h3>
+      </div>
       {% endif %}
       {% if username %}
         {% if meals %}
@@ -89,7 +92,7 @@
               <th>Time</th>
               <th>Location</th>
               <th>My Attire</th>
-              <th>Matched?</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -148,7 +151,7 @@
                   {% endif %}
               </td>
 
-              <td>{% if meal.is_matched %} Yes! {% else %} Not yet :( {% endif %}</td>
+              <td>{% if meal.is_matched %} Matched! {% else %} Unmatched {% endif %}</td>
               <!-- TODO(drew) use a button group or a dropdown or something? -->
               <!-- TODO(drew) disable edit if meal is too soon -->
               <td><button type="submit" class="btn btn-default" id="editButton_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
@@ -179,10 +182,11 @@
               <th>Time</th>
               <th>Location</th>
               <th>My Attire</th>
-              <th>Matched?</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
+            <p> {{ expired_meals.length }} </p>
             {% for meal in expired_meals %}
             <tr class= "info">
               <td>
@@ -227,8 +231,14 @@
                   {% endif %}
               </td>
 
-              <td>{% if meal.is_matched %} Yes! {% else %} no :( {% endif %}</td>
-              <td></td>
+              <td>Expired</td>
+              <td>
+                <form role="form" method="POST" action="/mealmatcher_app/delete-meal/">
+                  {% csrf_token %}
+                  <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
+                  <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}"><span class="glyphicon glyphicon-remove"></span></button>
+                </form>
+              </td>
             </tr>
             {% endfor %}
           </tbody>

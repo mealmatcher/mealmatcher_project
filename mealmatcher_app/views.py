@@ -156,16 +156,17 @@ def view_meals(request):
 @login_required
 def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
 	meals = list(Meal.objects.filter(users__user=request.user).order_by('date'))
+	copy = list(meals)
 	expired_meals = []
 	removed_meals = []
-	for meal in meals:
-		if meal.to_be_removed():
-			meals.remove(meal)
-			removed_meals.append(meal)
-		elif meal.is_expired():
+	for meal in copy:
+		#if meal.to_be_removed():
+		#	meals.remove(meal)
+		#	removed_meals.append(meal)
+		if meal.is_expired():
+			print meal
 			meals.remove(meal)
 			expired_meals.append(meal)
-
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 	if new_meal:
 		meals.remove(new_meal)
