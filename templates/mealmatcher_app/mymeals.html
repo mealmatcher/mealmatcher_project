@@ -54,7 +54,10 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li>
-              <a href="/mealmatcher_app/find-a-meal/">Find a Meal</a>
+              <a href="/mealmatcher_app/find-a-meal/">Create a Meal</a>
+            </li>
+            <li>
+              <a href="/mealmatcher_app/open-meals/">Open Meals</a>
             </li>
             <li class="active">
               <a href="/mealmatcher_app/my-meals/">My Meals</a>
@@ -261,7 +264,9 @@
               </div>
             </div>
           </div>
-          <div class="event-listing clearfix">
+        </script>
+        <!-- uncomment and move into script to add thing -->
+<!--           <div class="event-listing clearfix">
             <div class="event-listing-title">MY MEALS THIS MONTH</div>
             <% _.each(eventsThisMonth, function(event) { %>
                 <div class="event-item">
@@ -271,14 +276,12 @@
                   </div>
                 </div>
               <% }); %>
-          </div>
-        </script>
+          </div> -->
       {% endif %}
     </div>
   </div>
 
 </div>
-
 
 <script>
   {% if username %}

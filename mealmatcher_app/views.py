@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
+# from django.db.models import Q
 from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
 from mealmatcher_app.forms import MealForm, DeleteMealForm
@@ -175,6 +176,23 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 					'user_profile': my_user_profile, 'expired_meals': expired_meals, 'removed_meals': removed_meals}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
+
+@login_required
+def open_meals(request):
+	meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
+	expired_meals = []
+	removed_meals = []
+	for meal in meals:
+		if meal.to_be_removed():
+			meals.remove(meal)
+			removed_meals.append(meal)
+		elif meal.is_expired():
+			meals.remove(meal)
+			expired_meals.append(meal)
+
+	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
+	context_dict = {'username':request.user.username, 'meals':meals, 'user_profile': my_user_profile, 'expired_meals': expired_meals, 'removed_meals': removed_meals}
+	return render(request, 'mealmatcher_app/openmeals.html', context_dict)
 
 @login_required
 def delete_meal(request):
