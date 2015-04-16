@@ -188,6 +188,104 @@
         <h2>No meals proposed! Choose "Find a Meal" to make one.</h2>
         {% endif %}
       {% endif %}
+
+      <h1>Expired Meals</h1>
+      {% if username %}
+        {% if expired_meals %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Meal</th>
+              <th>Time</th>
+              <th>Location</th>
+              <th>My Attire</th>
+              <th>Matched?</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for meal in expired_meals %}
+            <tr class= "info">
+              <td>
+              {% if meal.date.weekday == 0 %} Monday
+              {% elif meal.date.weekday == 1 %} Tuesday
+              {% elif meal.date.weekday == 2 %} Wednesday
+              {% elif meal.date.weekday == 3 %} Thursday
+              {% elif meal.date.weekday == 4 %} Friday
+              {% elif meal.date.weekday == 5 %} Saturday
+              {% elif meal.date.weekday == 6 %} Sunday
+              {% endif %}
+              {{ meal.date.month}}/{{ meal.date.day }}
+              </td>
+
+              <td>
+              {% if meal.meal_time == "B" %} Breakfast
+              {% elif meal.meal_time == "L" %} Lunch
+              {% elif meal.meal_time == "D" %} Dinner
+              {% endif %}
+              </td>
+
+              <td>{{ meal.date|date:"g:i A" }}</td>
+              <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
+
+              <td>
+              {% if meal.location == "WH" %} Whitman
+              {% elif meal.location == "BW" %} Butler/Wilson
+              {% elif meal.location == "RM" %} Rocky/Mathey
+              {% elif meal.location == "F" %} Forbes
+              {% endif %}
+              </td>
+
+              <td>{% if meal.is_matched %} 
+                    {% with meal.users.all.0 as user1 %}
+                      {% if user1 == user_profile %}
+                        {{ meal.attire1 }} 
+                      {% else %}
+                        {{ meal.attire2 }} 
+                      {% endif %}
+                    {% endwith %}
+                  {% else %} 
+                    {{ meal.attire1 }} 
+                  {% endif %}
+              </td>
+
+              <td>{% if meal.is_matched %} Yes! {% else %} Not yet :( {% endif %}</td>
+              <!-- TODO(drew) use a button group or a dropdown or something? -->
+              <!-- TODO(drew) disable edit if meal is too soon -->
+              <td></td>
+              <td>
+                <form role="form" method="POST" action="/mealmatcher_app/delete-meal/">
+                  {% csrf_token %}
+                  <!-- <input class="form-control" id="idToDeleteTextbox_{{ meal.id }}" aria-describedby="basic-addon1"> -->
+                  <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
+                  <!-- {% for hidden in deleteForm.hidden_fields %}
+                    {{ hidden }}
+                  {% endfor %}
+                  {% for field in deleteForm.visible_fields %}
+                    {{ field.errors }}
+                    {{ field.help_text }}
+                    {{ field }}
+                  {% endfor %} -->
+                  <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}"><span class="glyphicon glyphicon-remove"></span></button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+
+            <!-- EXAMPLE: -->
+            <!-- <tr class="danger">
+              <td>Sunday 4/1</td>
+              <td>Lunch</td>
+              <td>12:30-1:00</td>
+              <td>Whitman</td>
+              <td>Not yet :(</td>
+            </tr> -->
+          </tbody>
+        </table>
+        {% else %}
+        <h2>No meals proposed! Choose "Find a Meal" to make one.</h2>
+        {% endif %}
+      {% endif %}
     </div>
   </div>
 </div>
