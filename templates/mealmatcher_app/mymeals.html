@@ -34,9 +34,13 @@
   <link rel="apple-touch-icon-precomposed" href="{% static "img/apple-touch-icon-57-precomposed.png" %}">
   <link rel="shortcut icon" href="{% static "img/favicon.png" %}">
   
+  <script type="text/javascript" src="{% static "js/less.js" %}"></script>
   <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
   <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
   <script type="text/javascript" src="{% static "js/scripts.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/underscore.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/clndr.min.js" %}"></script>
 </head>
 
 <div class="container">
@@ -50,7 +54,10 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li>
-              <a href="/mealmatcher_app/find-a-meal/">Find a Meal</a>
+              <a href="/mealmatcher_app/find-a-meal/">Create a Meal</a>
+            </li>
+            <li>
+              <a href="/mealmatcher_app/open-meals/">Open Meals</a>
             </li>
             <li class="active">
               <a href="/mealmatcher_app/my-meals/">My Meals</a>
@@ -67,13 +74,16 @@
 
       <h1>My Meals</h1>
       {% if deleted_meal %}
-      <h3>Deleted meal at 
-        {% if deleted_meal.meal_time == "B" %} Breakfast
-        {% elif deleted_meal.meal_time == "L" %} Lunch
-        {% elif deleted_meal.meal_time == "D" %} Dinner
-        {% endif %}
-        on {{ deleted_meal.date|date:"l n/j" }}
-      </h3>
+      <div class="alert alert-danger">
+      
+        <h3>Deleted meal at 
+          {% if deleted_meal.meal_time == "B" %} Breakfast
+          {% elif deleted_meal.meal_time == "L" %} Lunch
+          {% elif deleted_meal.meal_time == "D" %} Dinner
+          {% endif %}
+          on {{ deleted_meal.date|date:"l n/j" }}
+        </h3>
+      </div>
       {% endif %}
       {% if username %}
         {% if meals %}
@@ -85,7 +95,7 @@
               <th>Time</th>
               <th>Location</th>
               <th>My Attire</th>
-              <th>Matched?</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -101,13 +111,6 @@
               {% endif %}
             {% endif %}
             >
-<!--
-              <td>{{ meal.day_of_week}} {{ meal.month_day }}</td>
-              <td>{{ meal.meal_time }}</td>
-              <td>{{ meal.meal_hourmin }}</td>
-              <td>{{ meal.location }}</td>
-              <td>{{ meal.is_matched }}</td>
--->
               <td>
               {% if meal.date.weekday == 0 %} Monday
               {% elif meal.date.weekday == 1 %} Tuesday
@@ -151,37 +154,19 @@
                   {% endif %}
               </td>
 
-              <td>{% if meal.is_matched %} Yes! {% else %} Not yet :( {% endif %}</td>
+              <td>{% if meal.is_matched %} Matched! {% else %} Unmatched {% endif %}</td>
               <!-- TODO(drew) use a button group or a dropdown or something? -->
               <!-- TODO(drew) disable edit if meal is too soon -->
               <td><button type="submit" class="btn btn-default" id="editButton_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
               <td>
                 <form role="form" method="POST" action="/mealmatcher_app/delete-meal/">
                   {% csrf_token %}
-                  <!-- <input class="form-control" id="idToDeleteTextbox_{{ meal.id }}" aria-describedby="basic-addon1"> -->
                   <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
-                  <!-- {% for hidden in deleteForm.hidden_fields %}
-                    {{ hidden }}
-                  {% endfor %}
-                  {% for field in deleteForm.visible_fields %}
-                    {{ field.errors }}
-                    {{ field.help_text }}
-                    {{ field }}
-                  {% endfor %} -->
                   <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}" {% if meal.is_matched %} disabled=true {% endif %}><span class="glyphicon glyphicon-trash"></span></button>
                 </form>
               </td>
             </tr>
             {% endfor %}
-
-            <!-- EXAMPLE: -->
-            <!-- <tr class="danger">
-              <td>Sunday 4/1</td>
-              <td>Lunch</td>
-              <td>12:30-1:00</td>
-              <td>Whitman</td>
-              <td>Not yet :(</td>
-            </tr> -->
           </tbody>
         </table>
         {% else %}
@@ -189,9 +174,9 @@
         {% endif %}
       {% endif %}
 
-      <h1>Expired Meals</h1>
       {% if username %}
         {% if expired_meals %}
+        <h1>Expired Meals</h1>
         <table class="table">
           <thead>
             <tr>
@@ -200,10 +185,11 @@
               <th>Time</th>
               <th>Location</th>
               <th>My Attire</th>
-              <th>Matched?</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
+            <p> {{ expired_meals.length }} </p>
             {% for meal in expired_meals %}
             <tr class= "info">
               <td>
@@ -226,7 +212,6 @@
               </td>
 
               <td>{{ meal.date|date:"g:i A" }}</td>
-              <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
 
               <td>
               {% if meal.location == "WH" %} Whitman
@@ -249,47 +234,54 @@
                   {% endif %}
               </td>
 
-              <td>{% if meal.is_matched %} Yes! {% else %} Not yet :( {% endif %}</td>
-              <!-- TODO(drew) use a button group or a dropdown or something? -->
-              <!-- TODO(drew) disable edit if meal is too soon -->
-              <td></td>
+              <td>Expired</td>
               <td>
                 <form role="form" method="POST" action="/mealmatcher_app/delete-meal/">
                   {% csrf_token %}
-                  <!-- <input class="form-control" id="idToDeleteTextbox_{{ meal.id }}" aria-describedby="basic-addon1"> -->
                   <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
-                  <!-- {% for hidden in deleteForm.hidden_fields %}
-                    {{ hidden }}
-                  {% endfor %}
-                  {% for field in deleteForm.visible_fields %}
-                    {{ field.errors }}
-                    {{ field.help_text }}
-                    {{ field }}
-                  {% endfor %} -->
                   <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}"><span class="glyphicon glyphicon-remove"></span></button>
                 </form>
               </td>
             </tr>
             {% endfor %}
-
-            <!-- EXAMPLE: -->
-            <!-- <tr class="danger">
-              <td>Sunday 4/1</td>
-              <td>Lunch</td>
-              <td>12:30-1:00</td>
-              <td>Whitman</td>
-              <td>Not yet :(</td>
-            </tr> -->
           </tbody>
         </table>
-        {% else %}
-        <h2>No meals proposed! Choose "Find a Meal" to make one.</h2>
         {% endif %}
+        <div id="mini-clndr"></div>
+
+        <script id="calendar-template" type="text/template">
+          <div class="controls">
+            <div class="clndr-previous-button">&lsaquo;</div><div class="month"><%= month %></div><div class="clndr-next-button">&rsaquo;</div>
+          </div>
+
+          <div class="clndr-grid">
+            <div class="days-container clearfix">
+              <div class="days">
+                <div class="headers">
+                  <% _.each(daysOfTheWeek, function(day) { %><div class="day-header"><%= day %></div><% }); %>
+                </div>
+                <% _.each(days, function(day) { %><div class="<%= day.classes %>" id="<%= day.id %>"><%= day.day %></div><% }); %>
+              </div>
+            </div>
+          </div>
+        </script>
+        <!-- uncomment and move into script to add thing -->
+<!--           <div class="event-listing clearfix">
+            <div class="event-listing-title">MY MEALS THIS MONTH</div>
+            <% _.each(eventsThisMonth, function(event) { %>
+                <div class="event-item">
+                  <div class="event-item-info">
+                    <% if (event.is_matched) print("MATCHED: "); else print("unmatched: "); %>
+                    <%= event.prettyDate %> - <%= event.title %> at <%= event.time %> at <%= event.location %>
+                  </div>
+                </div>
+              <% }); %>
+          </div> -->
       {% endif %}
     </div>
   </div>
-</div>
 
+</div>
 
 <script>
   {% if username %}
@@ -299,18 +291,68 @@
         e.preventDefault();
         console.log("meal edited: " + "{{meal.id}}")
       });
-
-      // $( "#deleteSubmitButton_{{ meal.id }}" ).click(function(e) { 
-      //   // e.preventDefault();
-      //   $('#idToDeleteTextbox_{{ meal.id }}' ).val("{{ meal.id }}");
-      //   console.log("meal deleted: " + "{{meal.id}}")
-      // });
       {% endfor %}
     {% endif %}
   {% endif %}
+
+  // CALENDAR STUFF
+  var currentMonth = moment().format('YYYY-MM');
+  var nextMonth    = moment().add('month', 1).format('YYYY-MM');
+  var events = [
+    {% if username %}
+      {% if meals %}
+        {% for meal in meals %}
+        { 
+          date: '{{ meal.date|date:"Y-m-d" }}',
+          prettyDate: '{{ meal.date|date:"n/j" }}',
+          time: '{{ meal.date|date:"g:i A" }}',
+          is_matched: '{{ meal.is_matched }}' == "true",
+          title: 
+            {% if meal.meal_time == "B" %} "Breakfast"
+            {% elif meal.meal_time == "L" %} "Lunch"
+            {% elif meal.meal_time == "D" %} "Dinner"
+            {% endif %},
+          location: 
+            {% if meal.location == "WH" %} "Whitman"
+            {% elif meal.location == "BW" %} "Butler/Wilson"
+            {% elif meal.location == "RM" %} "Rocky/Mathey"
+            {% elif meal.location == "F" %} "Forbes"
+            {% endif %},
+        },
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+    // { date: currentMonth + '-' + '10', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' },
+  ];
+
+  var miniCalDiv = $('#mini-clndr')
+
+  if (miniCalDiv) {
+    miniCalDiv.clndr({
+      template: $('#calendar-template').html(),
+      events: events,
+      clickEvents: {
+        click: function(target) {
+          if(target.events.length) {
+            var daysContainer = $('#mini-clndr').find('.days-container');
+            daysContainer.toggleClass('show-events', true);
+            $('#mini-clndr').find('.x-button').click( function() {
+              daysContainer.toggleClass('show-events', false);
+            });
+          }
+        },
+        onMonthChange: function(month) {
+          // console.log('you just went to ' + month.format('MMMM, YYYY'));
+        },
+        doneRendering: function() {
+          // console.log('this would be a fine place to attach custom event handlers.');
+        }
+      },
+      adjacentDaysChangeMonth: true
+    });
+  }
+  else console.log("miniCalDiv not found");
 </script> 
-
-
 
 </body>
 </html>
