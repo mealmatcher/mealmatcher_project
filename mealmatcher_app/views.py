@@ -153,14 +153,14 @@ def find_meals(request):
 							'princeton.meal.matcher@gmail.com',
 							template='match_email',
 							context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
-							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, (datetime_obj.hour -= 2)),
+							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, (datetime_obj.hour - 2)),
 						)
 						mail.send(
 							[user2 + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							template='match_email',
 							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
-							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, (datetime_obj.hour -= 2)),
+							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, (datetime_obj.hour - 2)),
 						)
 
 
