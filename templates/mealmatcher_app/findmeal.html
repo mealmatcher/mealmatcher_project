@@ -18,35 +18,35 @@
   
   <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
   <link href="{% static "css/style.css" %}" rel="stylesheet">
-  <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
-  <!-- <link href="css/style.css" rel="stylesheet"> -->
+  <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+  <link href="{% static "css/index2.css" %}" rel="stylesheet">
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
-  <![endif]-->
+    <![endif]-->
 
-  <!-- Fav and touch icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "img/apple-touch-icon-144-precomposed.png" %}">
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static "img/apple-touch-icon-114-precomposed.png" %}">
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static "img/apple-touch-icon-72-precomposed.png" %}">
-  <link rel="apple-touch-icon-precomposed" href="{% static "img/apple-touch-icon-57-precomposed.png" %}">
-  <link rel="shortcut icon" href="{% static "img/favicon.png" %}">
-  
-  <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/scripts.js" %}"></script>
-</head>
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "img/apple-touch-icon-144-precomposed.png" %}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static "img/apple-touch-icon-114-precomposed.png" %}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static "img/apple-touch-icon-72-precomposed.png" %}">
+    <link rel="apple-touch-icon-precomposed" href="{% static "img/apple-touch-icon-57-precomposed.png" %}">
+    <link rel="shortcut icon" href="{% static "img/favicon.png" %}">
 
-<div class="container">
-  <div class="row clearfix">
-    <div class="col-md-12 column">
-      <nav class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
+    <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/scripts.js" %}"></script>
+  </head>
+
+  <div class="container">
+    <div class="row clearfix">
+      <div class="col-md-12 column">
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="navbar-header">
            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/mealmatcher_app/">MealMatcher</a>
-        </div>
-        
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+         </div>
+
+         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li class="active">
               <a href="/mealmatcher_app/find-a-meal/">Find a Meal</a>
@@ -65,110 +65,157 @@
         
       </nav>
 
-      <h1>Find a Meal</h1>
+      <!-- <h1>Find a Meal</h1> -->
       {% if badTime %}
       <div class="alert alert-danger">
-          Cannot sign up for a new meal at a mealtime that already has a meal.
+        Cannot sign up for a new meal at a mealtime that already has a meal.
       </div>
       {% endif %}
       <form role="form" id="findMealForm" method="POST" action="/mealmatcher_app/find-a-meal/">
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}
-          {{ hidden }}
+        {{ hidden }}
         {% endfor %}
         {% for field in form.visible_fields %}
-          {{ field.errors }}
-          {{ field.help_text }}
-          {{ field }}
+        {{ field.errors }}
+        {{ field.help_text }}
+        {{ field }}
         {% endfor %}
 
-        <input type="submit" name="submitButton" id="submitButton" value="Match Me!" />
+<!--         <input type="submit" name="submitButton" id="submitButton" value="Match Me!" />
+-->
+<div class="row  pad-top">
+  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3><strong>   Sign up for a meal </strong>  </h3>
+      </div>
 
-        <!-- <div class="dropdown">
-          <label for="dateDropdown">Date</label>
-          <select id="dateDropdown">
-            <option value="Date">dates in next two weeks generated in JS and entered here</option>
-          </select>
-        </div> -->
-        
-        <!-- <div class="mealDropdown">
-          <label for="mealDropdown">Meal</label>
-          <select>
-            <option value="B">Breakfast</option>
-            <option value="L">Lunch</option>
-            <option value="D">Dinner</option>
-          </select> 
-        </div> -->
+      <div class="panel-body">
+        <form role="form">
+          <br/>
+          <div class="form-group input-group">
+            <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
 
-        <!-- <label for="timeDropdown">Time</label>
-        <select class="form-control" id="timeDropdown"></select> -->
-<!-- 
-        <label>Location</label>
-        <div class="checkbox">
-           <label><input type="checkbox">Whitman</label>
-        </div> 
-        <div class="checkbox">
-           <label><input type="checkbox">Rocky/Mathey</label>
-        </div> 
-        <div class="checkbox">
-           <label><input type="checkbox">Butler/Wilson</label>
-        </div> 
-        <div class="checkbox">
-           <label><input type="checkbox">Forbes</label>
-        </div>  -->
 
-        <!-- <div class="input-group">
-           <span class="input-group-addon">I'll be wearing</span>
-           <input class="form-control" id="dressInput" placeholder="jeans and a tshirt" type="dress" aria-describedby="basic-addon1">
-        </div> -->
+            <div class="btn-group">
+             <button type="button" class="btn btn-default dropdown-toggle input-lg form-control" data-toggle="dropdown">
+               <span data-bind="label">Meal</span>&nbsp;<span class="caret"></span>
+             </button>
+             <ul class="dropdown-menu" role="menu">
+               <li><a href="#">Item 1</a></li>
+               <li><a href="#">Another item</a></li>
+               <li><a href="#">This is a longer item that will not fit properly</a></li>
+             </ul>
+           </div>
+         </div>
+         <div class="form-group input-group">
+          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          <div class="btn-group">
+<!--     <label for="{{ MealForm.date_mdy.dateDropdown }}">
+-->     
+<button type="button" class="btn btn-default dropdown-toggle form-control input-lg" data-toggle="dropdown">
+ <span data-bind="label">Date</span>&nbsp;<span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu">
+ <li><a href="#">Item 1</a></li>
+ <li><a href="#">Another item</a></li>
+ <li><a href="#">This is a longer item that will not fit properly</a></li>
+</ul>
+<!--      </label>{{ date_mdy }}
+-->
+</div>
+</div>
+<div class="form-group input-group">
+  <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+  <div class="btn-group">
+   <button type="button" class="btn btn-default dropdown-toggle form-control input-lg" data-toggle="dropdown">
+     <span data-bind="label">Time</span>&nbsp;<span class="caret"></span>
+   </button>
+   <ul class="dropdown-menu" role="menu">
+     <li><a href="#">Item 1</a></li>
+     <li><a href="#">Another item</a></li>
+     <li><a href="#">This is a longer item that will not fit properly</a></li>
+   </ul>
+ </div>
+<!--                                             <input type="text" class="form-control" placeholder="Time" />
+-->                                    </div>
+<div class="form-group input-group">
+  <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+  <div class="btn-group">
+   <button type="button" class="btn btn-default dropdown-toggle form-control input-lg" data-toggle="dropdown">
+     <span data-bind="label">Location</span>&nbsp;<span class="caret"></span>
+   </button>
+   <ul class="dropdown-menu" role="menu">
+     <li><a href="#">Item 1</a></li>
+     <li><a href="#">Another item</a></li>
+     <li><a href="#">This is a longer item that will not fit properly</a></li>
+   </ul>
+ </div>
+</div>
+<div class="form-group input-group">
+  <span class="input-group-addon"><i class="fa fa-child"></i></span>
+  <input type="text" class="form-control" placeholder="What will you be wearing?" />
+</div>
 
-        <!-- <button class="btn btn-default" name="submitButton" id="submitButton" >Match me!</button>       -->
-        </form>
+<input href="#" type="submit" name="submitButton" id="submitButton" class="btn btn-success" value="Match Me!" />
 
-    </div>
-  </div>
+<hr />
+</form>
+
+</div>
+
+</div>
+</div>
+
+</form>
+
+</div>
+</div>
+</div>
+</div>
 </div>
 
 <script>
   var meal_timess = {
     // NOTE(drew): these keys must match the options in the meal selection dropdown
     Breakfast: [
-      ["7:30", "8:00"],
-      ["8:00", "8:30"],
-      ["8:30", "9:00"],
-      ["9:00", "9:30"],
-      ["9:30", "10:00"],
-      ["10:00", "10:30"],
-      ["10:30", "11:00"],
+    ["7:30", "8:00"],
+    ["8:00", "8:30"],
+    ["8:30", "9:00"],
+    ["9:00", "9:30"],
+    ["9:30", "10:00"],
+    ["10:00", "10:30"],
+    ["10:30", "11:00"],
     ],
     Lunch: [
-      ["11:00", "11:45"],
-      ["11:45", "12:30"],
-      ["12:30", "1:15"],
-      ["1:15", "2:00"],
+    ["11:00", "11:45"],
+    ["11:45", "12:30"],
+    ["12:30", "1:15"],
+    ["1:15", "2:00"],
     ],
     Dinner: [
-      ["5:00", "5:45"],
-      ["5:45", "6:30"],
-      ["6:30", "7:15"],
-      ["7:15", "8:00"],
+    ["5:00", "5:45"],
+    ["5:45", "6:30"],
+    ["6:30", "7:15"],
+    ["7:15", "8:00"],
     ],
   };
 
   var updateTimes = function() {
-      var meal = $('#mealDropdown').find(":selected").text();
+    var meal = $('#mealDropdown').find(":selected").text();
 
-      var meal_times = meal_timess[meal];
+    var meal_times = meal_timess[meal];
 
-      $("select#timeDropdown").empty();
-      for (var i = 0; i < meal_times.length; i++) {
-        $("select#timeDropdown").append( $("<option>")
-            .val(meal_times[i][0] + "-" + meal_times[i][1])
-            .html(meal_times[i][0] + " - " + meal_times[i][1])
+    $("select#timeDropdown").empty();
+    for (var i = 0; i < meal_times.length; i++) {
+      $("select#timeDropdown").append( $("<option>")
+        .val(meal_times[i][0] + "-" + meal_times[i][1])
+        .html(meal_times[i][0] + " - " + meal_times[i][1])
         );
-      }
+    }
 
-      return false;
+    return false;
   };
   $('#mealDropdown').change(updateTimes);
   updateTimes();
@@ -177,18 +224,18 @@
   // NOTE: the date should only ever come from a time variable (not a string). Potential security risk otherwise
   // TODO: hook these up in view and make sure names are correct
   var month_lengths = [
-    31,
-    28,
-    31,
-    30,
-    31,
-    30,
-    31,
-    31,
-    30,
-    31,
-    30,
-    31,
+  31,
+  28,
+  31,
+  30,
+  31,
+  30,
+  31,
+  31,
+  30,
+  31,
+  30,
+  31,
   ];
   var today_month = Number("{{ date.month }}");
   var today_day = Number("{{ date.day }}");
@@ -198,9 +245,9 @@
   for (var i = 0; i < days_to_show; i++) {
     dateStr = today_month.toString() + "/" + today_day.toString()
     $("select#dateDropdown").append( $("<option>")
-        .val(dateStr)
-        .html(dateStr)
-    );
+      .val(dateStr)
+      .html(dateStr)
+      );
 
     // TODO leap year support
     // TODO display weekdays
@@ -213,13 +260,25 @@
     }
   }
 
-  // $( "#submitButton" ).click(function(e) {
-  //   // e.preventDefault();
-  //   // console.log("asdf");
-  //   window.location.href = '/mealmatcher_app/my-meals/';
-  // });
-
 </script> 
+
+
+
+
+<script>
+  //Display selection on button
+  $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+
+    var $target = $( event.currentTarget );
+
+    $target.closest( '.btn-group' )
+    .find( '[data-bind="label"]' ).text( $target.text() )
+    .end()
+    .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+
+    return false;
+  });
+</script>
 
 </body>
 </html>
