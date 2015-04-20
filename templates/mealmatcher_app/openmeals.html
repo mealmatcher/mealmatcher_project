@@ -41,6 +41,8 @@
   <script type="text/javascript" src="{% static "js/underscore.js" %}"></script>
   <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
   <script type="text/javascript" src="{% static "js/clndr.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/clndr.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/jquery.scrollTo.js" %}"></script>
 </head>
 
 <div class="container">
@@ -73,95 +75,99 @@
       </nav>
 
       <h1>Open Meals</h1>
-      {% if meals %}
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Meal</th>
-            <th>Time</th>
-            <th>Location</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for meal in meals %}
-          <tr class=
-          {% if meal == new_meal %}
-            "warning"
-          {% else %}
-            {% if meal.is_matched %}
-            "success"
-            {% else %}
-            "danger"
-            {% endif %}
-          {% endif %}
-          >
-            <td>
-            {% if meal.date.weekday == 0 %} Monday
-            {% elif meal.date.weekday == 1 %} Tuesday
-            {% elif meal.date.weekday == 2 %} Wednesday
-            {% elif meal.date.weekday == 3 %} Thursday
-            {% elif meal.date.weekday == 4 %} Friday
-            {% elif meal.date.weekday == 5 %} Saturday
-            {% elif meal.date.weekday == 6 %} Sunday
-            {% endif %}
-            {{ meal.date.month}}/{{ meal.date.day }}
-            </td>
 
-            <td>
-            {% if meal.meal_time == "B" %} Breakfast
-            {% elif meal.meal_time == "L" %} Lunch
-            {% elif meal.meal_time == "D" %} Dinner
-            {% endif %}
-            </td>
+      <div class="container">
+        <div class="col-md-4">
+          <div id="mini-clndr" class="clearfix"></div>
 
-            <td>{{ meal.date|date:"g:i A" }}</td>
-            <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
-
-            <td>
-            {% if meal.location == "WH" %} Whitman
-            {% elif meal.location == "BW" %} Butler/Wilson
-            {% elif meal.location == "RM" %} Rocky/Mathey
-            {% elif meal.location == "F" %} Forbes
-            {% endif %}
-            </td>
-
-            <!-- TODO(drew) use a button group or a dropdown or something? -->
-            <!-- TODO(drew) disable edit if meal is too soon -->
-            <td><button type="submit" class="btn btn-default" id="editButton_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
-            <td>
-              <form role="form" method="POST" action="/mealmatcher_app/delete-meal/">
-                {% csrf_token %}
-                <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
-                <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}" {% if meal.is_matched %} disabled=true {% endif %}><span class="glyphicon glyphicon-trash"></span></button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <h2>No open meals found! Choose "Find a Meal" to make one.</h2>
-      {% endif %}
-
-      <div id="mini-clndr"></div>
-
-      <script id="calendar-template" type="text/template">
-        <div class="controls">
-          <div class="clndr-previous-button">&lsaquo;</div><div class="month"><%= month %></div><div class="clndr-next-button">&rsaquo;</div>
-        </div>
-
-        <div class="clndr-grid">
-          <div class="days-container clearfix">
-            <div class="days">
-              <div class="headers">
-                <% _.each(daysOfTheWeek, function(day) { %><div class="day-header"><%= day %></div><% }); %>
-              </div>
-              <% _.each(days, function(day) { %><div class="<%= day.classes %>" id="<%= day.id %>"><%= day.day %></div><% }); %>
+          <script id="calendar-template" type="text/template">
+            <div class="controls">
+              <div class="clndr-previous-button">&lsaquo;</div><div class="month unselectable"><%= month %></div><div class="clndr-next-button">&rsaquo;</div>
             </div>
-          </div>
+
+            <div class="clndr-grid">
+              <div class="days-container clearfix">
+                <div class="days">
+                  <div class="headers">
+                    <% _.each(daysOfTheWeek, function(day) { %><div class="day-header unselectable"><%= day %></div><% }); %>
+                  </div>
+                  <% _.each(days, function(day) { %><div class="<%= day.classes %> unselectable" id="<%= day.id %>"><%= day.day %></div><% }); %>
+                </div>
+              </div>
+            </div>
+          </script>
         </div>
-      </script>
+
+        <div class="col-md-8 meals-table-div" >
+          {% if meals %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Meal</th>
+                <th>Time</th>
+                <th>Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for meal in meals %}
+                {% if not meal.is_matched %}
+                  <tr id="{{meal.id}}" class= "">
+                    <td>
+                    {% if meal.date.weekday == 0 %} Monday
+                    {% elif meal.date.weekday == 1 %} Tuesday
+                    {% elif meal.date.weekday == 2 %} Wednesday
+                    {% elif meal.date.weekday == 3 %} Thursday
+                    {% elif meal.date.weekday == 4 %} Friday
+                    {% elif meal.date.weekday == 5 %} Saturday
+                    {% elif meal.date.weekday == 6 %} Sunday
+                    {% endif %}
+                    {{ meal.date.month}}/{{ meal.date.day }}
+                    </td>
+
+                    <td>
+                    {% if meal.meal_time == "B" %} Breakfast
+                    {% elif meal.meal_time == "L" %} Lunch
+                    {% elif meal.meal_time == "D" %} Dinner
+                    {% endif %}
+                    </td>
+
+                    <td>{{ meal.date|date:"g:i A" }}</td>
+                    <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
+
+                    <td>
+                    {% if meal.location == "WH" %} Whitman
+                    {% elif meal.location == "BW" %} Butler/Wilson
+                    {% elif meal.location == "RM" %} Rocky/Mathey
+                    {% elif meal.location == "F" %} Forbes
+                    {% endif %}
+                    </td>
+
+                    <td>
+                      <form role="form" method="POST" action="/mealmatcher_app/join-meal/">
+                        {% csrf_token %}
+                        <input type="text" name="idToJoin" value="{{ meal.id }}" hidden = true />
+                        <!-- {% for hidden in form.hidden_fields %}
+                          {{ hidden }}
+                        {% endfor %}
+                        {% for field in form.visible_fields %}
+                          {{ field.as_hidden }}
+                        {% endfor %} -->
+                        <button type="submit" class="btn btn-primary" id="joinMealButton_{{ meal.id }}"><span class="glyphicon glyphicon-plus"></span></button>
+                      </form>
+                    </td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <h2>No open meals found! Choose "Find a Meal" to make one.</h2>
+          {% endif %}
+        </div>
+      </div>
+
+
         <!-- uncomment and move into script to add thing -->
         <!-- <div class="event-listing clearfix">
           <div class="event-listing-title">OPEN MEALS THIS MONTH</div>
@@ -203,6 +209,7 @@
           prettyDate: '{{ meal.date|date:"n/j" }}',
           time: '{{ meal.date|date:"g:i A" }}',
           is_matched: '{{ meal.is_matched }}' == "true",
+          id: '{{meal.id}}',
           title: 
             {% if meal.meal_time == "B" %} "Breakfast"
             {% elif meal.meal_time == "L" %} "Lunch"
@@ -236,6 +243,28 @@
               daysContainer.toggleClass('show-events', false);
             });
           }
+
+          console.log(target);
+
+          if (target.events.length > 0) {
+            var elt = document.getElementById(target.events[0].id);
+            // var div = $("#meals-table-div");
+            $.scrollTo(elt, 1600, {
+              interrupt: true,
+            });
+          }
+
+          {% for meal in meals %}
+          var elt = $("#{{ meal.id }}");
+          if (elt) elt.attr("class", "");
+          {% endfor %}
+
+          for (var i = 0; i < target.events.length; i++) {
+            var elt = $("#"+target.events[i].id);
+            if (elt) {
+              elt.attr("class", "warning");
+            }
+          }
         },
         onMonthChange: function(month) {
           // console.log('you just went to ' + month.format('MMMM, YYYY'));
@@ -244,10 +273,26 @@
           // console.log('this would be a fine place to attach custom event handlers.');
         }
       },
-      adjacentDaysChangeMonth: true
+      adjacentDaysChangeMonth: false,
     });
   }
   else console.log("miniCalDiv not found");
+
+
+  $(function() {  
+      var window_height = $(window).height();
+      var content_height = window_height - 600;
+
+      $('.meals-table-div').height(content_height);
+  });
+
+  $( window ).resize(function() {
+      var window_height = $(window).height(),
+         content_height = window_height - 600;
+      $('.meals-table-div').height(content_height);
+  });
+
+
 </script> 
 
 </body>

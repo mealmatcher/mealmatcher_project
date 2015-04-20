@@ -15,6 +15,16 @@ class DeleteMealForm(forms.Form):
     fields = ('idToDelete',)
     exclude = ()
 
+class JoinMealForm(forms.Form):
+  idToJoin = forms.CharField(
+    widget = forms.TextInput(attrs={'id': "idToJoinTextbox"}),
+    max_length = 3,  
+  )
+
+  class Meta:
+    fields = ('idToJoin',)
+    exclude = ()
+
 
 class MealForm(forms.ModelForm):
   # filled in by JS, mm/dd but not necessarily leading 0s
@@ -29,23 +39,6 @@ class MealForm(forms.ModelForm):
     widget = forms.Select(attrs={'id': 'timeDropdown'}),
     max_length = 11,    
     help_text = "at",
-    # choices = ( # HACK(drew): this tuple must include all options filled in dynamically in findmeal.html
-    #   ("7:30-8:00", "7:30 - 8:00"),
-    #   ("8:00-8:30", "8:00 - 8:30"),
-    #   ("8:30-9:00", "8:30 - 9:00"),
-    #   ("9:00-9:30", "9:00 - 9:30"),
-    #   ("9:30-10:00", "9:30 - 10:00"),
-    #   ("10:00-10:30", "10:00 - 10:30"),
-    #   ("10:30-11:00", "10:30 - 11:00"),
-    #   ("11:00-11:45", "11:00 - 11:45"),
-    #   ("11:45-12:30", "11:45 - 12:30"),
-    #   ("12:30-1:15", "12:30 - 1:15"),
-    #   ("1:15-2:00", "1:15 - 2:00"),
-    #   ("5:00-5:45", "5:00 - 5:45"),
-    #   ("5:45-6:30", "5:45 - 6:30"),
-    #   ("6:30-7:15", "6:30 - 7:15"),
-    #   ("7:15-8:00", "7:15 - 8:00"),
-    # )
   ) 
   
   meal_time = forms.ChoiceField(

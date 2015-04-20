@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, logout
 # from django.db.models import Q
 from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
-from mealmatcher_app.forms import MealForm, DeleteMealForm
+from mealmatcher_app.forms import MealForm, DeleteMealForm, JoinMealForm
 import datetime, random
 #import pytz
 from django.utils import timezone as django_timezone
@@ -21,6 +21,145 @@ from django.template.loader import render_to_string
 def index(request):
 	context_dict = {'user': request.user}
 	return render(request, 'mealmatcher_app/index.html', context_dict)
+
+def match_meal(attire1, my_user_profile, matched_meal):
+	matched_meal.attire2 = attire1
+
+	#mailer user
+	matchedUsers = matched_meal.users.all()
+	# TODO error if not found
+	# if len(matchedUsers) > 0:
+	user2 = matchedUsers[0].user.username
+
+	# print(type(matched_meal.users))
+	# print(type(my_user_profile))
+
+	# HACK(drew): match with dummy user for debug
+	dummyProfile = None
+	dummyUser = None
+	dummyUsers = User.objects.filter(username="nobody")
+	if len(dummyUsers) == 0:
+		username = "nobody"
+		password = "nobody"
+		dummyUser = User(username=username, password=password, email= ("nobody" + '@princeton.edu'))
+		dummyUser.save()
+		dummyUser.set_password(dummyUser.password)
+		dummyUser.save()
+		dummyProfile = UserProfile(user = dummyUser)
+		dummyProfile.save()
+	else:
+		dummyUser = dummyUsers[0]
+		dummyProfile = UserProfile.objects.filter(user=dummyUser)[0]
+
+	matched_meal.users.add(dummyProfile)
+
+	# TODO(drew) get rid of dummy user and uncomment this
+	# matched_meal.users.add(my_user_profile)
+
+	#mailer
+	# if not EmailTemplate.objects.all():
+	# 	EmailTemplate.objects.create(
+	# 		name='match_email',
+	# 		subject='Good Day, {{ name }}!',
+	# 		content='MEAL INCOMING, {{ name }}!',
+	# 		html_content='MEAL INCOMING, {{ name }}! DATE - {{ datetime }} MEAL - {{ meal }} LOCATION - {{ location }} YOUR GUEST ATTIRE - {{ attire }}',
+	# 	)
+	# 	EmailTemplate.objects.create(
+	# 		name='delete_email',
+	# 		subject='Good Day, {{ name }}!',
+	# 		content='MEAL INCOMING, {{ name }}!',
+	# 		html_content='MEAL INCOMING, {{ name }}! Your {{ meal }} on {{ datetime }} at {{ location }} has been unmatched, but we put you back in the pool for other matches!',
+	# 	)
+
+
+	# #html_content=render_to_string('match_email_html.html'),
+
+	# #mailer view
+	# mail.send(
+	# 	[username + '@princeton.edu'],
+	# 	'princeton.meal.matcher@gmail.com',
+	# 	template='match_email',
+	# 	context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+	# 	priority='now',
+	# )
+	# mail.send(
+	# 	[user2 + '@princeton.edu'],
+	# 	'princeton.meal.matcher@gmail.com',
+	# 	template='match_email',
+	# 	context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+	# 	priority='now',
+	# )
+
+	# if (datetime_obj.hour == 2):
+	# 	mail.send(
+	# 		[username + '@princeton.edu'],
+	# 		'princeton.meal.matcher@gmail.com',
+	# 		template='match_email',
+	# 		context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+	# 		scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
+	# 	)
+	# 	mail.send(
+	# 		[user2 + '@princeton.edu'],
+	# 		'princeton.meal.matcher@gmail.com',
+	# 		template='match_email',
+	# 		context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+	# 		scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
+	# 	)
+	# elif (datetime_obj.hour == 1):
+	# 	mail.send(
+	# 		[username + '@princeton.edu'],
+	# 		'princeton.meal.matcher@gmail.com',
+	# 		template='match_email',
+	# 		context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+	# 		scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 11),
+	# 	)
+	# 	mail.send(
+	# 		[user2 + '@princeton.edu'],
+	# 		'princeton.meal.matcher@gmail.com',
+	# 		template='match_email',
+	# 		context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+	# 		scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 11),
+	# 	)
+	# else:
+	# 	mail.send(
+	# 		[username + '@princeton.edu'],
+	# 		'princeton.meal.matcher@gmail.com',
+	# 		template='match_email',
+	# 		context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+	# 		scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, (datetime_obj.hour - 2)),
+	# 	)
+	# 	mail.send(
+	# 		[user2 + '@princeton.edu'],
+	# 		'princeton.meal.matcher@gmail.com',
+	# 		template='match_email',
+	# 		context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+	# 		scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, (datetime_obj.hour - 2)),
+	# 	)
+
+	print matched_meal.attire2
+	matched_meal.users.add(my_user_profile)
+	matched_meal.save()
+
+@login_required
+def join_meal(request):
+	if request.method == 'POST': # http post, process the data
+		print 'received a join meal post'
+		form = JoinMealForm(request.POST)
+		if form.is_valid():
+			data = form.cleaned_data
+			print(data['idToJoin'])
+			matchingMeals = Meal.objects.filter(id=data['idToJoin'])
+			if len(matchingMeals) >= 1:
+				mealToJoin = matchingMeals[0]
+				print("found meal")
+				print(mealToJoin)
+				my_user_profile = UserProfile.objects.filter(user=request.user)[0]
+				match_meal("clothes", my_user_profile, mealToJoin)
+				return view_meals(request, new_meal=mealToJoin)
+				# return view_meals(request)
+		else:
+			print form.errors
+		return view_meals(request)
 
 # find-meals page
 @login_required
@@ -45,7 +184,6 @@ def find_meals(request):
 			#if hour < 0: hour = hour + 12
 			minute = int(date_time[1])
 			
-
 			datetime_obj = datetime.datetime(year, month, day, hour, minute)
 			#eastern = pytz.timezone('US/Eastern') # attempt at timezones, did not work
 			#fmt = '%Y-%m-%d %H:%M %Z%z'
@@ -75,99 +213,7 @@ def find_meals(request):
 				# if there are still possible_matches, make the match, 				
 				if possible_matches:
 					matched_meal = random.choice(possible_matches)
-					matched_meal.attire2 = attire1
-
-					#mailer user
-					user2 = matched_meal.users.all()[0].user.username
-
-					matched_meal.users.add(my_user_profile)
-					new_meal = None
-
-					#mailer
-					if not EmailTemplate.objects.all():
-						EmailTemplate.objects.create(
-							name='match_email',
-							subject='Good Day, {{ name }}!',
-							content='MEAL INCOMING, {{ name }}!',
-							html_content='MEAL INCOMING, {{ name }}! DATE - {{ datetime }} MEAL - {{ meal }} LOCATION - {{ location }} YOUR GUEST ATTIRE - {{ attire }}',
-						)
-						EmailTemplate.objects.create(
-							name='delete_email',
-							subject='Good Day, {{ name }}!',
-							content='MEAL INCOMING, {{ name }}!',
-							html_content='MEAL INCOMING, {{ name }}! Your {{ meal }} on {{ datetime }} at {{ location }} has been unmatched, but we put you back in the pool for other matches!',
-						)
-
-
-					#html_content=render_to_string('match_email_html.html'),
-
-					#mailer view
-					mail.send(
-						[username + '@princeton.edu'],
-						'princeton.meal.matcher@gmail.com',
-						template='match_email',
-						context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
-						priority='now',
-					)
-					mail.send(
-						[user2 + '@princeton.edu'],
-						'princeton.meal.matcher@gmail.com',
-						template='match_email',
-						context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
-						priority='now',
-					)
-
-					if (datetime_obj.hour == 2):
-						mail.send(
-							[username + '@princeton.edu'],
-							'princeton.meal.matcher@gmail.com',
-							template='match_email',
-							context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
-							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
-						)
-						mail.send(
-							[user2 + '@princeton.edu'],
-							'princeton.meal.matcher@gmail.com',
-							template='match_email',
-							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
-							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
-						)
-					elif (datetime_obj.hour == 1):
-						mail.send(
-							[username + '@princeton.edu'],
-							'princeton.meal.matcher@gmail.com',
-							template='match_email',
-							context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
-							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 11),
-						)
-						mail.send(
-							[user2 + '@princeton.edu'],
-							'princeton.meal.matcher@gmail.com',
-							template='match_email',
-							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
-							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 11),
-						)
-					else:
-						mail.send(
-							[username + '@princeton.edu'],
-							'princeton.meal.matcher@gmail.com',
-							template='match_email',
-							context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
-							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, (datetime_obj.hour - 2)),
-						)
-						mail.send(
-							[user2 + '@princeton.edu'],
-							'princeton.meal.matcher@gmail.com',
-							template='match_email',
-							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
-							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, (datetime_obj.hour - 2)),
-						)
-
-
-					print matched_meal.attire2
-					matched_meal.users.add(my_user_profile)
-					new_meal = matched_meal
-					new_meal.save()
+					match_meal(attire1, my_user_profile, matched_meal)
 
 					#return HttpResponse('Made a match!')
 				else: # no matches, make a new Meal and add it to the database
@@ -234,7 +280,9 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 
 @login_required
 def open_meals(request):
-	meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
+	meals = list(Meal.objects.order_by('date'))
+	# TODO(drew) reenable exclusion of my meals
+	# meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
 	expired_meals = []
 	removed_meals = []
 	for meal in meals:
