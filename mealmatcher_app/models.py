@@ -22,6 +22,7 @@ class Meal(models.Model):
 		('B', 'Breakfast'),
 		('L', 'Lunch'),
 		('D', 'Dinner'),
+		('R', 'Brunch'),
 	)
 	meal_time = models.CharField(max_length=1, choices=MEALS)
 
