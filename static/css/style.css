@@ -178,3 +178,7 @@
   /* IE10+ */
 
 }
+
+.change-font-size {
+    font: normal 18px Helvetica;
+}
