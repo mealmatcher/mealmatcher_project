@@ -313,7 +313,7 @@
                         {% elif meal.location == "RM" %} "Rocky/Mathey"
                         {% elif meal.location == "F" %} "Forbes"
                         {% endif %}
-        var confirmation_message = "Are you sure you want to delete this meal:"
+        var confirmation_message = "Are you sure you want to delete this meal: "
                                    + date + "  " + meal_time + "  " + time + " at " + location;
         bootbox.confirm(confirmation_message, function(result) {
             if (result) {
