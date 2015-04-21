@@ -203,3 +203,7 @@ body {
 .change-font-size {
     font: normal 18px Helvetica;
 }
+
+.change-font-size-bigger{
+  font: normal 24px Helvetica;
+}

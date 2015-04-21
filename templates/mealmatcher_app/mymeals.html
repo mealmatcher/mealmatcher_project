@@ -80,14 +80,14 @@
       {% if deleted_meal %}
       <div class="alert alert-danger">
       
-        <h3>Deleted meal at 
-          {% if deleted_meal.meal_time == "B" %} Breakfast
-          {% elif deleted_meal.meal_time == "L" %} Lunch
-          {% elif deleted_meal.meal_time == "D" %} Dinner
-          {% elif deleted_meal.meal_time == "R" %} Brunch
+        <h6 class="change-font-size">Removed
+          {% if deleted_meal.meal_time == "B" %} breakfast
+          {% elif deleted_meal.meal_time == "L" %} lunch
+          {% elif deleted_meal.meal_time == "D" %} dinner
+          {% elif deleted_meal.meal_time == "R" %} brunch
           {% endif %}
-          on {{ deleted_meal.date|date:"l n/j" }}
-        </h3>
+          on {{ deleted_meal.date|date:"l, n/j" }}
+        </h6>
       </div>
       {% endif %}
       {% if username %}
@@ -176,7 +176,7 @@
           </tbody>
         </table>
         {% else %}
-        <h2>No meals proposed! Choose "Find a Meal" to make one.</h2>
+        <h2 class="change-font-size">No meals proposed! Choose "Find a Meal" to make one.</h2>
         {% endif %}
       {% endif %}
 
@@ -302,10 +302,10 @@
         var currentForm = this;
         e.preventDefault();
         var date = "{{ meal.date.month}}/{{ meal.date.day }}"
-        var meal_time = {% if meal.meal_time == "B" %} "Breakfast"
-                        {% elif meal.meal_time == "L" %} "Lunch"
-                        {% elif meal.meal_time == "D" %} "Dinner"
-                        {% elif meal.meal_time == "R" %} "Brunch"
+        var meal_time = {% if meal.meal_time == "B" %} "breakfast"
+                        {% elif meal.meal_time == "L" %} "lunch"
+                        {% elif meal.meal_time == "D" %} "dinner"
+                        {% elif meal.meal_time == "R" %} "brunch"
                         {% endif %}
         var time = "{{ meal.date|date:"g:i A" }}"
         var location = {% if meal.location == "WH" %} "Whitman"
@@ -313,8 +313,8 @@
                         {% elif meal.location == "RM" %} "Rocky/Mathey"
                         {% elif meal.location == "F" %} "Forbes"
                         {% endif %}
-        var confirmation_message = "Are you sure you want to delete this meal: "
-                                   + date + "  " + meal_time + "  " + time + " at " + location;
+        var confirmation_message = "Are you sure you want to remove " + 
+                                   meal_time + " at " + time + ", " + date + " at " + location + "?";
         bootbox.confirm(confirmation_message, function(result) {
             if (result) {
                 console.log("meal deleted: " + "{{meal.id}}")
