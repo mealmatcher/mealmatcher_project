@@ -41,6 +41,10 @@
   <script type="text/javascript" src="{% static "js/underscore.js" %}"></script>
   <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
   <script type="text/javascript" src="{% static "js/clndr.min.js" %}"></script>
+
+
+    <script type="text/javascript" src="{% static "js/bootbox.min.js" %}"></script>
+
 </head>
 
 <div class="container">
@@ -80,6 +84,7 @@
           {% if deleted_meal.meal_time == "B" %} Breakfast
           {% elif deleted_meal.meal_time == "L" %} Lunch
           {% elif deleted_meal.meal_time == "D" %} Dinner
+          {% elif deleted_meal.meal_time == "R" %} Brunch
           {% endif %}
           on {{ deleted_meal.date|date:"l n/j" }}
         </h3>
@@ -127,6 +132,7 @@
               {% if meal.meal_time == "B" %} Breakfast
               {% elif meal.meal_time == "L" %} Lunch
               {% elif meal.meal_time == "D" %} Dinner
+              {% elif meal.meal_time == "R" %} Brunch
               {% endif %}
               </td>
 
@@ -154,12 +160,12 @@
                   {% endif %}
               </td>
 
-              <td>{% if meal.is_matched %} Matched! {% else %} Unmatched {% endif %}</td>
+              <td>{% if meal.is_matched %} Matched! {% else %} Unmatched! {% endif %}</td>
               <!-- TODO(drew) use a button group or a dropdown or something? -->
               <!-- TODO(drew) disable edit if meal is too soon -->
               <td><button type="submit" class="btn btn-default" id="editButton_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
               <td>
-                <form role="form" method="POST" action="/mealmatcher_app/delete-meal/">
+                <form role="form" method="POST" action="/mealmatcher_app/delete-meal/" id="deleteSubmitForm_{{ meal.id }}">
                   {% csrf_token %}
                   <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
                   <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}" {% if meal.is_matched %} disabled=true {% endif %}><span class="glyphicon glyphicon-trash"></span></button>
@@ -208,6 +214,7 @@
               {% if meal.meal_time == "B" %} Breakfast
               {% elif meal.meal_time == "L" %} Lunch
               {% elif meal.meal_time == "D" %} Dinner
+              {% elif meal.meal_time == "R" %} Brunch
               {% endif %}
               </td>
 
@@ -291,6 +298,30 @@
         e.preventDefault();
         console.log("meal edited: " + "{{meal.id}}")
       });
+      $('#deleteSubmitForm_{{ meal.id }}').submit(function(e) {
+        var currentForm = this;
+        e.preventDefault();
+        var date = "{{ meal.date.month}}/{{ meal.date.day }}"
+        var meal_time = {% if meal.meal_time == "B" %} "Breakfast"
+                        {% elif meal.meal_time == "L" %} "Lunch"
+                        {% elif meal.meal_time == "D" %} "Dinner"
+                        {% elif meal.meal_time == "R" %} "Brunch"
+                        {% endif %}
+        var time = "{{ meal.date|date:"g:i A" }}"
+        var location = {% if meal.location == "WH" %} "Whitman"
+                        {% elif meal.location == "BW" %} "Butler/Wilson"
+                        {% elif meal.location == "RM" %} "Rocky/Mathey"
+                        {% elif meal.location == "F" %} "Forbes"
+                        {% endif %}
+        var confirmation_message = "Are you sure you want to delete this meal: "
+                                   + date + "  " + meal_time + "  " + time + " at " + location;
+        bootbox.confirm(confirmation_message, function(result) {
+            if (result) {
+                console.log("meal deleted: " + "{{meal.id}}")
+                currentForm.submit();
+            }
+        });
+    });
       {% endfor %}
     {% endif %}
   {% endif %}
@@ -311,6 +342,7 @@
             {% if meal.meal_time == "B" %} "Breakfast"
             {% elif meal.meal_time == "L" %} "Lunch"
             {% elif meal.meal_time == "D" %} "Dinner"
+            {% elif meal.meal_time == "R" %} "Brunch"
             {% endif %},
           location: 
             {% if meal.location == "WH" %} "Whitman"
@@ -352,6 +384,8 @@
     });
   }
   else console.log("miniCalDiv not found");
+
+  
 </script> 
 
 </body>
