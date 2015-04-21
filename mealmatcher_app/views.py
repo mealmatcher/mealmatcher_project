@@ -270,7 +270,7 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 			meals.remove(meal)
 			expired_meals.append(meal)
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
-	if new_meal:
+	if new_meal and new_meal in meals:
 		meals.remove(new_meal)
 		meals.insert(0, new_meal)
 	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'deleted_meal':deleted_meal, 
