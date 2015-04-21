@@ -19,14 +19,14 @@ class DeleteMealForm(forms.Form):
 class MealForm(forms.ModelForm):
   # filled in by JS, mm/dd but not necessarily leading 0s
   date_mdy = forms.CharField(
-    widget = forms.Select(attrs={'id': 'dateDropdown'}),
+    widget = forms.Select(attrs={'id': 'dateDropdown', 'class': 'form-control'}),
     max_length = 5,
     help_text = "on"
   )
 
   # filled in by JS, hour:minutes-hour:minutes
   date_time = forms.CharField(
-    widget = forms.Select(attrs={'id': 'timeDropdown'}),
+    widget = forms.Select(attrs={'id': 'timeDropdown', 'class': 'form-control'}),
     max_length = 11,    
     help_text = "at",
     # choices = ( # HACK(drew): this tuple must include all options filled in dynamically in findmeal.html
@@ -49,7 +49,7 @@ class MealForm(forms.ModelForm):
   ) 
   
   meal_time = forms.ChoiceField(
-    widget = forms.Select(attrs={'id': 'mealDropdown', 'name': 'mealDropdown'}),
+    widget = forms.Select(attrs={'id': 'mealDropdown', 'name': 'mealDropdown', 'class': 'form-control'}),
     help_text = "I want to get",
     choices = (
       ('B', 'Breakfast'),
@@ -59,6 +59,7 @@ class MealForm(forms.ModelForm):
   )
 
   location = forms.ChoiceField(
+    widget = forms.Select(attrs={'class': 'form-control'}),
     help_text = "at",
     choices = (
       ('WH', 'Whitman'),

@@ -68,7 +68,14 @@
         
       </nav>
 
-      <!-- <h1>Find a Meal</h1> -->
+      <div class="row  pad-top">
+  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3><strong>   Sign up for a meal </strong>  </h3>
+      </div>
+
+      <div class="panel-body">
       {% if badTime %}
       <div class="alert alert-danger">
         Cannot sign up for a new meal at a mealtime that already has a meal.
@@ -80,14 +87,41 @@
         {{ hidden }}
         {% endfor %}
         {% for field in form.visible_fields %}
-        {{ field.errors }}
-        {{ field.help_text }}
-        {{ field }}
-        {% endfor %}
+        <div class="form-group input-group">
 
-<!--         <input type="submit" name="submitButton" id="submitButton" value="Match Me!" />
--->
-<div class="row  pad-top">
+        {% if forloop.counter == 1 %}
+            <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
+        {% endif %}
+
+        {% if forloop.counter == 2 %}
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+        {% endif %}
+
+        {% if forloop.counter == 3 %}
+            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            <!-- <select class="form-control" id="dateDropdown" name="dateDropdown">
+  </select> -->
+        {% endif %}
+
+        {% if forloop.counter == 4 %}
+            <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+        {% endif %}
+
+
+        {% if forloop.counter == 5 %}
+            <span class="input-group-addon"><i class="fa fa-child"></i></span>
+        {% endif %}
+
+        {{ field.errors }}
+        {{ field }}
+        </div>
+        {% endfor %}
+        <input href="#" type="submit" name="submitButton" id="submitButton" class="btn btn-success" value="Match Me!" />
+
+<hr />
+</form>
+
+<!-- <div class="row  pad-top">
   <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -95,89 +129,52 @@
       </div>
 
       <div class="panel-body">
-        <form role="form">
-          <br/>
+        {% if badTime %}
+        <div class="alert alert-danger">
+          Cannot sign up for a new meal at a mealtime that already has a meal.
+        </div>
+        {% endif %}
+        <form role="form" id="findMealForm" method="POST" action="/mealmatcher_app/find-a-meal/">
+          {% csrf_token %}          <br/>
           <div class="form-group input-group">
             <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
-
-
-            <div class="btn-group">
-             <button type="button" class="btn btn-default dropdown-toggle input-lg form-control" data-toggle="dropdown">
-               <span data-bind="label">Meal</span>&nbsp;<span class="caret"></span>
-             </button>
-             <ul class="dropdown-menu" role="menu">
-               <li><a href="#">Item 1</a></li>
-               <li><a href="#">Another item</a></li>
-               <li><a href="#">This is a longer item that will not fit properly</a></li>
-             </ul>
+            <select class="form-control" id="mealDropdown" name="mealDropdown">
+              <option>Breakfast</option>
+              <option>Lunch</option>
+              <option>Dinner</option>
+            </select>
            </div>
-         </div>
-         <div class="form-group input-group">
-          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-          <div class="btn-group">
-<!--     <label for="{{ MealForm.date_mdy.dateDropdown }}">
--->     
-<button type="button" class="btn btn-default dropdown-toggle form-control input-lg" data-toggle="dropdown">
- <span data-bind="label">Date</span>&nbsp;<span class="caret"></span>
-</button>
-<ul class="dropdown-menu" role="menu">
- <li><a href="#">Item 1</a></li>
- <li><a href="#">Another item</a></li>
- <li><a href="#">This is a longer item that will not fit properly</a></li>
-</ul>
-<!--      </label>{{ date_mdy }}
--->
+           <div class="form-group input-group">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <div class="btn-group">
+  <select class="form-control" id="dateDropdown" name="dateDropdown">
+  </select>
 </div>
 </div>
 <div class="form-group input-group">
   <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-  <div class="btn-group">
-   <button type="button" class="btn btn-default dropdown-toggle form-control input-lg" data-toggle="dropdown">
-     <span data-bind="label">Time</span>&nbsp;<span class="caret"></span>
-   </button>
-   <ul class="dropdown-menu" role="menu">
-     <li><a href="#">Item 1</a></li>
-     <li><a href="#">Another item</a></li>
-     <li><a href="#">This is a longer item that will not fit properly</a></li>
-   </ul>
- </div>
-<!--                                             <input type="text" class="form-control" placeholder="Time" />
--->                                    </div>
+ <select class="form-control" id="timeDropdown" name="timeDropdown">
+            </select>
+            </div>
 <div class="form-group input-group">
   <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-  <div class="btn-group">
-   <button type="button" class="btn btn-default dropdown-toggle form-control input-lg" data-toggle="dropdown">
-     <span data-bind="label">Location</span>&nbsp;<span class="caret"></span>
-   </button>
-   <ul class="dropdown-menu" role="menu">
-     <li><a href="#">Item 1</a></li>
-     <li><a href="#">Another item</a></li>
-     <li><a href="#">This is a longer item that will not fit properly</a></li>
-   </ul>
- </div>
-</div>
+<select class="form-control" name="location">
+              <option value="WH">Whitman</option>
+              <option value="RM">Rocky/Mathey</option>
+              <option value="BW">Butler/Wilson</option>
+              <option value="F">Forbes</option>
+            </select>
+            </div>
+
 <div class="form-group input-group">
   <span class="input-group-addon"><i class="fa fa-child"></i></span>
-  <input type="text" class="form-control" placeholder="What will you be wearing?" />
+  <input type="text" class="form-control" name="attire1" placeholder="What will you be wearing?" />
 </div>
 
 <input href="#" type="submit" name="submitButton" id="submitButton" class="btn btn-success" value="Match Me!" />
 
 <hr />
-</form>
-
-</div>
-
-</div>
-</div>
-
-</form>
-
-</div>
-</div>
-</div>
-</div>
-</div>
+</form> -->
 
 <script>
   var meal_timess = {
