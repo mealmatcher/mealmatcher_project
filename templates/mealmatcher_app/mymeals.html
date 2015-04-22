@@ -81,12 +81,17 @@
       <div class="alert alert-danger">
       
         <h6 class="change-font-size">Removed
+          {% if deleted_meal.is_expired %} expired 
+          {% endif %}
           {% if deleted_meal.meal_time == "B" %} breakfast
           {% elif deleted_meal.meal_time == "L" %} lunch
           {% elif deleted_meal.meal_time == "D" %} dinner
           {% elif deleted_meal.meal_time == "R" %} brunch
           {% endif %}
-          on {{ deleted_meal.date|date:"l, n/j" }}
+          {% if deleted_meal.is_expired %} from
+          {% else %} on
+          {% endif %}
+          {{ deleted_meal.date|date:"l, n/j" }}
         </h6>
       </div>
       {% endif %}

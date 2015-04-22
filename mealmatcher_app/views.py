@@ -8,13 +8,14 @@ from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
 from mealmatcher_app.forms import MealForm, DeleteMealForm, JoinMealForm
 import datetime, random
-#import pytz
+import pytz
 from django.utils import timezone as django_timezone
 import urllib2, re
 # mailer lib
 from post_office.models import EmailTemplate
 from post_office import mail
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 # index is the app homepage
 @login_required
@@ -166,12 +167,17 @@ def join_meal(request):
 def find_meals(request):
 	username = request.user.username
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
+	badTime = False
+	expiredTime = False
 	if request.method == 'POST': # http post, process the data
 		form = MealForm(request.POST)
-		badTime = False
+
 		if form.is_valid():
 			data = form.cleaned_data
 			year = 2015
+			location = data['location']
+			meal_time = data['meal_time']
+			attire1 = data['attire1']
 			date_md = data['date_mdy'].split('/')
 			print date_md[0]
 			month = int(date_md[0])
@@ -179,19 +185,25 @@ def find_meals(request):
 
 			date_time = data['date_time'].split('-')[0].split(':')
 			hour = int(date_time[0])
+			if meal_time == 'L' and hour <= 3:
+				hour += 12
+			elif meal_time == 'D':
+				hour += 12
+			elif meal_time == 'R' and hour <= 3:
+				hour += 12
 			# hack for timezone to avoid confusion of objects -- DANGER
 			#hour = int(date_time[0]) - 4 
 			#if hour < 0: hour = hour + 12
 			minute = int(date_time[1])
 			
 			datetime_obj = datetime.datetime(year, month, day, hour, minute)
+			print timezone.get_default_timezone_name()
+			datetime_obj = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj)
 			#eastern = pytz.timezone('US/Eastern') # attempt at timezones, did not work
 			#fmt = '%Y-%m-%d %H:%M %Z%z'
 			#datetime_obj = eastern.localize(datetime_obj)
 			#print datetime_obj.strftime(fmt)
-			location = data['location']
-			meal_time = data['meal_time']
-			attire1 = data['attire1']
+			
 
 			# check for multiple meals at the same mealtime -- prevent signup 
 			same_time = list(Meal.objects.filter(meal_time=meal_time, users__user=User.objects.filter(username=username)))
@@ -200,7 +212,14 @@ def find_meals(request):
 					print 'Attempted signup at a time that already has a meal the user is in.'
 					badTime = True
 
-			if not badTime:
+			# check if meal is going to be at an expired time -- prevent signup
+			check_exp = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
+			if check_exp.is_expired():
+				print 'Attempted signup at an expired time.'
+				expiredTime = True
+
+
+			if not badTime and not expiredTime:
 				possible_matches = Meal.objects.filter(date=datetime_obj, location=location, 
 									meal_time=meal_time).exclude(users__user=User.objects.filter(username=username))
 				filtered_matches = []
@@ -228,9 +247,8 @@ def find_meals(request):
 			print form.errors
 	else:
 		form = MealForm()
-		badTime = False
 	today = django_timezone.now()
-	context_dict = {'form':form, 'date': {'month':today.month, 'day':today.day}, 'badTime': badTime}
+	context_dict = {'form':form, 'date': {'month':today.month, 'day':today.day}, 'badTime': badTime, 'expiredTime': expiredTime}
 	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
 		# return HttpResponse("Find meals")
 
@@ -286,10 +304,10 @@ def open_meals(request):
 	expired_meals = []
 	removed_meals = []
 	for meal in meals:
-		if meal.to_be_removed():
-			meals.remove(meal)
-			removed_meals.append(meal)
-		elif meal.is_expired():
+		#if meal.to_be_removed():
+		#	meals.remove(meal)
+		#	removed_meals.append(meal)
+		if meal.is_expired():
 			meals.remove(meal)
 			expired_meals.append(meal)
 
@@ -328,7 +346,7 @@ def delete_meal(request):
 							[user2 + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							template='delete_email',
-							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location},
+							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location}, # this crashes under same cases, when datetime_obj is not defined
 							priority='now',
 						)
 						status = False

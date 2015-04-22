@@ -77,8 +77,21 @@
 
       <div class="panel-body">
       {% if badTime %}
-      <div class="alert alert-danger">
-        Cannot sign up for a new meal at a mealtime that already has a meal.
+      <div class="alert alert-danger alert-dismissable">
+         <button type="button" class="close" data-dismiss="alert" 
+            aria-hidden="true">
+            &times;
+         </button>
+        Sorry, you cannot sign up for a new meal at a mealtime where you already have a meal.
+      </div>
+      {% endif %}
+      {% if expiredTime %}
+      <div class="alert alert-danger alert-dismissable">
+         <button type="button" class="close" data-dismiss="alert" 
+            aria-hidden="true">
+            &times;
+         </button>
+         Sorry, the signup period for this meal has expired. Meal signup must occur at least 1 hour before the meal's start time. 
       </div>
       {% endif %}
       <form role="form" id="findMealForm" method="POST" action="/mealmatcher_app/find-a-meal/">
@@ -181,24 +194,55 @@
     // NOTE(drew): these keys must match the options in the meal selection dropdown
     Breakfast: [
     ["7:30", "8:00"],
+    ["7:45", "8:30"],
     ["8:00", "8:30"],
+    ["8:15", "8:45"],
     ["8:30", "9:00"],
+    ["8:45", "9:15"],
     ["9:00", "9:30"],
+    ["9:15", "9:45"],
     ["9:30", "10:00"],
+    ["9:45", "10:15"],
     ["10:00", "10:30"],
+    ["10:15", "10:45"],
     ["10:30", "11:00"],
     ],
     Lunch: [
-    ["11:00", "11:45"],
-    ["11:45", "12:30"],
-    ["12:30", "1:15"],
-    ["1:15", "2:00"],
+    ["11:30", "12:00"],
+    ["11:45", "12:15"],
+    ["12:00", "12:30"],
+    ["12:15", "12:45"],
+    ["12:30", "1:00"],
+    ["12:45", "1:15"],
+    ["1:00", "1:30"],
+    ["1:15", "1:45"],
+    ["1:30", "2:00"],
     ],
     Dinner: [
-    ["5:00", "5:45"],
-    ["5:45", "6:30"],
-    ["6:30", "7:15"],
-    ["7:15", "8:00"],
+    ["5:00", "5:30"],
+    ["5:15", "5:45"],
+    ["5:30", "6:00"],
+    ["5:45", "6:15"],
+    ["6:00", "6:30"],
+    ["6:15", "6:45"],
+    ["6:30", "7:00"],
+    ["6:45", "7:15"],
+    ["7:00", "7:30"],
+    ["7:15", "7:45"],
+    ["7:30", "8:00"],
+    ],
+    Brunch: [
+    ["11:00", "11:30"],
+    ["11:15", "11:45"],
+    ["11:30", "12:00"],
+    ["11:45", "12:15"],
+    ["12:00", "12:30"],
+    ["12:15", "12:45"],
+    ["12:30", "1:00"],
+    ["12:45", "1:15"],
+    ["1:00", "1:30"],
+    ["1:15", "1:45"],
+    ["1:30", "2:00"],
     ],
   };
 
