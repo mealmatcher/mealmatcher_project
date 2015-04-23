@@ -23,7 +23,7 @@ def index(request):
 	base_url = request.build_absolute_uri()
 	print base_url
 	context_dict = {'user': request.user}
-	return render(request, 'mealmatcher_app/index.html', context_dict)
+	return render(request, 'mealmatcher_app/index_new.html', context_dict)
 
 def match_meal(attire1, my_user_profile, matched_meal):
 	matched_meal.attire2 = attire1
