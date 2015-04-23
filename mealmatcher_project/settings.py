@@ -77,7 +77,9 @@ WSGI_APPLICATION = 'mealmatcher_project.wsgi.application'
 
 # Uncomment this when testing on local, but using these otehr settings to run on heroku
 import dj_database_url
-DATABASES['default'] =  dj_database_url.config()
+DATABASES = {}
+DATABASES['default'] =  dj_database_url.config(default='postgres://wwzrrmdkhlzakt:rM3Ux-GV8H67N1WGgNGXuOG4tV@ec2-54-163-226-9.compute-1.amazonaws.com:5432/dc8nuaqi4u7f5')
+DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 
 '''DATABASES = {
     'default': {
