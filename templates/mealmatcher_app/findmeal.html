@@ -99,8 +99,6 @@
 
         {% if forloop.counter == 3 %}
             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-            <!-- <select class="form-control" id="dateDropdown" name="dateDropdown">
-  </select> -->
         {% endif %}
 
         {% if forloop.counter == 4 %}
@@ -121,60 +119,23 @@
 <hr />
 </form>
 
-<!-- <div class="row  pad-top">
-  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3><strong>   Sign up for a meal </strong>  </h3>
-      </div>
+<a href="https://campusdining.princeton.edu/dining/_Foodpro/location.asp" targe="_blank"> Dining Hall Menus</a>
 
-      <div class="panel-body">
-        {% if badTime %}
-        <div class="alert alert-danger">
-          Cannot sign up for a new meal at a mealtime that already has a meal.
-        </div>
-        {% endif %}
-        <form role="form" id="findMealForm" method="POST" action="/mealmatcher_app/find-a-meal/">
-          {% csrf_token %}          <br/>
-          <div class="form-group input-group">
-            <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
-            <select class="form-control" id="mealDropdown" name="mealDropdown">
-              <option>Breakfast</option>
-              <option>Lunch</option>
-              <option>Dinner</option>
-            </select>
-           </div>
-           <div class="form-group input-group">
-            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-            <div class="btn-group">
-  <select class="form-control" id="dateDropdown" name="dateDropdown">
-  </select>
-</div>
-</div>
-<div class="form-group input-group">
-  <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
- <select class="form-control" id="timeDropdown" name="timeDropdown">
-            </select>
-            </div>
-<div class="form-group input-group">
-  <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-<select class="form-control" name="location">
-              <option value="WH">Whitman</option>
-              <option value="RM">Rocky/Mathey</option>
-              <option value="BW">Butler/Wilson</option>
-              <option value="F">Forbes</option>
-            </select>
-            </div>
+<!-- <a href="https://campusdining.princeton.edu/dining/_Foodpro/nutframe.asp?sName=Princeton+University+Campus+Dining&locationNum=08&locationName=Whitman+College&naFlag=1" target="_blank"> Whitman Menu</a>
 
-<div class="form-group input-group">
-  <span class="input-group-addon"><i class="fa fa-child"></i></span>
-  <input type="text" class="form-control" name="attire1" placeholder="What will you be wearing?" />
-</div>
+<br>
 
-<input href="#" type="submit" name="submitButton" id="submitButton" class="btn btn-success" value="Match Me!" />
+<a href="https://campusdining.princeton.edu/dining/_Foodpro/nutframe.asp?sName=Princeton+University+Campus+Dining&locationNum=01&locationName=Rockefeller+%26+Mathey+Colleges&naFlag=1" target="_blank"> Rocky/Mathey Menu</a>
 
-<hr />
-</form> -->
+<br>
+
+<a href="https://campusdining.princeton.edu/dining/_Foodpro/nutframe.asp?sName=Princeton+University+Campus+Dining&locationNum=02&locationName=Butler+%26+Wilson+Colleges&naFlag=1" target="_blank"> Wilson/Butler Menu</a>
+
+<br>
+
+<a href="https://campusdining.princeton.edu/dining/_Foodpro/nutframe.asp?sName=Princeton+University+Campus+Dining&locationNum=03&locationName=Forbes+College&naFlag=1" target="_blank"> Forbes Menu</a> -->
+
+
 
 <script>
   var meal_timess = {
