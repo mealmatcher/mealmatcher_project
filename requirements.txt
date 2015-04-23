@@ -6,3 +6,4 @@ psycopg2==2.6
 static==0.4
 static3==0.5.1
 django-post-office==1.1.1
+pytz==2013.7
