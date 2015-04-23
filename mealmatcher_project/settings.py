@@ -54,7 +54,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mealmatcher_app',
-    "post_office",
+    'post_office',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -204,24 +204,26 @@
     {% if username %}
       {% if meals %}
         {% for meal in meals %}
-        { 
-          date: '{{ meal.date|date:"Y-m-d" }}',
-          prettyDate: '{{ meal.date|date:"n/j" }}',
-          time: '{{ meal.date|date:"g:i A" }}',
-          is_matched: '{{ meal.is_matched }}' == "true",
-          id: '{{meal.id}}',
-          title: 
-            {% if meal.meal_time == "B" %} "Breakfast"
-            {% elif meal.meal_time == "L" %} "Lunch"
-            {% elif meal.meal_time == "D" %} "Dinner"
-            {% endif %},
-          location: 
-            {% if meal.location == "WH" %} "Whitman"
-            {% elif meal.location == "BW" %} "Butler/Wilson"
-            {% elif meal.location == "RM" %} "Rocky/Mathey"
-            {% elif meal.location == "F" %} "Forbes"
-            {% endif %},
-        },
+          {% if not meal.is_matched %}
+          { 
+            date: '{{ meal.date|date:"Y-m-d" }}',
+            prettyDate: '{{ meal.date|date:"n/j" }}',
+            time: '{{ meal.date|date:"g:i A" }}',
+            is_matched: '{{ meal.is_matched }}' == "true",
+            id: '{{meal.id}}',
+            title: 
+              {% if meal.meal_time == "B" %} "Breakfast"
+              {% elif meal.meal_time == "L" %} "Lunch"
+              {% elif meal.meal_time == "D" %} "Dinner"
+              {% endif %},
+            location: 
+              {% if meal.location == "WH" %} "Whitman"
+              {% elif meal.location == "BW" %} "Butler/Wilson"
+              {% elif meal.location == "RM" %} "Rocky/Mathey"
+              {% elif meal.location == "F" %} "Forbes"
+              {% endif %},
+          },
+          {% endif %}
         {% endfor %}
       {% endif %}
     {% endif %}
