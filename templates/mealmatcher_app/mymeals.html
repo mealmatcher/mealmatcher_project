@@ -52,25 +52,25 @@
     <div class="col-md-12 column">
       <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
-           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/mealmatcher_app/">MealMatcher</a>
+           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">MealMatcher</a>
         </div>
         
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li>
-              <a href="/mealmatcher_app/find-a-meal/">Create a Meal</a>
+              <a href="/find-a-meal/">Create a Meal</a>
             </li>
             <li>
-              <a href="/mealmatcher_app/open-meals/">Open Meals</a>
+              <a href="/open-meals/">Open Meals</a>
             </li>
             <li class="active">
-              <a href="/mealmatcher_app/my-meals/">My Meals</a>
+              <a href="/my-meals/">My Meals</a>
             </li>
             
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="/mealmatcher_app/logout/">Logout</a>
+              <a href="/logout/">Logout</a>
             </li>
           </ul>
         </div>        
@@ -170,7 +170,7 @@
               <!-- TODO(drew) disable edit if meal is too soon -->
               <td><button type="submit" class="btn btn-default" id="editButton_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
               <td>
-                <form role="form" method="POST" action="/mealmatcher_app/delete-meal/" id="deleteSubmitForm_{{ meal.id }}">
+                <form role="form" method="POST" action="/delete-meal/" id="deleteSubmitForm_{{ meal.id }}">
                   {% csrf_token %}
                   <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
                   <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}" {% if meal.is_matched %} disabled=true {% endif %}><span class="glyphicon glyphicon-trash"></span></button>
@@ -248,7 +248,7 @@
 
               <td>Expired</td>
               <td>
-                <form role="form" method="POST" action="/mealmatcher_app/delete-meal/">
+                <form role="form" method="POST" action="/delete-meal/">
                   {% csrf_token %}
                   <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
                   <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}"><span class="glyphicon glyphicon-remove"></span></button>

@@ -43,25 +43,25 @@
       <div class="col-md-12 column">
         <nav class="navbar navbar-default" role="navigation">
           <div class="navbar-header">
-           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/mealmatcher_app/">MealMatcher</a>
+           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">MealMatcher</a>
          </div>
 
          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li class="active">
-              <a href="/mealmatcher_app/find-a-meal/">Create a Meal</a>
+              <a href="/find-a-meal/">Create a Meal</a>
             </li>
             <li>
-              <a href="/mealmatcher_app/open-meals/">Open Meals</a>
+              <a href="/open-meals/">Open Meals</a>
             </li>
             <li>
-              <a href="/mealmatcher_app/my-meals/">My Meals</a>
+              <a href="/my-meals/">My Meals</a>
             </li>
             
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="/mealmatcher_app/logout/">Logout</a>
+              <a href="/logout/">Logout</a>
             </li>
           </ul>
         </div>
@@ -94,7 +94,7 @@
          Sorry, the signup period for this meal has expired. Meal signup must occur at least 1 hour before the meal's start time. 
       </div>
       {% endif %}
-      <form role="form" id="findMealForm" method="POST" action="/mealmatcher_app/find-a-meal/">
+      <form role="form" id="findMealForm" method="POST" action="/find-a-meal/">
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}
         {{ hidden }}

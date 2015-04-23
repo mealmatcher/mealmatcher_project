@@ -20,6 +20,8 @@ from django.utils import timezone
 # index is the app homepage
 @login_required
 def index(request):
+	base_url = request.build_absolute_uri()
+	print base_url
 	context_dict = {'user': request.user}
 	return render(request, 'mealmatcher_app/index.html', context_dict)
 
@@ -369,16 +371,19 @@ def delete_meal(request):
 
 # login page
 def site_login(request):
+	#base_url = request.build_absolute_uri()
+	base_url = 'http://' + request.META['HTTP_HOST']
+	print base_url
 	# user is logged in, redirect to index page
 	if request.user.is_authenticated():
-		return HttpResponseRedirect('/mealmatcher_app/')
+		return HttpResponseRedirect('/')
 	# user is not logged in. go through CAS stuff
 	else: 
 		ticket = request.GET.get('ticket')
 		if not ticket:
-			return HttpResponseRedirect('https://fed.princeton.edu/cas/login?service=http://localhost:8000/mealmatcher_app/login/')
+			return HttpResponseRedirect('https://fed.princeton.edu/cas/login?service=' + base_url + '/login/')
 		else:
-			source = urllib2.urlopen('https://fed.princeton.edu/cas/serviceValidate?service=http://localhost:8000/mealmatcher_app/login/&ticket=' + ticket)
+			source = urllib2.urlopen('https://fed.princeton.edu/cas/serviceValidate?service=' + base_url + '/login/&ticket=' + ticket)
 			content = source.read()
 			if 'authenticationSuccess' in content:      # success in authentication
 				regexp = re.search('<cas:user>.*</cas:user>', content)
@@ -389,7 +394,7 @@ def site_login(request):
 					user = authenticate(username=username, password=password)
 					if user: 
 						django_login(request, user)
-						return HttpResponseRedirect('/mealmatcher_app/')
+						return HttpResponseRedirect('')
 					else:
 						return HttpResponse('Fatal error trying to log in '+ netid)
 				else:
@@ -409,10 +414,10 @@ def site_login(request):
 					profile.save()
 					newuser = authenticate(username=username, password=password)
 					django_login(request, newuser)
-					return HttpResponseRedirect('/mealmatcher_app/')
+					return HttpResponseRedirect('')
 			else: # redirect to try again
 				#return HttpResponse('failure')
-				return HttpResponseRedirect('https://fed.princeton.edu/cas/login?service=http://localhost:8000/mealmatcher_app/login/')
+				return HttpResponseRedirect('https://fed.princeton.edu/cas/login?service=' + base_url + '/login/')
 
 
 

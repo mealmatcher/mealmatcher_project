@@ -118,7 +118,7 @@ EMAIL_HOST_PASSWORD = 'i8wsuHLt5PmaXkxB8Ok7qg'
 STATIC_URL = '/static/'
 
 # Redirects non-logged in users to this
-LOGIN_URL = '/mealmatcher_app/login/'
+LOGIN_URL = '/login/'
 
 '''
 # Parse database configuration from $DATABASE_URL
