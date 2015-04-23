@@ -18,160 +18,248 @@
   
   <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
   <link href="{% static "css/style.css" %}" rel="stylesheet">
-  <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
-  <!-- <link href="css/style.css" rel="stylesheet"> -->
+  <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+  <link href="{% static "css/index2.css" %}" rel="stylesheet">
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
-  <![endif]-->
+    <![endif]-->
 
-  <!-- Fav and touch icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "img/apple-touch-icon-144-precomposed.png" %}">
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static "img/apple-touch-icon-114-precomposed.png" %}">
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static "img/apple-touch-icon-72-precomposed.png" %}">
-  <link rel="apple-touch-icon-precomposed" href="{% static "img/apple-touch-icon-57-precomposed.png" %}">
-  <link rel="shortcut icon" href="{% static "img/favicon.png" %}">
-  
-  <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/scripts.js" %}"></script>
-</head>
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "img/apple-touch-icon-144-precomposed.png" %}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static "img/apple-touch-icon-114-precomposed.png" %}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static "img/apple-touch-icon-72-precomposed.png" %}">
+    <link rel="apple-touch-icon-precomposed" href="{% static "img/apple-touch-icon-57-precomposed.png" %}">
+    <link rel="shortcut icon" href="{% static "img/favicon.png" %}">
 
-<div class="container">
-  <div class="row clearfix">
-    <div class="col-md-12 column">
-      <nav class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
-           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/mealmatcher_app/">MealMatcher</a>
-        </div>
-        
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/scripts.js" %}"></script>
+  </head>
+
+  <div class="container">
+    <div class="row clearfix">
+      <div class="col-md-12 column">
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">MealMatcher</a>
+         </div>
+
+         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li class="active">
-              <a href="/mealmatcher_app/find-a-meal/">Create a Meal</a>
+              <a href="/find-a-meal/">Create a Meal</a>
             </li>
             <li>
-              <a href="/mealmatcher_app/open-meals/">Open Meals</a>
+              <a href="/open-meals/">Open Meals</a>
             </li>
             <li>
-              <a href="/mealmatcher_app/my-meals/">My Meals</a>
+              <a href="/my-meals/">My Meals</a>
             </li>
             
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="/mealmatcher_app/logout/">Logout</a>
+              <a href="/logout/">Logout</a>
             </li>
           </ul>
         </div>
         
       </nav>
 
-      <h1>Find a Meal</h1>
+      <div class="row  pad-top">
+  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3><strong>   Sign up for a meal </strong>  </h3>
+      </div>
+
+      <div class="panel-body">
       {% if badTime %}
-      <div class="alert alert-danger">
-          Cannot sign up for a new meal at a mealtime that already has a meal.
+      <div class="alert alert-danger alert-dismissable">
+         <button type="button" class="close" data-dismiss="alert" 
+            aria-hidden="true">
+            &times;
+         </button>
+        Sorry, you cannot sign up for a new meal at a mealtime where you already have a meal.
       </div>
       {% endif %}
-      <form role="form" id="findMealForm" method="POST" action="/mealmatcher_app/find-a-meal/">
+      {% if expiredTime %}
+      <div class="alert alert-danger alert-dismissable">
+         <button type="button" class="close" data-dismiss="alert" 
+            aria-hidden="true">
+            &times;
+         </button>
+         Sorry, the signup period for this meal has expired. Meal signup must occur at least 1 hour before the meal's start time. 
+      </div>
+      {% endif %}
+      <form role="form" id="findMealForm" method="POST" action="/find-a-meal/">
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}
-          {{ hidden }}
+        {{ hidden }}
         {% endfor %}
         {% for field in form.visible_fields %}
-          {{ field.errors }}
-          {{ field.help_text }}
-          {{ field }}
+        <div class="form-group input-group">
+
+        {% if forloop.counter == 1 %}
+            <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
+        {% endif %}
+
+        {% if forloop.counter == 2 %}
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+        {% endif %}
+
+        {% if forloop.counter == 3 %}
+            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            <!-- <select class="form-control" id="dateDropdown" name="dateDropdown">
+  </select> -->
+        {% endif %}
+
+        {% if forloop.counter == 4 %}
+            <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+        {% endif %}
+
+
+        {% if forloop.counter == 5 %}
+            <span class="input-group-addon"><i class="fa fa-child"></i></span>
+        {% endif %}
+
+        {{ field.errors }}
+        {{ field }}
+        </div>
         {% endfor %}
+        <input href="#" type="submit" name="submitButton" id="submitButton" class="btn btn-success" value="Match Me!" />
 
-        <input type="submit" name="submitButton" id="submitButton" value="Match Me!" />
+<hr />
+</form>
 
-        <!-- <div class="dropdown">
-          <label for="dateDropdown">Date</label>
-          <select id="dateDropdown">
-            <option value="Date">dates in next two weeks generated in JS and entered here</option>
-          </select>
-        </div> -->
-        
-        <!-- <div class="mealDropdown">
-          <label for="mealDropdown">Meal</label>
-          <select>
-            <option value="B">Breakfast</option>
-            <option value="L">Lunch</option>
-            <option value="D">Dinner</option>
-          </select> 
-        </div> -->
+<!-- <div class="row  pad-top">
+  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3><strong>   Sign up for a meal </strong>  </h3>
+      </div>
 
-        <!-- <label for="timeDropdown">Time</label>
-        <select class="form-control" id="timeDropdown"></select> -->
-<!-- 
-        <label>Location</label>
-        <div class="checkbox">
-           <label><input type="checkbox">Whitman</label>
-        </div> 
-        <div class="checkbox">
-           <label><input type="checkbox">Rocky/Mathey</label>
-        </div> 
-        <div class="checkbox">
-           <label><input type="checkbox">Butler/Wilson</label>
-        </div> 
-        <div class="checkbox">
-           <label><input type="checkbox">Forbes</label>
-        </div>  -->
-
-        <!-- <div class="input-group">
-           <span class="input-group-addon">I'll be wearing</span>
-           <input class="form-control" id="dressInput" placeholder="jeans and a tshirt" type="dress" aria-describedby="basic-addon1">
-        </div> -->
-
-        <!-- <button class="btn btn-default" name="submitButton" id="submitButton" >Match me!</button>       -->
-        </form>
-
-    </div>
-  </div>
+      <div class="panel-body">
+        {% if badTime %}
+        <div class="alert alert-danger">
+          Cannot sign up for a new meal at a mealtime that already has a meal.
+        </div>
+        {% endif %}
+        <form role="form" id="findMealForm" method="POST" action="/mealmatcher_app/find-a-meal/">
+          {% csrf_token %}          <br/>
+          <div class="form-group input-group">
+            <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
+            <select class="form-control" id="mealDropdown" name="mealDropdown">
+              <option>Breakfast</option>
+              <option>Lunch</option>
+              <option>Dinner</option>
+            </select>
+           </div>
+           <div class="form-group input-group">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <div class="btn-group">
+  <select class="form-control" id="dateDropdown" name="dateDropdown">
+  </select>
 </div>
+</div>
+<div class="form-group input-group">
+  <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+ <select class="form-control" id="timeDropdown" name="timeDropdown">
+            </select>
+            </div>
+<div class="form-group input-group">
+  <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+<select class="form-control" name="location">
+              <option value="WH">Whitman</option>
+              <option value="RM">Rocky/Mathey</option>
+              <option value="BW">Butler/Wilson</option>
+              <option value="F">Forbes</option>
+            </select>
+            </div>
+
+<div class="form-group input-group">
+  <span class="input-group-addon"><i class="fa fa-child"></i></span>
+  <input type="text" class="form-control" name="attire1" placeholder="What will you be wearing?" />
+</div>
+
+<input href="#" type="submit" name="submitButton" id="submitButton" class="btn btn-success" value="Match Me!" />
+
+<hr />
+</form> -->
 
 <script>
   var meal_timess = {
     // NOTE(drew): these keys must match the options in the meal selection dropdown
     Breakfast: [
-      ["7:30", "8:00"],
-      ["8:00", "8:30"],
-      ["8:30", "9:00"],
-      ["9:00", "9:30"],
-      ["9:30", "10:00"],
-      ["10:00", "10:30"],
-      ["10:30", "11:00"],
+    ["7:30", "8:00"],
+    ["7:45", "8:30"],
+    ["8:00", "8:30"],
+    ["8:15", "8:45"],
+    ["8:30", "9:00"],
+    ["8:45", "9:15"],
+    ["9:00", "9:30"],
+    ["9:15", "9:45"],
+    ["9:30", "10:00"],
+    ["9:45", "10:15"],
+    ["10:00", "10:30"],
+    ["10:15", "10:45"],
+    ["10:30", "11:00"],
     ],
     Lunch: [
-      ["11:00", "11:45"],
-      ["11:45", "12:30"],
-      ["12:30", "1:15"],
-      ["1:15", "2:00"],
+    ["11:30", "12:00"],
+    ["11:45", "12:15"],
+    ["12:00", "12:30"],
+    ["12:15", "12:45"],
+    ["12:30", "1:00"],
+    ["12:45", "1:15"],
+    ["1:00", "1:30"],
+    ["1:15", "1:45"],
+    ["1:30", "2:00"],
     ],
     Dinner: [
-      ["5:00", "5:45"],
-      ["5:45", "6:30"],
-      ["6:30", "7:15"],
-      ["7:15", "8:00"],
+    ["5:00", "5:30"],
+    ["5:15", "5:45"],
+    ["5:30", "6:00"],
+    ["5:45", "6:15"],
+    ["6:00", "6:30"],
+    ["6:15", "6:45"],
+    ["6:30", "7:00"],
+    ["6:45", "7:15"],
+    ["7:00", "7:30"],
+    ["7:15", "7:45"],
+    ["7:30", "8:00"],
+    ],
+    Brunch: [
+    ["11:00", "11:30"],
+    ["11:15", "11:45"],
+    ["11:30", "12:00"],
+    ["11:45", "12:15"],
+    ["12:00", "12:30"],
+    ["12:15", "12:45"],
+    ["12:30", "1:00"],
+    ["12:45", "1:15"],
+    ["1:00", "1:30"],
+    ["1:15", "1:45"],
+    ["1:30", "2:00"],
     ],
   };
 
   var updateTimes = function() {
-      var meal = $('#mealDropdown').find(":selected").text();
+    var meal = $('#mealDropdown').find(":selected").text();
 
-      var meal_times = meal_timess[meal];
+    var meal_times = meal_timess[meal];
 
-      $("select#timeDropdown").empty();
-      for (var i = 0; i < meal_times.length; i++) {
-        $("select#timeDropdown").append( $("<option>")
-            .val(meal_times[i][0] + "-" + meal_times[i][1])
-            .html(meal_times[i][0] + " - " + meal_times[i][1])
+    $("select#timeDropdown").empty();
+    for (var i = 0; i < meal_times.length; i++) {
+      $("select#timeDropdown").append( $("<option>")
+        .val(meal_times[i][0] + "-" + meal_times[i][1])
+        .html(meal_times[i][0] + " - " + meal_times[i][1])
         );
-      }
+    }
 
-      return false;
+    return false;
   };
   $('#mealDropdown').change(updateTimes);
   updateTimes();
@@ -180,18 +268,18 @@
   // NOTE: the date should only ever come from a time variable (not a string). Potential security risk otherwise
   // TODO: hook these up in view and make sure names are correct
   var month_lengths = [
-    31,
-    28,
-    31,
-    30,
-    31,
-    30,
-    31,
-    31,
-    30,
-    31,
-    30,
-    31,
+  31,
+  28,
+  31,
+  30,
+  31,
+  30,
+  31,
+  31,
+  30,
+  31,
+  30,
+  31,
   ];
   var today_month = Number("{{ date.month }}");
   var today_day = Number("{{ date.day }}");
@@ -201,9 +289,9 @@
   for (var i = 0; i < days_to_show; i++) {
     dateStr = today_month.toString() + "/" + today_day.toString()
     $("select#dateDropdown").append( $("<option>")
-        .val(dateStr)
-        .html(dateStr)
-    );
+      .val(dateStr)
+      .html(dateStr)
+      );
 
     // TODO leap year support
     // TODO display weekdays
@@ -216,13 +304,25 @@
     }
   }
 
-  // $( "#submitButton" ).click(function(e) {
-  //   // e.preventDefault();
-  //   // console.log("asdf");
-  //   window.location.href = '/mealmatcher_app/my-meals/';
-  // });
-
 </script> 
+
+
+
+
+<script>
+  //Display selection on button
+  $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+
+    var $target = $( event.currentTarget );
+
+    $target.closest( '.btn-group' )
+    .find( '[data-bind="label"]' ).text( $target.text() )
+    .end()
+    .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+
+    return false;
+  });
+</script>
 
 </body>
 </html>

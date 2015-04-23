@@ -22,6 +22,7 @@ class Meal(models.Model):
 		('B', 'Breakfast'),
 		('L', 'Lunch'),
 		('D', 'Dinner'),
+		('R', 'Brunch'),
 	)
 	meal_time = models.CharField(max_length=1, choices=MEALS)
 
@@ -47,12 +48,12 @@ class Meal(models.Model):
 	is_matched.boolean = True
 	is_matched.short_description = 'Are there are two users associated with the meal?'
 
-	# True if the meal has already occured
+	# True if the meal should no longer be matched with
 	def is_expired(self):
 		now = timezone.now()
-		return ((now - datetime.timedelta(hours=1)) > self.date )
+		return ((now + datetime.timedelta(hours=1)) > self.date )
 	is_expired.boolean = True
-	is_expired.short_description = 'Has the meal occurred?'
+	is_expired.short_description = 'Should the meal no longer be considered?'
 
 	def to_be_removed(self):
 		now = timezone.now()

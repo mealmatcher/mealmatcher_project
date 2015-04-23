@@ -85,20 +85,20 @@
               <li><a href="/mealmatcher_app/my-meals/">My Meals <span class="sr-only">(current)</span></a></li> -->
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="/mealmatcher_app/logout/">Logout</a></li>
+              <li><a href="/logout/">Logout</a></li>
             </ul>
           </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
       </nav>
 
 
-      <h1><font color="white">Hello, {{user.username}} </font></h1>
+      <h1><font color="white">Hello, {{user.first_name}} {{user.last_name}} </font></h1>
 <!--       <div class="col-md-6 col-md-offset-5" >
  -->  
       <div class="centered">
-      <a class="btn btn-default btn-lg" href="/mealmatcher_app/find-a-meal/">Create a Meal</a>
-      <a class="btn btn-default btn-lg" href="/mealmatcher_app/open-meals/">Open Meals</a>
-      <a class="btn btn-default btn-lg" href="/mealmatcher_app/my-meals/">My Meals</a>
+      <a class="btn btn-default btn-lg" href="/find-a-meal/">Create a Meal</a>
+      <a class="btn btn-default btn-lg" href="/open-meals/">Open Meals</a>
+      <a class="btn btn-default btn-lg" href="/my-meals/">My Meals</a>
       <!--
       <input type="button" name="findMeal" id="findMeal" value="Find a Meal" class="btn btn-default btn-lg" />
       <input type="button" name="myMeals" id="myMeals" value="My Meals" class="btn btn-default btn-lg" />-->
