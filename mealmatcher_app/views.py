@@ -27,7 +27,7 @@ def index(request):
 
 def match_meal(attire1, my_user_profile, matched_meal):
 	matched_meal.attire2 = attire1
-
+	matched_meal.save()
 	#mailer user
 	matchedUsers = matched_meal.users.all()
 	# TODO error if not found
@@ -422,7 +422,21 @@ def delete_meal(request):
 			matchingMeals = Meal.objects.filter(id=data['idToDelete'])
 			if len(matchingMeals) >= 1:
 				mealToDelete = matchingMeals[0]
-				if not mealToDelete.is_matched():
+
+				if mealToDelete.is_expired():
+					if not mealToDelete.is_matched():
+						mealToDelete.delete()
+						return view_meals(request, deleted_meal=mealToDelete)
+					else:
+						myProfile = UserProfile.objects.filter(user=request.user)[0]
+						if mealToDelete.users.all()[0] == myProfile: #user 1 
+							mealToDelete.attire1 = mealToDelete.attire2
+							mealToDelete.attire2 = ""
+							mealToDelete.save()
+						mealToDelete.users.remove(myProfile)
+						return view_meals(request, deleted_meal=mealToDelete)
+
+				elif not mealToDelete.is_matched():
 					mealToDelete.delete()
 				# TODO(drew) only allow dropping out if meal isn't too soon
 				else:
@@ -456,8 +470,9 @@ def delete_meal(request):
 							priority='now',
 						)
 
-					mealToDelete.attire2 = None
+					mealToDelete.attire2 = ""
 					mealToDelete.users.remove(myProfile)
+					mealToDelete.save()
 				return view_meals(request, deleted_meal=mealToDelete)
 		else:
 			print form.errors
@@ -487,6 +502,10 @@ def site_login(request):
 					password = netid
 					user = authenticate(username=username, password=password)
 					if user: 
+						user_profile = UserProfile.objects.filter(user=user)
+						if not user_profile:
+							profile = UserProfile(user=user)
+							print 'made the profile'
 						django_login(request, user)
 						return HttpResponseRedirect('')
 					else:
@@ -496,9 +515,11 @@ def site_login(request):
 					password = netid
 					name_source = urllib2.urlopen('http://www.princeton.edu/main/tools/search/?q=' + netid)
 					name_content = name_source.read()
-					#regexp_name = re.search('id=\"people-row-link-3\">\n.*\n      </a>', name_content)
-					#last_name = regexp_name.group(0).split(',')[0][30:]
-					#first_name = regexp_name.group(0).split(',')[1][1:-11]
+					regexp_name = re.search('id=\"people-row-link-3\">\n.*\n      </a>', name_content)
+					last_name = regexp_name.group(0).split(',')[0][30:]
+					first_name = regexp_name.group(0).split(',')[1][1:-11]
+					if '.' in first_name: # has a middle inital
+						first_name = first_name[:-3]
 					newuser = User(username=username, password=password, email= (netid + '@princeton.edu'))
 					newuser.save()
 					newuser.set_password(newuser.password)
@@ -507,6 +528,7 @@ def site_login(request):
 					profile.save()
 					newuser = authenticate(username=username, password=password)
 					django_login(request, newuser)
+					print first_name + ' @@ ' + last_name
 					return HttpResponseRedirect('')
 			else: # redirect to try again
 				#return HttpResponse('failure')

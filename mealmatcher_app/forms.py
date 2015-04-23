@@ -46,7 +46,7 @@ class MealForm(forms.ModelForm):
     help_text = "I want to get",
     choices = (
       ('B', 'Breakfast'),
-      ('BR', 'Brunch'),
+      ('R', 'Brunch'),
       ('L', 'Lunch'),
       ('D', 'Dinner'),
     )
