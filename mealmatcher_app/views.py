@@ -349,7 +349,7 @@ def find_meals(request):
 	else:
 		form = MealForm()
 	today = django_timezone.now()
-	context_dict = {'form':form, 'date': {'month':today.month, 'day':today.day}, 'badTime': badTime, 'expiredTime': expiredTime}
+	context_dict = {'form':form, 'dateObj': today, 'date': {'month':today.month, 'day':today.day}, 'badTime': badTime, 'expiredTime': expiredTime}
 	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
 		# return HttpResponse("Find meals")
 
