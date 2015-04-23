@@ -496,11 +496,10 @@ def site_login(request):
 					password = netid
 					name_source = urllib2.urlopen('http://www.princeton.edu/main/tools/search/?q=' + netid)
 					name_content = name_source.read()
-					regexp_name = re.search('id=\"people-row-link-3\">\n.*\n      </a>', name_content)
-					last_name = regexp_name.group(0).split(',')[0][30:]
-					first_name = regexp_name.group(0).split(',')[1][1:-11]
-					newuser = User(username=username, password=password, first_name = first_name,
-									last_name=last_name, email= (netid + '@princeton.edu'))
+					#regexp_name = re.search('id=\"people-row-link-3\">\n.*\n      </a>', name_content)
+					#last_name = regexp_name.group(0).split(',')[0][30:]
+					#first_name = regexp_name.group(0).split(',')[1][1:-11]
+					newuser = User(username=username, password=password, email= (netid + '@princeton.edu'))
 					newuser.save()
 					newuser.set_password(newuser.password)
 					newuser.save()
