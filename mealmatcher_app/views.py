@@ -38,26 +38,25 @@ def match_meal(attire1, my_user_profile, matched_meal):
 	# print(type(my_user_profile))
 
 	# HACK(drew): match with dummy user for debug
-	dummyProfile = None
-	dummyUser = None
-	dummyUsers = User.objects.filter(username="nobody")
-	if len(dummyUsers) == 0:
-		username = "nobody"
-		password = "nobody"
-		dummyUser = User(username=username, password=password, email= ("nobody" + '@princeton.edu'))
-		dummyUser.save()
-		dummyUser.set_password(dummyUser.password)
-		dummyUser.save()
-		dummyProfile = UserProfile(user = dummyUser)
-		dummyProfile.save()
-	else:
-		dummyUser = dummyUsers[0]
-		dummyProfile = UserProfile.objects.filter(user=dummyUser)[0]
+	# dummyProfile = None
+	# dummyUser = None
+	# dummyUsers = User.objects.filter(username="nobody")
+	# if len(dummyUsers) == 0:
+	# 	username = "nobody"
+	# 	password = "nobody"
+	# 	dummyUser = User(username=username, password=password, email= ("nobody" + '@princeton.edu'))
+	# 	dummyUser.save()
+	# 	dummyUser.set_password(dummyUser.password)
+	# 	dummyUser.save()
+	# 	dummyProfile = UserProfile(user = dummyUser)
+	# 	dummyProfile.save()
+	# else:
+	# 	dummyUser = dummyUsers[0]
+	# 	dummyProfile = UserProfile.objects.filter(user=dummyUser)[0]
 
-	matched_meal.users.add(dummyProfile)
+	# matched_meal.users.add(dummyProfile)
 
-	# TODO(drew) get rid of dummy user and uncomment this
-	# matched_meal.users.add(my_user_profile)
+	matched_meal.users.add(my_user_profile)
 
 	#mailer
 	# if not EmailTemplate.objects.all():
@@ -400,21 +399,16 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 
 @login_required
 def open_meals(request):
-	meals = list(Meal.objects.order_by('date'))
-	# TODO(drew) reenable exclusion of my meals
-	# meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
-	expired_meals = []
-	removed_meals = []
-	for meal in meals:
-		#if meal.to_be_removed():
-		#	meals.remove(meal)
-		#	removed_meals.append(meal)
+	# meals = list(Meal.objects.order_by('date'))
+	meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
+	mealsCopy = list(meals)
+	for meal in mealsCopy:
 		if meal.is_expired():
+			print meal
 			meals.remove(meal)
-			expired_meals.append(meal)
 
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
-	context_dict = {'username':request.user.username, 'meals':meals, 'user_profile': my_user_profile, 'expired_meals': expired_meals, 'removed_meals': removed_meals}
+	context_dict = {'username':request.user.username, 'meals':meals, 'user_profile': my_user_profile}
 	return render(request, 'mealmatcher_app/openmeals.html', context_dict)
 
 @login_required
