@@ -92,6 +92,12 @@ def find_meals(request):
 							html_content='MEAL INCOMING, {{ name }}! DATE - {{ datetime }} MEAL - {{ meal }} LOCATION - {{ location }} YOUR GUEST ATTIRE - {{ attire }}',
 						)
 						EmailTemplate.objects.create(
+							name='warn_email',
+							subject='Good Day, {{ name }}!',
+							content='MEAL INCOMING, {{ name }}!',
+							html_content='MEAL INCOMING, T-2 hours until your meal with {{ name }} on {{ datetime }} at {{ location }}!',
+						)
+						EmailTemplate.objects.create(
 							name='delete_email',
 							subject='Good Day, {{ name }}!',
 							content='MEAL INCOMING, {{ name }}!',
@@ -121,29 +127,29 @@ def find_meals(request):
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='match_email',
-							context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+							template='warn_email',
+							context={'name': username, 'datetime': datetime_obj, 'location': location},
 							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
 						)
 						mail.send(
 							[user2 + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='match_email',
-							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+							template='warn_email',
+							context={'name': user2, 'datetime': datetime_obj, 'location': location},
 							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
 						)
 					elif (datetime_obj.hour == 1):
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='match_email',
-							context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+							template='warn_email',
+							context={'name': username, 'datetime': datetime_obj, 'location': location},
 							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 11),
 						)
 						mail.send(
 							[user2 + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='match_email',
+							template='warn_email',
 							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
 							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, 11),
 						)
@@ -151,14 +157,14 @@ def find_meals(request):
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='match_email',
+							template='warn_email',
 							context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
 							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, (datetime_obj.hour - 2)),
 						)
 						mail.send(
 							[user2 + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='match_email',
+							template='warn_email',
 							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
 							scheduled_time=date(datetime_obj.year, datetime_obj.month, datetime_obj.day, (datetime_obj.hour - 2)),
 						)
@@ -280,7 +286,7 @@ def delete_meal(request):
 							[user2 + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							template='delete_email',
-							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location},
+							context={'name': user2, 'datetime': mealToDelete.date, 'meal': mealToDelete.meal_time, 'location': mealToDelete.location},
 							priority='now',
 						)
 						status = False
@@ -290,7 +296,7 @@ def delete_meal(request):
 							[user1 + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							template='delete_email',
-							context={'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location},
+							context={'name': user1, 'datetime': mealToDelete.date, 'meal': mealToDelete.meal_time, 'location': mealToDelete.location},
 							priority='now',
 						)
 
