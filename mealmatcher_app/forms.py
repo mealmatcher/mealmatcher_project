@@ -62,7 +62,9 @@ class MealForm(forms.ModelForm):
     )
   )
 
+
   attire1 = forms.CharField(
+    widget = forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What will you be wearing?'}),
      help_text = "and I'll be wearing",
      max_length=100,
    )
