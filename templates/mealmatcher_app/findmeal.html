@@ -36,6 +36,7 @@
     <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/scripts.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
   </head>
 
   <div class="container">
@@ -223,7 +224,10 @@
     return false;
   };
   $('#mealDropdown').change(updateTimes);
-  updateTimes();
+
+  var is_weekend = function(weekDayNum) {
+    return weekDayNum == 5 || weekDayNum == 6;
+  }
 
   // set up dates dropdown:
   // NOTE: the date should only ever come from a time variable (not a string). Potential security risk otherwise
@@ -242,8 +246,9 @@
   30,
   31,
   ];
-  var today_month = Number("{{ date.month }}");
-  var today_day = Number("{{ date.day }}");
+  var today_month = Number("{{ dateObj.month }}");
+  var today_day = Number("{{ dateObj.day }}");
+  var today_weekday = Number("{{ dateObj.weekday}}"); // monday is 0
 
   var days_to_show = 14;
   $("select#dateDropdown").empty();
@@ -253,6 +258,13 @@
       .val(dateStr)
       .html(dateStr)
       );
+
+    var thisWeekday = (today_weekday + i) % 7;
+    var isWeekend = is_weekend(thisWeekday);
+
+    if (isWeekend) {
+
+    }
 
     // TODO leap year support
     // TODO display weekdays
@@ -264,6 +276,53 @@
         today_month = "1";
     }
   }
+
+
+  $("#dateDropdown").change(function () {
+    var monthDateStr = $('#dateDropdown').find(":selected").text();
+    var monthDay = monthDateStr.split("/");
+    var month = Number(monthDay[0]);
+    var date = Number(monthDay[1]);
+
+    var momentWeekday = moment().date(date).month(month - 1).day(); //sunday is 0
+    updateMealTimes(momentWeekday == 0 || momentWeekday == 6);
+  })
+
+  var today_weekday = Number("{{ dateObj.weekday}}");
+  var todayIsWeekend = is_weekend(today_weekday);
+  // var prevWasWeekend = todayIsWeekend;
+  var updateMealTimes = function(isWeekend) {
+    // HACK
+    $("select#mealDropdown").empty();
+    if (isWeekend) {
+      $("select#mealDropdown").append( $("<option>")
+        .val("BR")
+        .html("Brunch")
+        );
+    }
+    else {
+      $("select#mealDropdown").append( $("<option>")
+        .val("B")
+        .html("Breakfast")
+        );
+      $("select#mealDropdown").append( $("<option>")
+        .val("L")
+        .html("Lunch")
+        );
+    }
+    $("select#mealDropdown").append( $("<option>")
+      .val("D")
+      .html("Dinner")
+      );
+
+    // if (isWeekend !== prevWasWeekend) {
+      updateTimes();
+    // }
+    // prevWasWeekend = isWeekend;
+  };
+  updateMealTimes(todayIsWeekend);
+  updateTimes();
+
 
 </script> 
 
