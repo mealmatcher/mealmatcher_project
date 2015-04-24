@@ -5,6 +5,21 @@ from django.contrib.auth.models import User
 import datetime
 from django.db import models
 
+class EditAttireForm(forms.Form):
+  idToEdit = forms.CharField(
+    widget = forms.TextInput(attrs={'id': "idToEditTextbox"}),
+    max_length = 3, # will this not work for larger inputs?
+  )
+  newAttire = forms.CharField(
+    widget = forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What will you be wearing?'}),
+     help_text = "Enter a new attire for the meal",
+     max_length=100,
+  )
+  class Meta:
+    fields = ('idToEdit',)
+    exclude = ()
+
+
 class DeleteMealForm(forms.Form):
   idToDelete = forms.CharField(
     widget = forms.TextInput(attrs={'id': "idToDeleteTextbox"}),

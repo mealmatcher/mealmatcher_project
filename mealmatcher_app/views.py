@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, logout
 # from django.db.models import Q
 from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
-from mealmatcher_app.forms import MealForm, DeleteMealForm, JoinMealForm
+from mealmatcher_app.forms import MealForm, DeleteMealForm, JoinMealForm, EditAttireForm
 import datetime, random
 import pytz
 from django.utils import timezone as django_timezone
@@ -24,6 +24,31 @@ def index(request):
 	print base_url
 	context_dict = {'user': request.user}
 	return render(request, 'mealmatcher_app/index_new.html', context_dict)
+
+@login_required
+def edit_attire(request): #TODO: add email support
+	if request.method == "POST":
+		print "received an edit post method"
+		form = EditAttireForm(request.POST)
+		if form.is_valid():
+			data = form.cleaned_data
+			newAttire = data['newAttire']
+			print('meal id being edited ' + data['idToEdit'])
+			matchingMeals = Meal.objects.filter(id=data['idToEdit'])
+			if len(matchingMeals) >= 1:
+				mealToEdit = matchingMeals[0]
+				my_user_profile = UserProfile.objects.filter(user=request.user)[0]
+				if mealToEdit.users.all()[0] == my_user_profile: # the one being edited is user 1
+					mealToEdit.attire1 = newAttire
+					mealToEdit.save()
+				else: # change user2
+					mealToEdit.attire2 = newAttire
+					mealToEdit.save()
+				return HttpResponseRedirect('/my-meals/')
+		else:
+			print form.errors
+		#return view_meals(request)
+	return HttpResponseRedirect('/my-meals/')
 
 def match_meal(attire1, my_user_profile, matched_meal):
 	matched_meal.attire2 = attire1
@@ -161,7 +186,8 @@ def join_meal(request):
 				# return view_meals(request)
 		else:
 			print form.errors
-		return view_meals(request)
+		#return view_meals(request)
+	return HttpResponseRedirect('/my-meals/')
 
 # find-meals page
 @login_required
@@ -355,25 +381,6 @@ def find_meals(request):
 
 # view-meals page
 
-'''
-def view_meals(request):
-	meals = Meal.objects.filter(users__user=request.user).order_by('date')
-	newmeals = []
-	for meal in meals:
-		day_of_week = meal.date.strftime('%A')
-		month_day = meal.date.strftime('%m/%d')
-		meal_dict =  {'B': 'Breakfast', 'L': 'Lunch', 'D': 'Dinner'}
-		meal_time = meal_dict[meal.meal_time]
-		meal_hourmin = (meal.date - datetime.timedelta(hours=4)).strftime('%H:%M') # hack to get around no time zones
-		location_dict = {'WH': 'Whitman', 'RM': 'Rocky/Mathey', 'BW': 'Butler/Wilson', 'F': 'Forbes'}
-		location = location_dict[meal.location]
-		is_matched = meal.is_matched()
-		newmeal = {'day_of_week': day_of_week, 'month_day': month_day, 'meal_time': meal_time,
-					 'meal_hourmin': meal_hourmin, 'location': location, 'is_matched': is_matched}
-		newmeals.append(newmeal)
-	context_dict = {'username':request.user.username, 'meals':newmeals}
-'''
-
 @login_required
 def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
 	meals = list(Meal.objects.filter(users__user=request.user).order_by('date'))
@@ -385,7 +392,7 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 		#	meals.remove(meal)
 		#	removed_meals.append(meal)
 		if meal.is_expired():
-			print meal
+			#print meal
 			meals.remove(meal)
 			expired_meals.append(meal)
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
@@ -393,7 +400,8 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 		meals.remove(new_meal)
 		meals.insert(0, new_meal)
 	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'deleted_meal':deleted_meal, 
-					'user_profile': my_user_profile, 'expired_meals': expired_meals, 'removed_meals': removed_meals}
+					'user_profile': my_user_profile, 'expired_meals': expired_meals, 'removed_meals': removed_meals,
+					}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
 
@@ -474,9 +482,11 @@ def delete_meal(request):
 					mealToDelete.users.remove(myProfile)
 					mealToDelete.save()
 				return view_meals(request, deleted_meal=mealToDelete)
-		else:
+		else:# errors with form -- redirect to error page?
 			print form.errors
-		return view_meals(request)
+		return HttpResponseRedirect('/my-meals/')
+	else:
+		return HttpResponseRedirect('/my-meals/')
 
 # login page
 def site_login(request):
@@ -531,7 +541,6 @@ def site_login(request):
 					print first_name + ' @@ ' + last_name
 					return HttpResponseRedirect('')
 			else: # redirect to try again
-				#return HttpResponse('failure')
 				return HttpResponseRedirect('https://fed.princeton.edu/cas/login?service=' + base_url + '/login/')
 
 
