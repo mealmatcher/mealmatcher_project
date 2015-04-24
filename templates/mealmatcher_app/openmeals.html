@@ -130,6 +130,7 @@
                     {% if meal.meal_time == "B" %} Breakfast
                     {% elif meal.meal_time == "L" %} Lunch
                     {% elif meal.meal_time == "D" %} Dinner
+                    {% elif meal.meal_time == "R" %} Brunch
                     {% endif %}
                     </td>
 
@@ -247,6 +248,7 @@
               {% if meal.meal_time == "B" %} "Breakfast"
               {% elif meal.meal_time == "L" %} "Lunch"
               {% elif meal.meal_time == "D" %} "Dinner"
+              {% elif meal.meal_time == "R" %} "Brunch"
               {% endif %},
             location: 
               {% if meal.location == "WH" %} "Whitman"
