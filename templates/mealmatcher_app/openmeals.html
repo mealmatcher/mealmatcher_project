@@ -43,6 +43,7 @@
   <script type="text/javascript" src="{% static "js/clndr.min.js" %}"></script>
   <script type="text/javascript" src="{% static "js/clndr.min.js" %}"></script>
   <script type="text/javascript" src="{% static "js/jquery.scrollTo.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/bootbox.min.js" %}"></script>
 </head>
 
 <div class="container">
@@ -142,19 +143,8 @@
                     {% elif meal.location == "F" %} Forbes
                     {% endif %}
                     </td>
-
                     <td>
-                      <form role="form" method="POST" action="/join-meal/">
-                        {% csrf_token %}
-                        <input type="text" name="idToJoin" value="{{ meal.id }}" hidden = true />
-                        <!-- {% for hidden in form.hidden_fields %}
-                          {{ hidden }}
-                        {% endfor %}
-                        {% for field in form.visible_fields %}
-                          {{ field.as_hidden }}
-                        {% endfor %} -->
                         <button type="submit" class="btn btn-primary" id="joinMealButton_{{ meal.id }}"><span class="glyphicon glyphicon-plus"></span></button>
-                      </form>
                     </td>
                   </tr>
                 {% endif %}
@@ -189,9 +179,51 @@
   {% if username %}
     {% if meals %}
       {% for meal in meals %}
-      $( "#editButton_{{ meal.id }}" ).click(function(e) { 
+      $( "#joinMealButton_{{ meal.id }}" ).click(function(e) { 
         e.preventDefault();
-        console.log("meal edited: " + "{{meal.id}}")
+        console.log("meal join: " + "{{meal.id}}");
+        var date = "{{ meal.date.month}}/{{ meal.date.day }}"
+        var meal_time = {% if meal.meal_time == "B" %} "breakfast"
+                        {% elif meal.meal_time == "L" %} "lunch"
+                        {% elif meal.meal_time == "D" %} "dinner"
+                        {% elif meal.meal_time == "R" %} "brunch"
+                        {% endif %}
+        var time = "{{ meal.date|date:"g:i A" }}"
+        var location = {% if meal.location == "WH" %} "Whitman"
+                        {% elif meal.location == "BW" %} "Butler/Wilson"
+                        {% elif meal.location == "RM" %} "Rocky/Mathey"
+                        {% elif meal.location == "F" %} "Forbes"
+                        {% endif %}
+        var edit_title = "Join " + meal_time + " at " + time + ", " + date + " at " + location;
+        bootbox.dialog({
+          title: edit_title,
+          message: '<form role="form" method="POST" action="/join-meal/" id="joinSubmitForm_{{ meal.id }}"> ' + 
+            "{% csrf_token %}" + 
+            '<input type="text" name="idToJoin" value="{{ meal.id }}" hidden = true > '+ 
+            '<div id="error_msg" class="alert alert-danger" hidden = true></div>' +
+            'What will you be wearing to this meal? <input type="text" name="newAttire" maxlength=100 id="attireinput"></form> ',
+          buttons: {
+            success: {
+              label: "Confirm",
+              className: "btn-success",
+              callback: function() {
+                var attireinput = document.getElementById("attireinput");
+                if (attireinput.value.length == 0)
+                {
+                  $("#error_msg").html("Please enter an attire."); // TODO: clothing validation, alphanumerical chars only
+                  document.getElementById("error_msg").style.display='block';
+                  //$("#editButton_{{ meal.id }}").click();
+                  this.function(); // currently deliberately throwing an error! this is bad!
+                }
+                else
+                {
+                  $('#joinSubmitForm_{{ meal.id }}').submit();
+                }
+              }
+            }
+          
+          }
+        });
       });
       {% endfor %}
     {% endif %}

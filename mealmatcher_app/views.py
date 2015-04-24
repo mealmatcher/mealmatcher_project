@@ -33,6 +33,7 @@ def edit_attire(request): #TODO: add email support
 		if form.is_valid():
 			data = form.cleaned_data
 			newAttire = data['newAttire']
+			if len(newAttire) > 100: newAttire = newAttire[0:100]
 			print('meal id being edited ' + data['idToEdit'])
 			matchingMeals = Meal.objects.filter(id=data['idToEdit'])
 			if len(matchingMeals) >= 1:
@@ -174,14 +175,13 @@ def join_meal(request):
 		form = JoinMealForm(request.POST)
 		if form.is_valid():
 			data = form.cleaned_data
-			print(data['idToJoin'])
+			join_attire = data['newAttire'] # attire of the person signing up
+			print('attempting to join ' + data['idToJoin'])
 			matchingMeals = Meal.objects.filter(id=data['idToJoin'])
 			if len(matchingMeals) >= 1:
 				mealToJoin = matchingMeals[0]
-				print("found meal")
-				print(mealToJoin)
 				my_user_profile = UserProfile.objects.filter(user=request.user)[0]
-				match_meal("clothes", my_user_profile, mealToJoin)
+				match_meal(join_attire, my_user_profile, mealToJoin)
 				return view_meals(request, new_meal=mealToJoin)
 				# return view_meals(request)
 		else:
