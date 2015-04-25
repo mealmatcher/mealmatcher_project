@@ -5,6 +5,22 @@ from django.contrib.auth.models import User
 import datetime
 from django.db import models
 
+# for editing attire for a meal
+class EditAttireForm(forms.Form): 
+  idToEdit = forms.CharField(
+    widget = forms.TextInput(attrs={'id': "idToEditTextbox"}),
+    max_length = 3, # will this not work for larger inputs?
+  )
+  newAttire = forms.CharField(
+    widget = forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What will you be wearing?'}),
+     help_text = "Enter a new attire for the meal",
+     max_length=100,
+  )
+  class Meta:
+    fields = ('idToEdit','newAttire')
+    exclude = ()
+
+# for deleting a meal
 class DeleteMealForm(forms.Form):
   idToDelete = forms.CharField(
     widget = forms.TextInput(attrs={'id': "idToDeleteTextbox"}),
@@ -15,14 +31,19 @@ class DeleteMealForm(forms.Form):
     fields = ('idToDelete',)
     exclude = ()
 
+# for joining a meal, needs new attire too
 class JoinMealForm(forms.Form):
   idToJoin = forms.CharField(
     widget = forms.TextInput(attrs={'id': "idToJoinTextbox"}),
     max_length = 3,  
   )
-
+  newAttire = forms.CharField(
+    widget = forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What will you be wearing?'}),
+     help_text = "Enter an attire for the meal",
+     max_length=100,
+  )
   class Meta:
-    fields = ('idToJoin',)
+    fields = ('idToJoin','newAttire')
     exclude = ()
 
 
@@ -46,7 +67,7 @@ class MealForm(forms.ModelForm):
     help_text = "I want to get",
     choices = (
       ('B', 'Breakfast'),
-      ('BR', 'Brunch'),
+      ('R', 'Brunch'),
       ('L', 'Lunch'),
       ('D', 'Dinner'),
     )
