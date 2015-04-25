@@ -22,7 +22,9 @@ from django.utils import timezone
 def index(request):
 	base_url = request.build_absolute_uri()
 	print base_url
-	context_dict = {'user': request.user}
+	first_name = request.user.first_name
+
+	context_dict = {'user': request.user, 'first_name': request.user.first_name, 'last_name': request.user.last_name, 'username': request.user.username}
 	return render(request, 'mealmatcher_app/index_new.html', context_dict)
 
 def match_meal(attire1, my_user_profile, matched_meal):

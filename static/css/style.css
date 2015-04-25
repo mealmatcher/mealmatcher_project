@@ -207,3 +207,8 @@ body {
 .change-font-size-bigger{
   font: normal 24px Helvetica;
 }
+
+.align-right
+{
+  text-align: right;
+}
