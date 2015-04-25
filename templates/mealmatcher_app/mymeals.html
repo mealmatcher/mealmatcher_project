@@ -58,11 +58,11 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li>
-              <a href="/find-a-meal/">Create a Meal</a>
+              <a href="/find-a-meal/">Find a Meal</a>
             </li>
-            <li>
+            <!-- <li>
               <a href="/open-meals/">Open Meals</a>
-            </li>
+            </li> -->
             <li class="active">
               <a href="/my-meals/">My Meals</a>
             </li>
@@ -259,7 +259,9 @@
           </tbody>
         </table>
         {% endif %}
-        <div id="mini-clndr"></div>
+
+        <!-- CALENDAR: -->
+<!--         <div id="mini-clndr"></div>
 
         <script id="calendar-template" type="text/template">
           <div class="controls">
@@ -276,7 +278,7 @@
               </div>
             </div>
           </div>
-        </script>
+        </script> -->
         <!-- uncomment and move into script to add thing -->
 <!--           <div class="event-listing clearfix">
             <div class="event-listing-title">MY MEALS THIS MONTH</div>
@@ -375,63 +377,63 @@
   {% endif %}
 
   // CALENDAR STUFF
-  var currentMonth = moment().format('YYYY-MM');
-  var nextMonth    = moment().add('month', 1).format('YYYY-MM');
-  var events = [
-    {% if username %}
-      {% if meals %}
-        {% for meal in meals %}
-        { 
-          date: '{{ meal.date|date:"Y-m-d" }}',
-          prettyDate: '{{ meal.date|date:"n/j" }}',
-          time: '{{ meal.date|date:"g:i A" }}',
-          is_matched: '{{ meal.is_matched }}' == "true",
-          title: 
-            {% if meal.meal_time == "B" %} "Breakfast"
-            {% elif meal.meal_time == "L" %} "Lunch"
-            {% elif meal.meal_time == "D" %} "Dinner"
-            {% elif meal.meal_time == "R" %} "Brunch"
-            {% endif %},
-          location: 
-            {% if meal.location == "WH" %} "Whitman"
-            {% elif meal.location == "BW" %} "Butler/Wilson"
-            {% elif meal.location == "RM" %} "Rocky/Mathey"
-            {% elif meal.location == "F" %} "Forbes"
-            {% endif %},
-        },
-        {% endfor %}
-      {% endif %}
-    {% endif %}
-    // { date: currentMonth + '-' + '10', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' },
-  ];
+  // var currentMonth = moment().format('YYYY-MM');
+  // var nextMonth    = moment().add('month', 1).format('YYYY-MM');
+  // var events = [
+  //   {% if username %}
+  //     {% if meals %}
+  //       {% for meal in meals %}
+  //       { 
+  //         date: '{{ meal.date|date:"Y-m-d" }}',
+  //         prettyDate: '{{ meal.date|date:"n/j" }}',
+  //         time: '{{ meal.date|date:"g:i A" }}',
+  //         is_matched: '{{ meal.is_matched }}' == "true",
+  //         title: 
+  //           {% if meal.meal_time == "B" %} "Breakfast"
+  //           {% elif meal.meal_time == "L" %} "Lunch"
+  //           {% elif meal.meal_time == "D" %} "Dinner"
+  //           {% elif meal.meal_time == "R" %} "Brunch"
+  //           {% endif %},
+  //         location: 
+  //           {% if meal.location == "WH" %} "Whitman"
+  //           {% elif meal.location == "BW" %} "Butler/Wilson"
+  //           {% elif meal.location == "RM" %} "Rocky/Mathey"
+  //           {% elif meal.location == "F" %} "Forbes"
+  //           {% endif %},
+  //       },
+  //       {% endfor %}
+  //     {% endif %}
+  //   {% endif %}
+  //   // { date: currentMonth + '-' + '10', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' },
+  // ];
 
-  var miniCalDiv = $('#mini-clndr')
+  // var miniCalDiv = $('#mini-clndr')
 
-  if (miniCalDiv) {
-    miniCalDiv.clndr({
-      template: $('#calendar-template').html(),
-      events: events,
-      clickEvents: {
-        click: function(target) {
-          if(target.events.length) {
-            var daysContainer = $('#mini-clndr').find('.days-container');
-            daysContainer.toggleClass('show-events', true);
-            $('#mini-clndr').find('.x-button').click( function() {
-              daysContainer.toggleClass('show-events', false);
-            });
-          }
-        },
-        onMonthChange: function(month) {
-          // console.log('you just went to ' + month.format('MMMM, YYYY'));
-        },
-        doneRendering: function() {
-          // console.log('this would be a fine place to attach custom event handlers.');
-        }
-      },
-      adjacentDaysChangeMonth: true
-    });
-  }
-  else console.log("miniCalDiv not found");
+  // if (miniCalDiv) {
+  //   miniCalDiv.clndr({
+  //     template: $('#calendar-template').html(),
+  //     events: events,
+  //     clickEvents: {
+  //       click: function(target) {
+  //         if(target.events.length) {
+  //           var daysContainer = $('#mini-clndr').find('.days-container');
+  //           daysContainer.toggleClass('show-events', true);
+  //           $('#mini-clndr').find('.x-button').click( function() {
+  //             daysContainer.toggleClass('show-events', false);
+  //           });
+  //         }
+  //       },
+  //       onMonthChange: function(month) {
+  //         // console.log('you just went to ' + month.format('MMMM, YYYY'));
+  //       },
+  //       doneRendering: function() {
+  //         // console.log('this would be a fine place to attach custom event handlers.');
+  //       }
+  //     },
+  //     adjacentDaysChangeMonth: true
+  //   });
+  // }
+  // else console.log("miniCalDiv not found");
 
   
 </script> 

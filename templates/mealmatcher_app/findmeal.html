@@ -32,11 +32,17 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static "img/apple-touch-icon-72-precomposed.png" %}">
     <link rel="apple-touch-icon-precomposed" href="{% static "img/apple-touch-icon-57-precomposed.png" %}">
     <link rel="shortcut icon" href="{% static "img/favicon.png" %}">
-
+    
+    <script type="text/javascript" src="{% static "js/less.js" %}"></script>
     <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/scripts.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/underscore.js" %}"></script>
     <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/clndr.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/clndr.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.scrollTo.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootbox.min.js" %}"></script>
   </head>
 
   <div class="container">
@@ -50,11 +56,11 @@
          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li class="active">
-              <a href="/find-a-meal/">Create a Meal</a>
+              <a href="/find-a-meal/">Find a Meal</a>
             </li>
-            <li>
+            <!-- <li>
               <a href="/open-meals/">Open Meals</a>
-            </li>
+            </li> -->
             <li>
               <a href="/my-meals/">My Meals</a>
             </li>
@@ -69,89 +75,324 @@
         
       </nav>
 
-      <div class="row  pad-top">
-  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3><strong>   Sign up for a meal </strong>  </h3>
-      </div>
+    <div class="row clearfix">
+      <div class="col-md-4">
+      <!-- <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1"> -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3><strong>   Find a meal </strong>  </h3>
+          </div>
 
-      <div class="panel-body">
-      {% if badTime %}
-      <div class="alert alert-danger alert-dismissable">
-         <button type="button" class="close" data-dismiss="alert" 
-            aria-hidden="true">
-            &times;
-         </button>
-        Sorry, you cannot sign up for a new meal at a mealtime where you already have a meal.
-      </div>
-      {% endif %}
-      {% if expiredTime %}
-      <div class="alert alert-danger alert-dismissable">
-         <button type="button" class="close" data-dismiss="alert" 
-            aria-hidden="true">
-            &times;
-         </button>
-         Sorry, the signup period for this meal has expired. Meal signup must occur at least 1 hour before the meal's start time. 
-      </div>
-      {% endif %}
-      <form role="form" id="findMealForm" method="POST" action="/find-a-meal/">
-        {% csrf_token %}
-        {% for hidden in form.hidden_fields %}
-        {{ hidden }}
-        {% endfor %}
-        {% for field in form.visible_fields %}
-        <div class="form-group input-group">
+          <div class="panel-body">
+          {% if badTime %}
+          <div class="alert alert-danger alert-dismissable">
+             <button type="button" class="close" data-dismiss="alert" 
+                aria-hidden="true">
+                &times;
+             </button>
+            Sorry, you cannot create a new meal at a mealtime where you already have a meal.
+          </div>
+          {% endif %}
+          {% if expiredTime %}
+          <div class="alert alert-danger alert-dismissable">
+             <button type="button" class="close" data-dismiss="alert" 
+                aria-hidden="true">
+                &times;
+             </button>
+             Sorry, the signup period for this meal has expired. Meal signup must occur at least 1 hour before the meal's start time. 
+          </div>
+          {% endif %}
+          <form role="form" id="findMealForm" method="POST" action="/find-a-meal/">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+            {% endfor %}
+            {% for field in form.visible_fields %}
+            <div class="form-group input-group">
+              {% if forloop.counter == 1 %}
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              {% endif %}
 
-        {% if forloop.counter == 1 %}
-            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-        {% endif %}
+              {% if forloop.counter == 2 %}
+                  <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
+              {% endif %}
 
-        {% if forloop.counter == 2 %}
-            <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
-        {% endif %}
+              {% if forloop.counter == 3 %}
+                  <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+              {% endif %}
 
-        {% if forloop.counter == 3 %}
-            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-        {% endif %}
-
-        {% if forloop.counter == 4 %}
-            <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-        {% endif %}
+              {% if forloop.counter == 4 %}
+                  <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+              {% endif %}
 
 
-        {% if forloop.counter == 5 %}
-            <span class="input-group-addon"><i class="fa fa-child"></i></span>
-        {% endif %}
+              {% if forloop.counter == 5 %}
+                  <span class="input-group-addon"><i class="fa fa-child"></i></span>
+              {% endif %}
 
-        {{ field.errors }}
-        {{ field }}
+              {{ field.errors }}
+              {{ field }}
+            </div>
+            {% endfor %}
+            <input href="#" type="submit" name="submitButton" id="submitButton" class="btn btn-success" value="Match Me!" />
+          </form>
+          <hr /> 
+          <a href="https://campusdining.princeton.edu/dining/_Foodpro/location.asp" target="_blank"> Dining Hall Menus</a>
         </div>
-        {% endfor %}
-        <input href="#" type="submit" name="submitButton" id="submitButton" class="btn btn-success" value="Match Me!" />
+      </div>
+    </div>
 
-<hr />
-</form>
 
-<a href="https://campusdining.princeton.edu/dining/_Foodpro/location.asp" target="_blank"> Dining Hall Menus</a>
+    <div class="col-md-4">
+      <div id="mini-clndr" class="clearfix"></div>
 
-<!-- <a href="https://campusdining.princeton.edu/dining/_Foodpro/nutframe.asp?sName=Princeton+University+Campus+Dining&locationNum=08&locationName=Whitman+College&naFlag=1" target="_blank"> Whitman Menu</a>
+      <script id="calendar-template" type="text/template">
+        <div class="controls">
+          <div class="clndr-previous-button">&lsaquo;</div><div class="month unselectable"><%= month %></div><div class="clndr-next-button">&rsaquo;</div>
+        </div>
 
-<br>
+        <div class="clndr-grid">
+          <div class="days-container clearfix">
+            <div class="days">
+              <div class="headers">
+                <% _.each(daysOfTheWeek, function(day) { %><div class="day-header unselectable"><%= day %></div><% }); %>
+              </div>
+              <% _.each(days, function(day) { %><div class="<%= day.classes %> unselectable" id="<%= day.id %>"><%= day.day %></div><% }); %>
+            </div>
+          </div>
+        </div>
+      </script>
+    </div>
 
-<a href="https://campusdining.princeton.edu/dining/_Foodpro/nutframe.asp?sName=Princeton+University+Campus+Dining&locationNum=01&locationName=Rockefeller+%26+Mathey+Colleges&naFlag=1" target="_blank"> Rocky/Mathey Menu</a>
+    <div class="col-md-8 meals-table-div" >
+      {% if meals %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Meal</th>
+            <th>Time</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for meal in meals %}
+            {% if not meal.is_matched %}
+              <tr id="{{meal.id}}" class= "">
+                <td>
+                {% if meal.date.weekday == 0 %} Monday
+                {% elif meal.date.weekday == 1 %} Tuesday
+                {% elif meal.date.weekday == 2 %} Wednesday
+                {% elif meal.date.weekday == 3 %} Thursday
+                {% elif meal.date.weekday == 4 %} Friday
+                {% elif meal.date.weekday == 5 %} Saturday
+                {% elif meal.date.weekday == 6 %} Sunday
+                {% endif %}
+                {{ meal.date.month}}/{{ meal.date.day }}
+                </td>
 
-<br>
+                <td>
+                {% if meal.meal_time == "B" %} Breakfast
+                {% elif meal.meal_time == "L" %} Lunch
+                {% elif meal.meal_time == "D" %} Dinner
+                {% elif meal.meal_time == "R" %} Brunch
+                {% endif %}
+                </td>
 
-<a href="https://campusdining.princeton.edu/dining/_Foodpro/nutframe.asp?sName=Princeton+University+Campus+Dining&locationNum=02&locationName=Butler+%26+Wilson+Colleges&naFlag=1" target="_blank"> Wilson/Butler Menu</a>
+                <td>{{ meal.date|date:"g:i A" }}</td>
+                <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
 
-<br>
+                <td>
+                {% if meal.location == "WH" %} Whitman
+                {% elif meal.location == "BW" %} Butler/Wilson
+                {% elif meal.location == "RM" %} Rocky/Mathey
+                {% elif meal.location == "F" %} Forbes
+                {% endif %}
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary" id="joinMealButton_{{ meal.id }}"><span class="glyphicon glyphicon-plus"></span></button>
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <h2>No open meals found!</h2>
+      {% endif %}
+    </div>
+    
 
-<a href="https://campusdining.princeton.edu/dining/_Foodpro/nutframe.asp?sName=Princeton+University+Campus+Dining&locationNum=03&locationName=Forbes+College&naFlag=1" target="_blank"> Forbes Menu</a> -->
+  </div>
+
 
 
 
 <script>
+
+///////////////////////////////////////////////////
+// OPEN MEALS STUFF:
+///////////////////////////////////////////////////
+
+{% if username %}
+  {% if meals %}
+    {% for meal in meals %}
+    $( "#joinMealButton_{{ meal.id }}" ).click(function(e) { 
+      e.preventDefault();
+      console.log("meal join: " + "{{meal.id}}");
+      var date = "{{ meal.date.month}}/{{ meal.date.day }}"
+      var meal_time = {% if meal.meal_time == "B" %} "breakfast"
+                      {% elif meal.meal_time == "L" %} "lunch"
+                      {% elif meal.meal_time == "D" %} "dinner"
+                      {% elif meal.meal_time == "R" %} "brunch"
+                      {% endif %}
+      var time = "{{ meal.date|date:"g:i A" }}"
+      var location = {% if meal.location == "WH" %} "Whitman"
+                      {% elif meal.location == "BW" %} "Butler/Wilson"
+                      {% elif meal.location == "RM" %} "Rocky/Mathey"
+                      {% elif meal.location == "F" %} "Forbes"
+                      {% endif %}
+      var edit_title = "Join " + meal_time + " at " + time + ", " + date + " at " + location;
+      bootbox.dialog({
+        title: edit_title,
+        message: '<form role="form" method="POST" action="/join-meal/" id="joinSubmitForm_{{ meal.id }}"> ' + 
+          "{% csrf_token %}" + 
+          '<input type="text" name="idToJoin" value="{{ meal.id }}" hidden = true > '+ 
+          '<div id="error_msg" class="alert alert-danger" hidden = true></div>' +
+          'What will you be wearing to this meal? <input type="text" name="newAttire" maxlength=100 id="attireinput"></form> ',
+        buttons: {
+          success: {
+            label: "Confirm",
+            className: "btn-success",
+            callback: function() {
+              var attireinput = document.getElementById("attireinput");
+              if (attireinput.value.length == 0)
+              {
+                $("#error_msg").html("Please enter an attire."); // TODO: clothing validation, alphanumerical chars only
+                document.getElementById("error_msg").style.display='block';
+                //$("#editButton_{{ meal.id }}").click();
+                this.function(); // currently deliberately throwing an error! this is bad!
+              }
+              else
+              {
+                $('#joinSubmitForm_{{ meal.id }}').submit();
+              }
+            }
+          }
+        
+        }
+      });
+    });
+    {% endfor %}
+  {% endif %}
+{% endif %}
+
+// // CALENDAR STUFF
+var currentMonth = moment().format('YYYY-MM');
+var nextMonth    = moment().add('month', 1).format('YYYY-MM');
+var events = [
+  {% if username %}
+    {% if meals %}
+      {% for meal in meals %}
+        {% if not meal.is_matched %}
+        { 
+          date: '{{ meal.date|date:"Y-m-d" }}',
+          prettyDate: '{{ meal.date|date:"n/j" }}',
+          time: '{{ meal.date|date:"g:i A" }}',
+          is_matched: '{{ meal.is_matched }}' == "true",
+          id: '{{meal.id}}',
+          title: 
+            {% if meal.meal_time == "B" %} "Breakfast"
+            {% elif meal.meal_time == "L" %} "Lunch"
+            {% elif meal.meal_time == "D" %} "Dinner"
+            {% elif meal.meal_time == "R" %} "Brunch"
+            {% endif %},
+          location: 
+            {% if meal.location == "WH" %} "Whitman"
+            {% elif meal.location == "BW" %} "Butler/Wilson"
+            {% elif meal.location == "RM" %} "Rocky/Mathey"
+            {% elif meal.location == "F" %} "Forbes"
+            {% endif %},
+        },
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+  // { date: currentMonth + '-' + '10', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' },
+];
+
+var miniCalDiv = $('#mini-clndr')
+{% if meals %}
+  if (miniCalDiv) {
+    miniCalDiv.clndr({
+      template: $('#calendar-template').html(),
+      events: events,
+      clickEvents: {
+        click: function(target) {
+          if(target.events.length) {
+            var daysContainer = $('#mini-clndr').find('.days-container');
+            daysContainer.toggleClass('show-events', true);
+            $('#mini-clndr').find('.x-button').click( function() {
+              daysContainer.toggleClass('show-events', false);
+            });
+          }
+
+          console.log(target);
+
+          if (target.events.length > 0) {
+            var elt = document.getElementById(target.events[0].id);
+            // var div = $("#meals-table-div");
+            $.scrollTo(elt, 1600, {
+              interrupt: true,
+            });
+          }
+
+          {% for meal in meals %}
+          var elt = $("#{{ meal.id }}");
+          if (elt) elt.attr("class", "");
+          {% endfor %}
+
+          for (var i = 0; i < target.events.length; i++) {
+            var elt = $("#"+target.events[i].id);
+            if (elt) {
+              elt.attr("class", "warning");
+            }
+          }
+        },
+        onMonthChange: function(month) {
+          // console.log('you just went to ' + month.format('MMMM, YYYY'));
+        },
+        doneRendering: function() {
+          // console.log('this would be a fine place to attach custom event handlers.');
+        }
+      },
+      adjacentDaysChangeMonth: false,
+    });
+  }
+  else console.log("miniCalDiv not found");
+{% endif %}
+
+
+// $(function() {  
+//     var window_height = $(window).height();
+//     var content_height = window_height - 600;
+
+//     $('.meals-table-div').height(content_height);
+// });
+
+// $( window ).resize(function() {
+//     var window_height = $(window).height(),
+//        content_height = window_height - 600;
+//     $('.meals-table-div').height(content_height);
+// });
+
+
+
+///////////////////////////////////////////////////
+// FIND MEAL FORM:
+///////////////////////////////////////////////////
+
+
   var meal_timess = {
     // NOTE(drew): these keys must match the options in the meal selection dropdown
     Breakfast: [
