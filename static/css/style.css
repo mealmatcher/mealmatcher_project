@@ -218,3 +218,14 @@ body {
   color: black;
   font: normal 24px Helvetica;
 }
+
+.pic-resize
+{
+  max-width:10%
+  max-width:10%;
+}
+
+img {
+    max-width: 50%;
+    height: auto;
+}

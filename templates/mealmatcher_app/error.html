@@ -74,14 +74,19 @@
         </div>
         
       </nav>
-<body background="{% static "img/chicken_and_waffles.jpg" %}" class="resize">      
+<body>      
 
-      &nbsp
-          <div>
+      <!-- &nbsp
+      <div class="pic-resize">
+      <img src="{% static "img/chicken_and_waffles.jpg" %}"/>
+      </div> -->
+      <div>
       <h1><center>Sorry, {{user.first_name}}. You have encountered an error :( </center></h1>
       <h2><center>Here are some chicken and waffles to make you feel better!</center></h2>
-
       </div>
+      &nbsp
+      <div class="pic-resize"><center><img src="{% static "img/chicken_and_waffles.jpg" %}" /></div></center>
+
 
 </body>
 </html>
