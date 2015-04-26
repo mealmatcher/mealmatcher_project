@@ -115,7 +115,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 #EMAIL_HOST = 'smtp.mandrillapp.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'princeton.meal.matcher@gmail.com'
-EMAIL_HOST_PASSWORD = 'plaxico123'
+EMAIL_HOST_PASSWORD = 'thefattestchicken'
 #EMAIL_HOST_PASSWORD = 'i8wsuHLt5PmaXkxB8Ok7qg'
 
 
