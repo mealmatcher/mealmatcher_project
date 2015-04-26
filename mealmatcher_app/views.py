@@ -16,6 +16,8 @@ from post_office.models import EmailTemplate
 from post_office import mail
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django import template
+	from django.template.loader import get_template
 
 # index is the app homepage
 @login_required
