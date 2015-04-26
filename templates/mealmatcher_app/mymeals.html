@@ -129,6 +129,8 @@
               <th>Location</th>
               <th>My Attire</th>
               <th>Status</th>
+              <!-- <th>Edit Attire</th> -->
+              <!-- <th>Delete Meal</th> -->
             </tr>
           </thead>
           <tbody>
@@ -360,8 +362,7 @@
                 {
                   $("#error_msg").html("Please enter an attire."); // TODO: clothing validation, alphanumerical chars only
                   document.getElementById("error_msg").style.display='block';
-                  //$("#editButton_{{ meal.id }}").click();
-                  this.function(); // currently deliberately throwing an error! this is bad!
+                  return false;
                 }
                 else
                 {

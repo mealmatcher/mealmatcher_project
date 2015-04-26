@@ -80,7 +80,7 @@
       <!-- <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1"> -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3><strong>   Create a Meal </strong>  </h3>
+            <h3><strong> Create a Meal </strong>  </h3>
           </div>
 
           <div class="panel-body">
@@ -143,86 +143,95 @@
     </div>
 
 
-    <div class="col-md-4">
-    <h2>Open Meals</h2>
-      &nbsp
-      <div id="mini-clndr" class="clearfix"></div>
-
-      <script id="calendar-template" type="text/template">
-        <div class="controls">
-          <div class="clndr-previous-button">&lsaquo;</div><div class="month unselectable"><%= month %></div><div class="clndr-next-button">&rsaquo;</div>
+  {% if username %} <!-- TODO(drew) switch back if meals -->
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3><strong>Open Meals</strong></h3>
         </div>
+        <div class="panel-body">
+          <div class="col-md-6">
+              <!-- <h2>Open Meals</h2> -->
+              <!-- &nbsp -->
+              <div id="mini-clndr" class="clearfix"></div>
 
-        <div class="clndr-grid">
-          <div class="days-container clearfix">
-            <div class="days">
-              <div class="headers">
-                <% _.each(daysOfTheWeek, function(day) { %><div class="day-header unselectable"><%= day %></div><% }); %>
-              </div>
-              <% _.each(days, function(day) { %><div class="<%= day.classes %> unselectable" id="<%= day.id %>"><%= day.day %></div><% }); %>
-            </div>
+              <script id="calendar-template" type="text/template">
+                <div class="controls">
+                  <div class="clndr-previous-button">&lsaquo;</div><div class="month unselectable"><%= month %></div><div class="clndr-next-button">&rsaquo;</div>
+                </div>
+
+                <div class="clndr-grid">
+                  <div class="days-container clearfix">
+                    <div class="days">
+                      <div class="headers">
+                        <% _.each(daysOfTheWeek, function(day) { %><div class="day-header unselectable"><%= day %></div><% }); %>
+                      </div>
+                      <% _.each(days, function(day) { %><div class="<%= day.classes %> unselectable" id="<%= day.id %>"><%= day.day %></div><% }); %>
+                    </div>
+                  </div>
+                </div>
+              </script>
+          </div>
+
+          <div class="col-md-6 meals-table-div" >
+            &nbsp
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Meal</th>
+                  <th>Time</th>
+                  <th>Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for meal in meals %}
+                  {% if not meal.is_matched %}
+                    <tr id="{{meal.id}}" class= "">
+                      <td>
+                      {% if meal.date.weekday == 0 %} Monday
+                      {% elif meal.date.weekday == 1 %} Tuesday
+                      {% elif meal.date.weekday == 2 %} Wednesday
+                      {% elif meal.date.weekday == 3 %} Thursday
+                      {% elif meal.date.weekday == 4 %} Friday
+                      {% elif meal.date.weekday == 5 %} Saturday
+                      {% elif meal.date.weekday == 6 %} Sunday
+                      {% endif %}
+                      {{ meal.date.month}}/{{ meal.date.day }}
+                      </td>
+
+                      <td>
+                      {% if meal.meal_time == "B" %} Breakfast
+                      {% elif meal.meal_time == "L" %} Lunch
+                      {% elif meal.meal_time == "D" %} Dinner
+                      {% elif meal.meal_time == "R" %} Brunch
+                      {% endif %}
+                      </td>
+
+                      <td>{{ meal.date|date:"g:i A" }}</td>
+                      <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
+
+                      <td>
+                      {% if meal.location == "WH" %} Whitman
+                      {% elif meal.location == "BW" %} Butler/Wilson
+                      {% elif meal.location == "RM" %} Rocky/Mathey
+                      {% elif meal.location == "F" %} Forbes
+                      {% endif %}
+                      </td>
+                      <td>
+                          <button type="submit" class="btn btn-primary" id="joinMealButton_{{ meal.id }}"><span class="glyphicon glyphicon-plus"></span></button>
+                      </td>
+                    </tr>
+                  {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
         </div>
-      </script>
-    </div>
-
-    <div class="col-md-8 meals-table-div" >
-      {% if meals %}
-      &nbsp
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Meal</th>
-            <th>Time</th>
-            <th>Location</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for meal in meals %}
-            {% if not meal.is_matched %}
-              <tr id="{{meal.id}}" class= "">
-                <td>
-                {% if meal.date.weekday == 0 %} Monday
-                {% elif meal.date.weekday == 1 %} Tuesday
-                {% elif meal.date.weekday == 2 %} Wednesday
-                {% elif meal.date.weekday == 3 %} Thursday
-                {% elif meal.date.weekday == 4 %} Friday
-                {% elif meal.date.weekday == 5 %} Saturday
-                {% elif meal.date.weekday == 6 %} Sunday
-                {% endif %}
-                {{ meal.date.month}}/{{ meal.date.day }}
-                </td>
-
-                <td>
-                {% if meal.meal_time == "B" %} Breakfast
-                {% elif meal.meal_time == "L" %} Lunch
-                {% elif meal.meal_time == "D" %} Dinner
-                {% elif meal.meal_time == "R" %} Brunch
-                {% endif %}
-                </td>
-
-                <td>{{ meal.date|date:"g:i A" }}</td>
-                <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
-
-                <td>
-                {% if meal.location == "WH" %} Whitman
-                {% elif meal.location == "BW" %} Butler/Wilson
-                {% elif meal.location == "RM" %} Rocky/Mathey
-                {% elif meal.location == "F" %} Forbes
-                {% endif %}
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-primary" id="joinMealButton_{{ meal.id }}"><span class="glyphicon glyphicon-plus"></span></button>
-                </td>
-              </tr>
-            {% endif %}
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
+      </div>
+    {% else %}
       <h3> <strong>No open meals found!</h3> </strong>
-      {% endif %}
+    {% endif %}
     </div>
     
 
@@ -237,6 +246,7 @@
 // OPEN MEALS STUFF:
 ///////////////////////////////////////////////////
 
+// join meal buttons:
 {% if username %}
   {% if meals %}
     {% for meal in meals %}
@@ -273,8 +283,7 @@
               {
                 $("#error_msg").html("Please enter an attire."); // TODO: clothing validation, alphanumerical chars only
                 document.getElementById("error_msg").style.display='block';
-                //$("#editButton_{{ meal.id }}").click();
-                this.function(); // currently deliberately throwing an error! this is bad!
+                return false;
               }
               else
               {
@@ -325,7 +334,7 @@ var events = [
 ];
 
 var miniCalDiv = $('#mini-clndr')
-{% if meals %}
+{% if username %} // TODO(drew) switch back it if meals
   if (miniCalDiv) {
     miniCalDiv.clndr({
       template: $('#calendar-template').html(),
@@ -344,7 +353,6 @@ var miniCalDiv = $('#mini-clndr')
 
           if (target.events.length > 0) {
             var elt = document.getElementById(target.events[0].id);
-            // var div = $("#meals-table-div");
             $.scrollTo(elt, 1600, {
               interrupt: true,
             });

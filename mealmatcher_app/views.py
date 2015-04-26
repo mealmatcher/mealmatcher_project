@@ -401,7 +401,7 @@ def find_meals(request):
 	meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
 	mealsCopy = list(meals)
 	for meal in mealsCopy:
-		if meal.is_expired():
+		if meal.is_expired() or meal.is_matched():
 			print meal
 			meals.remove(meal)
 
