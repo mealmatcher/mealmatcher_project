@@ -537,7 +537,8 @@ def site_login(request):
 					first_name = regexp_name.group(0).split(',')[1][1:-11]
 					if '.' in first_name: # has a middle inital
 						first_name = first_name[:-3]
-					newuser = User(username=username, password=password, email= (netid + '@princeton.edu'))
+					newuser = User(username=username, password=password, email= (netid + '@princeton.edu'), 
+									first_name=first_name, last_name=last_name)
 					newuser.save()
 					newuser.set_password(newuser.password)
 					newuser.save()
