@@ -309,7 +309,7 @@ def find_meals(request):
 						priority='now',
 					)
 
-					if (datetime_obj.hour == 1):
+					'''if (datetime_obj.hour == 1):
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
@@ -339,7 +339,7 @@ def find_meals(request):
 							template='warn_email',
 							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
 							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, hour),
-						)
+						)'''
 
 
 					print matched_meal.attire2
