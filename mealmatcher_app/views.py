@@ -189,7 +189,11 @@ def join_meal(request):
 @login_required
 def find_meals(request):
 	username = request.user.username
-	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
+	myUserProfiles = UserProfile.objects.filter(user=request.user)
+	if len(myUserProfiles) >= 1:
+		my_user_profile = myUserProfiles[0]
+	else:
+		print("user profile missing for user " + username)
 	badTime = False
 	expiredTime = False
 	if request.method == 'POST': # http post, process the data
@@ -357,7 +361,21 @@ def find_meals(request):
 	else:
 		form = MealForm()
 	today = django_timezone.now()
-	context_dict = {'form':form, 'dateObj': today, 'date': {'month':today.month, 'day':today.day}, 'badTime': badTime, 'expiredTime': expiredTime}
+
+	# grab the open meals
+	meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
+	mealsCopy = list(meals)
+	for meal in mealsCopy:
+		if meal.is_expired():
+			print meal
+			meals.remove(meal)
+
+	context_dict = {
+		# for find meal form:
+		'form':form, 'dateObj': today, 'date': {'month':today.month, 'day':today.day}, 'badTime': badTime, 'expiredTime': expiredTime, 
+		# for open meals:
+		'username':request.user.username, 'meals':meals, 'user_profile': UserProfile.objects.filter(user=request.user)[0]
+		}
 	return render(request, 'mealmatcher_app/findmeal.html', context_dict)
 		# return HttpResponse("Find meals")
 
