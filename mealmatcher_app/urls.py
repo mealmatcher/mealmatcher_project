@@ -12,4 +12,5 @@ urlpatterns = patterns('',
 	url(r'^login/', views.site_login, name='login'),
 	url(r'^logout/', views.site_logout, name='logout'),
 	#url(r'^login/$', views.login, name='login'),
+	url(r'^error/', views.error, name='error'),
 	)

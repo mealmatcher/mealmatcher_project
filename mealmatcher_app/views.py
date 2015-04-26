@@ -408,6 +408,11 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 	# return HttpResponse("View meals")
 
 @login_required
+def error(request):
+	
+	return render(request, 'mealmatcher_app/error.html')
+
+@login_required
 def open_meals(request):
 	# meals = list(Meal.objects.order_by('date'))
 	meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
