@@ -270,19 +270,19 @@ def find_meals(request):
 						EmailTemplate.objects.create(
 							name='match_email',
 							subject='Good Day from MealMatcher!',
-							html_content=get_template('match_email.html'),
+							html_content=get_template('mealmatcher_app/match_email.html'),
 							#'MEAL INCOMING, {{ name }}! DATE - {{ datetime }} MEAL - {{ meal }} LOCATION - {{ location }} YOUR GUEST ATTIRE - {{ attire }}',
 						)
 						EmailTemplate.objects.create(
 							name='warn_email',
 							subject='Good Day from MealMatcher!',
-							html_content=get_template('warn_email.html'),
+							html_content=get_template('mealmatcher_app/warn_email.html'),
 							#html_content='Meal incoming, {{ name }}! Your {{ meal }} on {{ datetime }} at {{ location }} has been unmatched, but we put you back in the pool for other matches!',
 						)
 						EmailTemplate.objects.create(
 							name='delete_email',
 							subject='Good Day from MealMatcher!',
-							html_content=get_template('match_email.html'),
+							html_content=get_template('mealmatcher_app/match_email.html'),
 							#'MEAL INCOMING, {{ name }}! Your {{ meal }} on {{ datetime }} at {{ location }} has been unmatched, but we put you back in the pool for other matches!',
 						)
 
