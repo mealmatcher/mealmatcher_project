@@ -187,6 +187,10 @@ def join_meal(request):
 		#return view_meals(request)
 	return HttpResponseRedirect('/my-meals/')
 
+@login_required
+def error(request):
+	return render(request, 'mealmatcher_app/error.html')
+
 # find-meals page
 @login_required
 def find_meals(request):
