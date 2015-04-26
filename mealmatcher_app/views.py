@@ -176,12 +176,39 @@ def join_meal(request):
 			join_attire = data['newAttire'] # attire of the person signing up
 			print('attempting to join ' + data['idToJoin'])
 			matchingMeals = Meal.objects.filter(id=data['idToJoin'])
+
+					
 			if len(matchingMeals) >= 1:
 				mealToJoin = matchingMeals[0]
-				my_user_profile = UserProfile.objects.filter(user=request.user)[0]
-				match_meal(join_attire, my_user_profile, mealToJoin)
-				return view_meals(request, new_meal=mealToJoin)
-				# return view_meals(request)
+
+				badTime = False
+				same_time = list(Meal.objects.filter(meal_time=meal_time, users__user=User.objects.filter(username=request.user.username)))
+				for meal in same_time:
+					if (meal.date.month == month and meal.date.day == day):
+						print 'Attempted meal join at a time that already has a meal the user is in.'
+						badTime = True
+
+				if badTime:
+					form = MealForm()
+					today = django_timezone.now()
+					# grab the open meals
+					meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
+					mealsCopy = list(meals)
+					for meal in mealsCopy:
+						if meal.is_expired():
+							print meal
+							meals.remove(meal)
+					context_dict = {
+						# for find meal form:
+						'form':form, 'dateObj': today, 'date': {'month':today.month, 'day':today.day}, 'badTime': badTime, 'expiredTime': False, 
+						# for open meals:
+						'username':request.user.username, 'meals':meals, 'user_profile': UserProfile.objects.filter(user=request.user)[0]
+						}
+					return render(request, 'mealmatcher_app/findmeal.html', context_dict)
+				else:
+					my_user_profile = UserProfile.objects.filter(user=request.user)[0]
+					match_meal(join_attire, my_user_profile, mealToJoin)
+					return view_meals(request, new_meal=mealToJoin)
 		else:
 			print form.errors
 		#return view_meals(request)
@@ -366,6 +393,8 @@ def find_meals(request):
 			print form.errors
 	else:
 		form = MealForm()
+
+
 	today = django_timezone.now()
 
 	# grab the open meals
