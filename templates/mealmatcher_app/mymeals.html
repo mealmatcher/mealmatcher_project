@@ -95,6 +95,29 @@
         </h6>
       </div>
       {% endif %}
+
+      {% if ongoing_meal %}
+      <div class="alert alert-success">
+        <h5 class="change-font-size">Upcoming/Ongoing Meal for
+          {% if ongoing_meal.meal_time == "B" %} breakfast
+          {% elif ongoing_meal.meal_time == "L" %} lunch
+          {% elif ongoing_meal.meal_time == "D" %} dinner
+          {% elif ongoing_meal.meal_time == "R" %} brunch
+          {% endif %}
+          at 
+          {% if ongoing_meal.location == "WH" %} Whitman
+          {% elif ongoing_meal.location == "BW" %} Butler/Wilson
+          {% elif ongoing_meal.location == "RM" %} Rocky/Mathey
+          {% elif ongoing_meal.location == "F" %} Forbes
+          {% endif %}
+          at
+          {{ ongoing_meal.date|date:"g:i A" }}
+        </h5>
+      </div>
+      {% endif %}
+
+           
+
       {% if username %}
         {% if meals %}
         <table class="table">
@@ -109,6 +132,9 @@
             </tr>
           </thead>
           <tbody>
+
+
+            <td> 
             {% for meal in meals %}
             <tr class=
             {% if meal == new_meal %}
@@ -181,7 +207,7 @@
           </tbody>
         </table>
         {% else %}
-        <h2 class="change-font-size">No meals proposed! Choose "Find a Meal" to make one.</h2>
+        <h2 class="change-font-size">No new meals proposed! Choose "Find a Meal" to make one.</h2>
         {% endif %}
       {% endif %}
 

@@ -48,6 +48,14 @@ class Meal(models.Model):
 	is_matched.boolean = True
 	is_matched.short_description = 'Are there are two users associated with the meal?'
 
+	# True is the time is within 1 hour of the mealtime
+	def is_ongoing(self):
+		now = timezone.now()
+		return self.is_matched() and ((now + datetime.timedelta(hours=1)) > self.date) and now < ((self.date + datetime.timedelta(hours=1)))
+	is_ongoing.boolean = True
+	is_ongoing.short_description = 'Is the meal upcoming or ongoing?'
+
+
 	# True if the meal should no longer be matched with
 	def is_expired(self):
 		now = timezone.now()

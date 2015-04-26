@@ -393,11 +393,15 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 	copy = list(meals)
 	expired_meals = []
 	removed_meals = []
+	ongoing_meal = None
 	for meal in copy:
 		#if meal.to_be_removed():
 		#	meals.remove(meal)
 		#	removed_meals.append(meal)
-		if meal.is_expired():
+		if meal.is_ongoing():
+			meals.remove(meal)
+			ongoing_meal = meal
+		elif meal.is_expired():
 			#print meal
 			meals.remove(meal)
 			expired_meals.append(meal)
@@ -407,14 +411,10 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 		meals.insert(0, new_meal)
 	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'deleted_meal':deleted_meal, 
 					'user_profile': my_user_profile, 'expired_meals': expired_meals, 'removed_meals': removed_meals,
-					}
+					'ongoing_meal': ongoing_meal}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 	# return HttpResponse("View meals")
 
-@login_required
-def error(request):
-	
-	return render(request, 'mealmatcher_app/error.html')
 
 @login_required
 def open_meals(request):
