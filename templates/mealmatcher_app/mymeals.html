@@ -17,7 +17,7 @@
   <!--script src="js/less-1.3.3.min.js"></script-->
   <!--append ‘#!watch’ to the browser URL, then refresh the page. -->
   
-  <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+  <link href="{% static "css/paper.css" %}" rel="stylesheet">
   <link href="{% static "css/style.css" %}" rel="stylesheet">
   <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
   <!-- <link href="css/style.css" rel="stylesheet"> -->
@@ -76,7 +76,6 @@
         </div>        
       </nav>
 
-      <h1>My Meals</h1>
       {% if deleted_meal %}
       <div class="alert alert-danger">
       
@@ -119,103 +118,112 @@
            
 
       {% if username %}
-        {% if meals %}
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Meal</th>
-              <th>Time</th>
-              <th>Location</th>
-              <th>My Attire</th>
-              <th>Status</th>
-              <!-- <th>Edit Attire</th> -->
-              <!-- <th>Delete Meal</th> -->
-            </tr>
-          </thead>
-          <tbody>
+      <div class="panel panel-default">
+        <!-- <div class="panel-heading">
+          <h3><strong> My Meals </strong>  </h3>
+        </div> -->
+
+        <div class="panel-body">
+          {% if meals %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Meal</th>
+                <th>Time</th>
+                <th>Location</th>
+                <th>My Attire</th>
+                <th>Status</th>
+                <th></th> <!-- just making sure the line extends across: -->
+                <th></th>
+                <!-- <th>Edit Attire</th> -->
+                <!-- <th>Delete Meal</th> -->
+              </tr>
+            </thead>
+            <tbody>
 
 
-            <td> 
-            {% for meal in meals %}
-            <tr class=
-            {% if meal == new_meal %}
-              "warning"
-            {% else %}
-              {% if meal.is_matched %}
-              "success"
+              <td> 
+              {% for meal in meals %}
+              <tr class=
+              {% if meal == new_meal %}
+                "warning"
               {% else %}
-              "danger"
+                {% if meal.is_matched %}
+                "success"
+                {% else %}
+                "danger"
+                {% endif %}
               {% endif %}
-            {% endif %}
-            >
-              <td>
-              {% if meal.date.weekday == 0 %} Monday
-              {% elif meal.date.weekday == 1 %} Tuesday
-              {% elif meal.date.weekday == 2 %} Wednesday
-              {% elif meal.date.weekday == 3 %} Thursday
-              {% elif meal.date.weekday == 4 %} Friday
-              {% elif meal.date.weekday == 5 %} Saturday
-              {% elif meal.date.weekday == 6 %} Sunday
-              {% endif %}
-              {{ meal.date.month}}/{{ meal.date.day }}
-              </td>
+              >
+                <td>
+                {% if meal.date.weekday == 0 %} Monday
+                {% elif meal.date.weekday == 1 %} Tuesday
+                {% elif meal.date.weekday == 2 %} Wednesday
+                {% elif meal.date.weekday == 3 %} Thursday
+                {% elif meal.date.weekday == 4 %} Friday
+                {% elif meal.date.weekday == 5 %} Saturday
+                {% elif meal.date.weekday == 6 %} Sunday
+                {% endif %}
+                {{ meal.date.month}}/{{ meal.date.day }}
+                </td>
 
-              <td>
-              {% if meal.meal_time == "B" %} Breakfast
-              {% elif meal.meal_time == "L" %} Lunch
-              {% elif meal.meal_time == "D" %} Dinner
-              {% elif meal.meal_time == "R" %} Brunch
-              {% endif %}
-              </td>
+                <td>
+                {% if meal.meal_time == "B" %} Breakfast
+                {% elif meal.meal_time == "L" %} Lunch
+                {% elif meal.meal_time == "D" %} Dinner
+                {% elif meal.meal_time == "R" %} Brunch
+                {% endif %}
+                </td>
 
-              <td>{{ meal.date|date:"g:i A" }}</td>
-              <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
+                <td>{{ meal.date|date:"g:i A" }}</td>
+                <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
 
-              <td>
-              {% if meal.location == "WH" %} Whitman
-              {% elif meal.location == "BW" %} Butler/Wilson
-              {% elif meal.location == "RM" %} Rocky/Mathey
-              {% elif meal.location == "F" %} Forbes
-              {% endif %}
-              </td>
+                <td>
+                {% if meal.location == "WH" %} Whitman
+                {% elif meal.location == "BW" %} Butler/Wilson
+                {% elif meal.location == "RM" %} Rocky/Mathey
+                {% elif meal.location == "F" %} Forbes
+                {% endif %}
+                </td>
 
-              <td>{% if meal.is_matched %} 
-                    {% with meal.users.all.0 as user1 %}
-                      {% if user1 == user_profile %}
-                        {{ meal.attire1 }} 
-                      {% else %}
-                        {{ meal.attire2 }} 
-                      {% endif %}
-                    {% endwith %}
-                  {% else %} 
-                    {{ meal.attire1 }} 
-                  {% endif %}
-              </td>
+                <td>{% if meal.is_matched %} 
+                      {% with meal.users.all.0 as user1 %}
+                        {% if user1 == user_profile %}
+                          {{ meal.attire1 }} 
+                        {% else %}
+                          {{ meal.attire2 }} 
+                        {% endif %}
+                      {% endwith %}
+                    {% else %} 
+                      {{ meal.attire1 }} 
+                    {% endif %}
+                </td>
 
-              <td>{% if meal.is_matched %} Matched! {% else %} Unmatched! {% endif %}</td>
-              <!-- TODO(drew) use a button group or a dropdown or something? -->
-              <!-- TODO(drew) disable edit if meal is too soon -->
-              <td><button type="submit" class="btn btn-default" id="editButton_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
-              <td>
-                <form role="form" method="POST" action="/delete-meal/" id="deleteSubmitForm_{{ meal.id }}">
-                  {% csrf_token %}
-                  <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
-                  <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}" {% if meal.is_matched %} disabled=true {% endif %}><span class="glyphicon glyphicon-trash"></span></button>
-                </form>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        {% else %}
-        <h2 class="change-font-size">No new meals proposed! Choose "Find a Meal" to make one.</h2>
-        {% endif %}
+                <td>{% if meal.is_matched %} Matched! {% else %} Unmatched! {% endif %}</td>
+                <!-- TODO(drew) use a button group or a dropdown or something? -->
+                <!-- TODO(drew) disable edit if meal is too soon -->
+                <td><button type="submit" class="btn btn-default" id="editButton_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
+                <td>
+                  <form role="form" method="POST" action="/delete-meal/" id="deleteSubmitForm_{{ meal.id }}">
+                    {% csrf_token %}
+                    <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
+                    <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}" {% if meal.is_matched %} disabled=true {% endif %}><span class="glyphicon glyphicon-trash"></span></button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <h2 class="change-font-size">No new meals proposed! Choose "Find a Meal" to make one.</h2>
+          {% endif %}
+        </div>
       {% endif %}
 
       {% if username %}
         {% if expired_meals %}
-        <h1>Expired Meals</h1>
+        <h1>Past Meals</h1>
         <table class="table">
           <thead>
             <tr>
