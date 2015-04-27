@@ -52,10 +52,44 @@
 
 </head>
 
+<nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="page-scroll" href="/logout/">Logout</a>
+                    </li>
+                    <li>
+                        <a color="white">{{user.first_name}} {{user.last_name}} </a>
+
+ 
+<!--                         <a color="white">{{first_name}} {{user.last_name}}</a>  
+ -->                     </li>
+                </ul>
+            </div>
+        </div>
+        <!-- <div class="align-right" >
+              <font color="white">{{user.first_name}} {{user.last_name}} </font>
+        </div> -->
+
+        <!-- /.container-fluid -->
+    </nav>
+
 <body>
 
     <!-- Navigation -->
-    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+    <!-- <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
     <nav id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
@@ -78,7 +112,7 @@
                 <a href="#contact" onclick = $("#menu-close").click(); >Contact</a>
             </li>
         </ul>
-    </nav>
+    </nav> -->
 
     <!-- Header -->
     <header id="top" class="header">
@@ -123,7 +157,7 @@
                                     <strong>Find a Meal</strong>
                                 </h4>
                                 <p>Click here to sign up for a new meal. Choose from different mealtimes, as well as different Dining Halls</p>
-                                <a href="#" class="btn btn-light">Find a Meal</a>
+                                <a href="/find-a-meal/" class="btn btn-light">Find a Meal</a>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-4">
@@ -136,7 +170,7 @@
                                     <strong>My Meals</strong>
                                 </h4>
                                 <p>Can't remember when you signed up for? Need to change/cancel a meal time? Simply select My Meals to view and edit the meals you've signed up for</p>
-                                <a href="#" class="btn btn-light">My Meals</a>
+                                <a href="/my-meals/" class="btn btn-light">My Meals</a>
                             </div>
                         </div>
                     </div>
@@ -150,11 +184,11 @@
     </section>
 
     <!-- Callout -->
-    <aside class="callout">
+    <!-- <aside class="callout">
         <div class="text-vertical-center">
             <h1>Meal Options</h1>
         </div>
-    </aside>
+    </aside> -->
 
     <!-- Portfolio -->
     <section id="portfolio" class="portfolio">
@@ -275,7 +309,7 @@
 -->
 
     <!-- Footer -->
-    <footer>
+    <!-- <footer>
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
@@ -301,7 +335,7 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> -->
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
