@@ -215,6 +215,10 @@ def join_meal(request):
 def error(request):
 	return render(request, 'mealmatcher_app/error.html')
 
+@login_required
+def about(request):
+	return render(request, 'mealmatcher_app/about.html')
+
 # find-meals page
 @login_required
 def find_meals(request):
