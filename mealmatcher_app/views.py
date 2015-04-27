@@ -398,7 +398,8 @@ def find_meals(request):
 	today = django_timezone.now()
 
 	# grab the open meals
-	meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
+	meals = list(Meal.objects.exclude().order_by('date'))
+	# meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
 	mealsCopy = list(meals)
 	for meal in mealsCopy:
 		if meal.is_expired() or meal.is_matched():
