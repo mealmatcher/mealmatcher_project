@@ -1,39 +1,99 @@
 <!DOCTYPE html>
+
+{% load staticfiles %}
+
 <html lang="en">
 
-<head>
+<meta charset="utf-8">
+<!-- PARTIALLY GENERATED WITH LAYOUTIT -->
+<title>MealMatcher</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
+<!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
+<!--script src="js/less-1.3.3.min.js"></script-->
+<!--append ‘#!watch’ to the browser URL, then refresh the page. -->
+
+<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+<link href="{% static "css/style.css" %}" rel="stylesheet">
+<link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+<link href="{% static "css/index2.css" %}" rel="stylesheet">
+<link href="{% static "css/stylish-portfolio-about.css" %}" rel="stylesheet">
+
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "img/apple-touch-icon-144-precomposed.png" %}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static "img/apple-touch-icon-114-precomposed.png" %}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static "img/apple-touch-icon-72-precomposed.png" %}">
+    <link rel="apple-touch-icon-precomposed" href="{% static "img/apple-touch-icon-57-precomposed.png" %}">
+    <link rel="shortcut icon" href="{% static "img/favicon.png" %}">
+    
+    <script type="text/javascript" src="{% static "js/less.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/scripts.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/underscore.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/clndr.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/clndr.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.scrollTo.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootbox.min.js" %}"></script>
+
 
     <title>About MealMatcher</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="css/stylish-portfolio-about.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
 </head>
 
-<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
 
-    <!-- Navigation -->
-    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+            <li>
+                    Welcome, {{user.first_name}}!
+                    &nbsp
+
+                    </li>
+                    <li>
+                    <a class="page-scroll" href="/logout/">Logout</a>
+                </li>
+<!--                     <a color="white"> </a>
+ -->
+
+<!--                         <a color="white">{{first_name}} {{user.last_name}}</a>  
+-->                     <!-- </li> -->
+</ul>
+</div>
+</div>
+        <!-- <div class="align-right" >
+              <font color="white">{{user.first_name}} {{user.last_name}} </font>
+          </div> -->
+
+          <!-- /.container-fluid -->
+      </nav>
+
+      <body>
+
+        <!-- Navigation -->
+    <!-- <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
     <nav id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
@@ -56,7 +116,7 @@
                 <a href="#contact" onclick = $("#menu-close").click(); >Contact</a>
             </li>
         </ul>
-    </nav>
+    </nav> -->
 
     <!-- Header -->
     <header id="top" class="header">
@@ -94,27 +154,27 @@
                         <div class="col-md-6 col-sm-4">
                             <div class="service-item">
                                 <span class="fa-stack fa-4x">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-flask fa-stack-1x text-primary"></i>
-                            </span>
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-flask fa-stack-1x text-primary"></i>
+                                </span>
                                 <h4>
                                     <strong>Find a Meal</strong>
                                 </h4>
                                 <p>Click here to sign up for a new meal. Choose from different mealtimes, as well as different Dining Halls</p>
-                                <a href="#" class="btn btn-light">Find a Meal</a>
+                                <a href="/find-a-meal/" class="btn btn-light">Find a Meal</a>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-4">
                             <div class="service-item">
                                 <span class="fa-stack fa-4x">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-shield fa-stack-1x text-primary"></i>
-                            </span>
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-shield fa-stack-1x text-primary"></i>
+                                </span>
                                 <h4>
                                     <strong>My Meals</strong>
                                 </h4>
                                 <p>Can't remember when you signed up for? Need to change/cancel a meal time? Simply select My Meals to view and edit the meals you've signed up for</p>
-                                <a href="#" class="btn btn-light">My Meals</a>
+                                <a href="/my-meals/" class="btn btn-light">My Meals</a>
                             </div>
                         </div>
                     </div>
@@ -128,11 +188,11 @@
     </section>
 
     <!-- Callout -->
-    <aside class="callout">
+    <!-- <aside class="callout">
         <div class="text-vertical-center">
             <h1>Meal Options</h1>
         </div>
-    </aside>
+    </aside> -->
 
     <!-- Portfolio -->
     <section id="portfolio" class="portfolio">
@@ -147,99 +207,99 @@
                                 <a href="#">
                                     <img class="img-portfolio img-responsive" src="img/portfolio-1.jpg">
                                 </a>
-                                </span>
-                                <h4>
-                                    <strong>Wu/Wilcox</strong>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Whitman</strong>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Rocky/Mathey</strong>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-4.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Forbes</strong>
-                                </h4>
-                            </div>
+                            </span>
+                            <h4>
+                                <strong>Wu/Wilcox</strong>
+                            </h4>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="portfolio-item">
+                            <a href="#">
+                                <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
+                            </a>
+                        </span>
+                        <h4>
+                            <strong>Whitman</strong>
+                        </h4>
+                    </div>
                 </div>
-                <!-- /.col-lg-10 -->
+                <div class="col-md-6">
+                    <div class="portfolio-item">
+                        <a href="#">
+                            <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
+                        </a>
+                    </span>
+                    <h4>
+                        <strong>Rocky/Mathey</strong>
+                    </h4>
+                </div>
             </div>
-            <!-- /.row -->
+            <div class="col-md-6">
+                <div class="portfolio-item">
+                    <a href="#">
+                        <img class="img-portfolio img-responsive" src="img/portfolio-4.jpg">
+                    </a>
+                </span>
+                <h4>
+                    <strong>Forbes</strong>
+                </h4>
+            </div>
         </div>
-        <!-- /.container -->
-    </section>
+    </div>
+</div>
+<!-- /.col-lg-10 -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container -->
+</section>
 
-    <!-- Call to Action -->
-    <aside class="call-to-action bg-primary">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2>Meal Times</h2>
-                    <hr class="small">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-1.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Breakfast!!!</strong>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Lunch?</strong>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Dinner</strong>
-                                </h4>
-                            </div>
-                        </div>
+<!-- Call to Action -->
+<aside class="call-to-action bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>Meal Times</h2>
+                <hr class="small">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="portfolio-item">
+                            <a href="#">
+                                <img class="img-portfolio img-responsive" src="img/portfolio-1.jpg">
+                            </a>
+                        </span>
+                        <h4>
+                            <strong>Breakfast!!!</strong>
+                        </h4>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="portfolio-item">
+                        <a href="#">
+                            <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
+                        </a>
+                    </span>
+                    <h4>
+                        <strong>Lunch?</strong>
+                    </h4>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="portfolio-item">
+                    <a href="#">
+                        <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
+                    </a>
+                </span>
+                <h4>
+                    <strong>Dinner</strong>
+                </h4>
+            </div>
         </div>
-    </aside>
+    </div>
+</div>
+</div>
+</aside>
 
     <!-- Map 
     <section id="contact" class="map">
@@ -252,8 +312,8 @@
     </section>
 -->
 
-    <!-- Footer -->
-    <footer>
+<!-- Footer -->
+    <!-- <footer>
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
@@ -279,7 +339,7 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> -->
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
@@ -317,7 +377,7 @@
             }
         });
     });
-    </script>
+</script>
 
 </body>
 

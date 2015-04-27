@@ -241,6 +241,11 @@ def join_meal(request):
 def error(request):
 	return render(request, 'mealmatcher_app/error.html')
 
+
+@login_required
+def about(request):
+	return render(request, 'mealmatcher_app/about.html')
+
 # find-meals page, used to find meals and view/join open meals
 # redirects to mymeals with the latest meal upon success
 @login_required
