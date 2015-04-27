@@ -173,6 +173,7 @@ def join_meal(request):
 		form = JoinMealForm(request.POST)
 		if form.is_valid():
 			data = form.cleaned_data
+			meal_time = data['meal_time']
 			join_attire = data['newAttire'] # attire of the person signing up
 			print('attempting to join ' + data['idToJoin'])
 			matchingMeals = Meal.objects.filter(id=data['idToJoin'])
