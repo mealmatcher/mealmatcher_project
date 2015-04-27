@@ -28,11 +28,11 @@ body {
 
 }
 
-.table {
+.table-dots {
     table-layout:fixed;
 }
 
-.table td {
+.table-dots td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
