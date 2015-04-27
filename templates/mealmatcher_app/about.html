@@ -2,29 +2,29 @@
 
 {% load staticfiles %}
 
- <html lang="en">
+<html lang="en">
 
-  <meta charset="utf-8">
-  <!-- PARTIALLY GENERATED WITH LAYOUTIT -->
-  <title>MealMatcher</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
+<meta charset="utf-8">
+<!-- PARTIALLY GENERATED WITH LAYOUTIT -->
+<title>MealMatcher</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
-  <!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
-  <!--script src="js/less-1.3.3.min.js"></script-->
-  <!--append ‘#!watch’ to the browser URL, then refresh the page. -->
-  
-  <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
-  <link href="{% static "css/style.css" %}" rel="stylesheet">
-  <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
-  <link href="{% static "css/index2.css" %}" rel="stylesheet">
-    <link href="{% static "css/stylish-portfolio-about.css" %}" rel="stylesheet">
+<!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
+<!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
+<!--script src="js/less-1.3.3.min.js"></script-->
+<!--append ‘#!watch’ to the browser URL, then refresh the page. -->
+
+<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+<link href="{% static "css/style.css" %}" rel="stylesheet">
+<link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+<link href="{% static "css/index2.css" %}" rel="stylesheet">
+<link href="{% static "css/stylish-portfolio-about.css" %}" rel="stylesheet">
 
 
-  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <![endif]-->
@@ -53,42 +53,46 @@
 </head>
 
 <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a class="page-scroll" href="/logout/">Logout</a>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+            <li>
+                    Welcome, {{user.first_name}}!
+                    &nbsp
+
                     </li>
                     <li>
-                        <a color="white">{{user.first_name}} {{user.last_name}} </a>
+                    <a class="page-scroll" href="/logout/">Logout</a>
+                </li>
+<!--                     <a color="white"> </a>
+ -->
 
- 
 <!--                         <a color="white">{{first_name}} {{user.last_name}}</a>  
- -->                     </li>
-                </ul>
-            </div>
-        </div>
+-->                     <!-- </li> -->
+</ul>
+</div>
+</div>
         <!-- <div class="align-right" >
               <font color="white">{{user.first_name}} {{user.last_name}} </font>
-        </div> -->
+          </div> -->
 
-        <!-- /.container-fluid -->
-    </nav>
+          <!-- /.container-fluid -->
+      </nav>
 
-<body>
+      <body>
 
-    <!-- Navigation -->
+        <!-- Navigation -->
     <!-- <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
     <nav id="sidebar-wrapper">
         <ul class="sidebar-nav">
@@ -150,9 +154,9 @@
                         <div class="col-md-6 col-sm-4">
                             <div class="service-item">
                                 <span class="fa-stack fa-4x">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-flask fa-stack-1x text-primary"></i>
-                            </span>
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-flask fa-stack-1x text-primary"></i>
+                                </span>
                                 <h4>
                                     <strong>Find a Meal</strong>
                                 </h4>
@@ -163,9 +167,9 @@
                         <div class="col-md-6 col-sm-4">
                             <div class="service-item">
                                 <span class="fa-stack fa-4x">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-shield fa-stack-1x text-primary"></i>
-                            </span>
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-shield fa-stack-1x text-primary"></i>
+                                </span>
                                 <h4>
                                     <strong>My Meals</strong>
                                 </h4>
@@ -203,99 +207,99 @@
                                 <a href="#">
                                     <img class="img-portfolio img-responsive" src="img/portfolio-1.jpg">
                                 </a>
-                                </span>
-                                <h4>
-                                    <strong>Wu/Wilcox</strong>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Whitman</strong>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Rocky/Mathey</strong>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-4.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Forbes</strong>
-                                </h4>
-                            </div>
+                            </span>
+                            <h4>
+                                <strong>Wu/Wilcox</strong>
+                            </h4>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="portfolio-item">
+                            <a href="#">
+                                <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
+                            </a>
+                        </span>
+                        <h4>
+                            <strong>Whitman</strong>
+                        </h4>
+                    </div>
                 </div>
-                <!-- /.col-lg-10 -->
+                <div class="col-md-6">
+                    <div class="portfolio-item">
+                        <a href="#">
+                            <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
+                        </a>
+                    </span>
+                    <h4>
+                        <strong>Rocky/Mathey</strong>
+                    </h4>
+                </div>
             </div>
-            <!-- /.row -->
+            <div class="col-md-6">
+                <div class="portfolio-item">
+                    <a href="#">
+                        <img class="img-portfolio img-responsive" src="img/portfolio-4.jpg">
+                    </a>
+                </span>
+                <h4>
+                    <strong>Forbes</strong>
+                </h4>
+            </div>
         </div>
-        <!-- /.container -->
-    </section>
+    </div>
+</div>
+<!-- /.col-lg-10 -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container -->
+</section>
 
-    <!-- Call to Action -->
-    <aside class="call-to-action bg-primary">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2>Meal Times</h2>
-                    <hr class="small">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-1.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Breakfast!!!</strong>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Lunch?</strong>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
-                                </a>
-                                </span>
-                                <h4>
-                                    <strong>Dinner</strong>
-                                </h4>
-                            </div>
-                        </div>
+<!-- Call to Action -->
+<aside class="call-to-action bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>Meal Times</h2>
+                <hr class="small">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="portfolio-item">
+                            <a href="#">
+                                <img class="img-portfolio img-responsive" src="img/portfolio-1.jpg">
+                            </a>
+                        </span>
+                        <h4>
+                            <strong>Breakfast!!!</strong>
+                        </h4>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="portfolio-item">
+                        <a href="#">
+                            <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
+                        </a>
+                    </span>
+                    <h4>
+                        <strong>Lunch?</strong>
+                    </h4>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="portfolio-item">
+                    <a href="#">
+                        <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
+                    </a>
+                </span>
+                <h4>
+                    <strong>Dinner</strong>
+                </h4>
+            </div>
         </div>
-    </aside>
+    </div>
+</div>
+</div>
+</aside>
 
     <!-- Map 
     <section id="contact" class="map">
@@ -308,7 +312,7 @@
     </section>
 -->
 
-    <!-- Footer -->
+<!-- Footer -->
     <!-- <footer>
         <div class="container">
             <div class="row">
@@ -373,7 +377,7 @@
             }
         });
     });
-    </script>
+</script>
 
 </body>
 
