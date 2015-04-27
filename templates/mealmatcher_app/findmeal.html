@@ -77,33 +77,33 @@
       </nav>
 
     <div class="row clearfix">
-      <div class="col-md-4">
-      <!-- <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1"> -->
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3><strong> Create a Meal </strong>  </h3>
-          </div>
+          <div class="col-md-4">
+            <div class="panel panel-default">
+              <div class="panel-heading">
 
-          <div class="panel-body">
-          {% if badTime %}
-          <div class="alert alert-danger alert-dismissable">
-             <button type="button" class="close" data-dismiss="alert" 
-                aria-hidden="true">
-                &times;
-             </button>
-            Sorry, you already have a meal at that time.
-          </div>
-          {% endif %}
-          {% if expiredTime %}
-          <div class="alert alert-danger alert-dismissable">
-             <button type="button" class="close" data-dismiss="alert" 
-                aria-hidden="true">
-                &times;
+                <h3><strong> Create a Meal </strong>  </h3>
+              </div>
+
+              <div class="panel-body">
+                {% if badTime %}
+                <div class="alert alert-danger alert-dismissable">
+                 <button type="button" class="close" data-dismiss="alert" 
+                 aria-hidden="true">
+                 &times;
+               </button>
+               Sorry, you already have a meal at that time.
+             </div>
+             {% endif %}
+             {% if expiredTime %}
+             <div class="alert alert-danger alert-dismissable">
+               <button type="button" class="close" data-dismiss="alert" 
+               aria-hidden="true">
+               &times;
              </button>
              Sorry, the signup period for this meal has expired. Meal signup must occur at least 1 hour before the meal's start time. 
-          </div>
-          {% endif %}
-          <form role="form" id="findMealForm" method="POST" action="/find-a-meal/">
+           </div>
+           {% endif %}
+           <form role="form" id="findMealForm" method="POST" action="/find-a-meal/">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
             {{ hidden }}
@@ -111,28 +111,45 @@
             {% for field in form.visible_fields %}
             <div class="form-group input-group">
               {% if forloop.counter == 1 %}
-                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
               {% endif %}
 
               {% if forloop.counter == 2 %}
-                  <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
+              <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
               {% endif %}
 
               {% if forloop.counter == 3 %}
-                  <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
               {% endif %}
 
               {% if forloop.counter == 4 %}
-                  <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+              <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
               {% endif %}
 
 
               {% if forloop.counter == 5 %}
-                  <span class="input-group-addon"><i class="fa fa-child"></i></span>
+              <span class="input-group-addon"><i class="fa fa-child"></i></span>
+
+
               {% endif %}
 
               {{ field.errors }}
               {{ field }}
+
+              {% if forloop.counter == 5 %}
+
+              <span class="input-group-addon">
+                
+                <a class="hovering"><i class="fa fa-info-circle"></i>
+                  <span>
+                    <img class="callout" src="{% static "img/callout.gif" %}" />
+                    Don't worry if you don't know for sure yet.<br />
+                    This can be changed up to 1 hour before.
+                  </span>
+                </a>
+              </span>
+
+              {% endif %}
             </div>
             {% endfor %}
             <input href="#" type="submit" name="submitButton" id="submitButton" class="btn btn-success" value="Match Me!" />
