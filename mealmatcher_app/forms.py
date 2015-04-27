@@ -9,7 +9,7 @@ from django.db import models
 class EditAttireForm(forms.Form): 
   idToEdit = forms.CharField(
     widget = forms.TextInput(attrs={'id': "idToEditTextbox"}),
-    max_length = 3, # will this not work for larger inputs?
+    max_length = 5, # will this not work for larger inputs?
   )
   newAttire = forms.CharField(
     widget = forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What will you be wearing?'}),
@@ -24,7 +24,7 @@ class EditAttireForm(forms.Form):
 class DeleteMealForm(forms.Form):
   idToDelete = forms.CharField(
     widget = forms.TextInput(attrs={'id': "idToDeleteTextbox"}),
-    max_length = 3,  
+    max_length = 5,  
   )
 
   class Meta:
@@ -35,7 +35,7 @@ class DeleteMealForm(forms.Form):
 class JoinMealForm(forms.Form):
   idToJoin = forms.CharField(
     widget = forms.TextInput(attrs={'id': "idToJoinTextbox"}),
-    max_length = 3,  
+    max_length = 5,  
   )
   newAttire = forms.CharField(
     widget = forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What will you be wearing?'}),
