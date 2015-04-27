@@ -50,6 +50,17 @@ body {
 
 }
 
+.table {
+    table-layout:fixed;
+}
+
+.table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+}
+
 @import url(http://fonts.googleapis.com/css?family=Asap:400,700);
 @import url(http://fonts.googleapis.com/css?family=Inconsolata:400,700);
 #mini-clndr {
@@ -135,17 +146,29 @@ body {
   background-size: cover;
   background-position: center;
 }
-#mini-clndr .clndr-grid .days .day.event .day-number,
-#mini-clndr .clndr-grid .days .empty.event .day-number {
-  padding-bottom: 4px;
-  border-bottom: 2px solid #3883a3;
-}
 #mini-clndr .clndr-grid .days-container .days .day.adjacent-month,
 #mini-clndr .clndr-grid .days-container .days .empty.adjacent-month {
-  opacity: 0.3;
+  /*background-color: #bbbbbb;*/
+  color: #bbbbbb;
+  /*opacity: 0.3;*/
+}
+#mini-clndr .clndr-grid .days-container .days .day.event,
+#mini-clndr .clndr-grid .days-container .days .empty.event {
+  /*padding-bottom: 4px;*/
+  /*border-bottom: 2px solid #3883a3;*/
+  color: white;
+  background-color: #0D77B6;
+  -webkit-transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s;
+  -ms-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
+  transition: background-color 0.5s;
+  cursor: pointer;
 }
 #mini-clndr .clndr-grid .days .today {
-  background-color: white;
+  /*background-color: white;*/
+  background-color: #ffffff;
+  /*border-bottom: 4px solid #3883a3;*/
   background-image: none;
 }
 /*#mini-clndr .event-listing {
