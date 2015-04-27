@@ -28,8 +28,10 @@ class Meal(models.Model):
 
 	LOCATIONS = (
 		('WH', 'Whitman'),
-		('RM', 'Rocky/Mathey'),
-		('BW', 'Butler/Wilson'),
+		('RM', 'Rocky'),
+		('BW', 'Butler'),
+		('MR', 'Mathey'),
+		('WB', 'Wilson'),
 		('F', 'Forbes'),
 	)
 	location = models.CharField(max_length=2, choices=LOCATIONS)

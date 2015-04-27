@@ -105,10 +105,12 @@
           {% endif %}
           at 
           {% if ongoing_meal.location == "WH" %} Whitman
-          {% elif ongoing_meal.location == "BW" %} Butler/Wilson
-          {% elif ongoing_meal.location == "RM" %} Rocky/Mathey
-          {% elif ongoing_meal.location == "F" %} Forbes
-          {% endif %}
+              {% elif ongoing_meal.location == "BW" %} Butler
+              {% elif ongoing_meal.location == "RM" %} Rocky
+              {% elif ongoing_meal.location == "WB" %} Wilson
+              {% elif ongoing_meal.location == "MR" %} Mathey
+              {% elif ongoing_meal.location == "F" %} Forbes
+              {% endif %}
           at
           {{ ongoing_meal.date|date:"g:i A" }}
         </h5>
@@ -181,8 +183,10 @@
 
                 <td>
                 {% if meal.location == "WH" %} Whitman
-                {% elif meal.location == "BW" %} Butler/Wilson
-                {% elif meal.location == "RM" %} Rocky/Mathey
+                {% elif meal.location == "BW" %} Butler
+                {% elif meal.location == "RM" %} Rocky
+                {% elif meal.location == "WB" %} Wilson
+                {% elif meal.location == "MR" %} Mathey
                 {% elif meal.location == "F" %} Forbes
                 {% endif %}
                 </td>
@@ -263,8 +267,10 @@
 
               <td>
               {% if meal.location == "WH" %} Whitman
-              {% elif meal.location == "BW" %} Butler/Wilson
-              {% elif meal.location == "RM" %} Rocky/Mathey
+              {% elif meal.location == "BW" %} Butler
+              {% elif meal.location == "RM" %} Rocky
+              {% elif meal.location == "WB" %} Wilson
+              {% elif meal.location == "MR" %} Mathey
               {% elif meal.location == "F" %} Forbes
               {% endif %}
               </td>
@@ -347,11 +353,13 @@
                          {% elif meal.meal_time == "R" %} "brunch"
                          {% endif %}
          var time = "{{ meal.date|date:"g:i A" }}"
-         var location = {% if meal.location == "WH" %} "Whitman"
-                         {% elif meal.location == "BW" %} "Butler/Wilson"
-                         {% elif meal.location == "RM" %} "Rocky/Mathey"
-                         {% elif meal.location == "F" %} "Forbes"
-                         {% endif %}
+         var location = {% if meal.location == "WH" %} Whitman
+                        {% elif meal.location == "BW" %} Butler
+                        {% elif meal.location == "RM" %} Rocky
+                        {% elif meal.location == "WB" %} Wilson
+                        {% elif meal.location == "MR" %} Mathey
+                        {% elif meal.location == "F" %} Forbes
+                        {% endif %}
          var edit_title = "Edit Attire for " + meal_time + " at " + time + ", " + date + " at " + location;
         bootbox.dialog({
           title: edit_title,
@@ -393,10 +401,12 @@
                         {% elif meal.meal_time == "R" %} "brunch"
                         {% endif %}
         var time = "{{ meal.date|date:"g:i A" }}"
-        var location = {% if meal.location == "WH" %} "Whitman"
-                        {% elif meal.location == "BW" %} "Butler/Wilson"
-                        {% elif meal.location == "RM" %} "Rocky/Mathey"
-                        {% elif meal.location == "F" %} "Forbes"
+        var location = {% if meal.location == "WH" %} Whitman
+                        {% elif meal.location == "BW" %} Butler
+                        {% elif meal.location == "RM" %} Rocky
+                        {% elif meal.location == "WB" %} Wilson
+                        {% elif meal.location == "MR" %} Mathey
+                        {% elif meal.location == "F" %} Forbes
                         {% endif %}
         var confirmation_message = "Are you sure you want to remove " + 
                                    meal_time + " at " + time + ", " + date + " at " + location + "?";

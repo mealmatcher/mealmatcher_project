@@ -78,8 +78,10 @@ class MealForm(forms.ModelForm):
     help_text = "at",
     choices = (
       ('WH', 'Whitman'),
-      ('RM', 'Rocky/Mathey'),
-      ('BW', 'Butler/Wilson'),
+      ('RM', 'Rocky'),
+      ('MR', 'Mathey'),
+      ('BW', 'Butler'),
+      ('WB', 'Wilson'),
       ('F', 'Forbes'),
     )
   )
