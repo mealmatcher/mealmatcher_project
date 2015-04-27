@@ -263,13 +263,13 @@
                       {% elif meal.meal_time == "R" %} "brunch"
                       {% endif %}
       var time = "{{ meal.date|date:"g:i A" }}"
-      var location = {% if meal.location == "WH" %} Whitman
-                        {% elif meal.location == "BW" %} Butler
-                        {% elif meal.location == "RM" %} Rocky
-                        {% elif meal.location == "WB" %} Wilson
-                        {% elif meal.location == "MR" %} Mathey
-                        {% elif meal.location == "F" %} Forbes
-                        {% endif %}
+      var location = {% if meal.location == "WH" %} "Whitman"
+                        {% elif meal.location == "BW" %} "Butler"
+                        {% elif meal.location == "RM" %} "Rocky"
+                        {% elif meal.location == "WB" %} "Wilson"
+                        {% elif meal.location == "MR" %} "Mathey"
+                        {% elif meal.location == "F" %} "Forbes"
+                        {% endif %};
       var edit_title = "Join " + meal_time + " at " + time + ", " + date + " at " + location;
       bootbox.dialog({
         title: edit_title,
@@ -325,13 +325,13 @@ var events = [
             {% elif meal.meal_time == "R" %} "Brunch"
             {% endif %},
           location: 
-            {% if meal.location == "WH" %} Whitman
-                {% elif meal.location == "BW" %} Butler
-                {% elif meal.location == "RM" %} Rocky
-                {% elif meal.location == "WB" %} Wilson
-                {% elif meal.location == "MR" %} Mathey
-                {% elif meal.location == "F" %} Forbes
-                {% endif %},
+            {% if meal.location == "WH" %} "Whitman"
+                        {% elif meal.location == "BW" %} "Butler"
+                        {% elif meal.location == "RM" %} "Rocky"
+                        {% elif meal.location == "WB" %} "Wilson"
+                        {% elif meal.location == "MR" %} "Mathey"
+                        {% elif meal.location == "F" %} "Forbes"
+                        {% endif %},
         },
         {% endif %}
       {% endfor %}

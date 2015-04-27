@@ -346,20 +346,20 @@
       $( "#editButton_{{ meal.id }}" ).click(function(e) { 
           e.preventDefault();
           console.log("meal edited: " + "{{meal.id}}");
-         var date = "{{ meal.date.month}}/{{ meal.date.day }}"
+         var date = "{{ meal.date.month}}/{{ meal.date.day }}";
          var meal_time = {% if meal.meal_time == "B" %} "breakfast"
                          {% elif meal.meal_time == "L" %} "lunch"
                          {% elif meal.meal_time == "D" %} "dinner"
                          {% elif meal.meal_time == "R" %} "brunch"
-                         {% endif %}
-         var time = "{{ meal.date|date:"g:i A" }}"
-         var location = {% if meal.location == "WH" %} Whitman
-                        {% elif meal.location == "BW" %} Butler
-                        {% elif meal.location == "RM" %} Rocky
-                        {% elif meal.location == "WB" %} Wilson
-                        {% elif meal.location == "MR" %} Mathey
-                        {% elif meal.location == "F" %} Forbes
-                        {% endif %}
+                         {% endif %};
+         var time = "{{ meal.date|date:"g:i A" }}";
+         var location = {% if meal.location == "WH" %} "Whitman"
+                        {% elif meal.location == "BW" %} "Butler"
+                        {% elif meal.location == "RM" %} "Rocky"
+                        {% elif meal.location == "WB" %} "Wilson"
+                        {% elif meal.location == "MR" %} "Mathey"
+                        {% elif meal.location == "F" %} "Forbes"
+                        {% endif %};
          var edit_title = "Edit Attire for " + meal_time + " at " + time + ", " + date + " at " + location;
         bootbox.dialog({
           title: edit_title,
@@ -401,13 +401,13 @@
                         {% elif meal.meal_time == "R" %} "brunch"
                         {% endif %}
         var time = "{{ meal.date|date:"g:i A" }}"
-        var location = {% if meal.location == "WH" %} Whitman
-                        {% elif meal.location == "BW" %} Butler
-                        {% elif meal.location == "RM" %} Rocky
-                        {% elif meal.location == "WB" %} Wilson
-                        {% elif meal.location == "MR" %} Mathey
-                        {% elif meal.location == "F" %} Forbes
-                        {% endif %}
+        var location = {% if meal.location == "WH" %} "Whitman"
+                        {% elif meal.location == "BW" %} "Butler"
+                        {% elif meal.location == "RM" %} "Rocky"
+                        {% elif meal.location == "WB" %} "Wilson"
+                        {% elif meal.location == "MR" %} "Mathey"
+                        {% elif meal.location == "F" %} "Forbes"
+                        {% endif %};
         var confirmation_message = "Are you sure you want to remove " + 
                                    meal_time + " at " + time + ", " + date + " at " + location + "?";
         bootbox.confirm(confirmation_message, function(result) {
