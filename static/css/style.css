@@ -81,7 +81,7 @@ body {
   letter-spacing: 1px;
 }
 #mini-clndr .clndr-grid {
-  float: left;
+  /*float: left;*/
   /*width: 65%;*/
   /*border-right: 2px solid white;*/
 }
