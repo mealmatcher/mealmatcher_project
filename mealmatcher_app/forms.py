@@ -5,11 +5,11 @@ from django.contrib.auth.models import User
 import datetime
 from django.db import models
 
-# for editing attire for a meal
+# form for editing attire for a meal --> used in mymeals
 class EditAttireForm(forms.Form): 
   idToEdit = forms.CharField(
     widget = forms.TextInput(attrs={'id': "idToEditTextbox"}),
-    max_length = 5, # will this not work for larger inputs?
+    max_length = 5, # note, this may not work for larger inputs
   )
   newAttire = forms.CharField(
     widget = forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What will you be wearing?'}),
@@ -20,7 +20,7 @@ class EditAttireForm(forms.Form):
     fields = ('idToEdit','newAttire')
     exclude = ()
 
-# for deleting a meal
+# form for deleting a meal --> used in mymeals
 class DeleteMealForm(forms.Form):
   idToDelete = forms.CharField(
     widget = forms.TextInput(attrs={'id': "idToDeleteTextbox"}),
@@ -31,7 +31,7 @@ class DeleteMealForm(forms.Form):
     fields = ('idToDelete',)
     exclude = ()
 
-# for joining a meal, needs new attire too
+# for joining a meal, takes user input for attire, to join a meal
 class JoinMealForm(forms.Form):
   idToJoin = forms.CharField(
     widget = forms.TextInput(attrs={'id': "idToJoinTextbox"}),
@@ -46,7 +46,7 @@ class JoinMealForm(forms.Form):
     fields = ('idToJoin','newAttire')
     exclude = ()
 
-
+# for find-a-meal form, choices are displayed as drop-down
 class MealForm(forms.ModelForm):
   # filled in by JS, mm/dd but not necessarily leading 0s
   date_mdy = forms.CharField(
@@ -55,7 +55,7 @@ class MealForm(forms.ModelForm):
     help_text = "on"
   )
 
-  # filled in by JS, hour:minutes-hour:minutes
+  # filled in by JS, hh:mm-hh:mm
   date_time = forms.CharField(
     widget = forms.Select(attrs={'id': 'timeDropdown', 'class': 'form-control'}),
     max_length = 11,    

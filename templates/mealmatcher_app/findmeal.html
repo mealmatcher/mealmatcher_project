@@ -76,16 +76,7 @@
         
       </nav>
 
-    <div class="row clearfix">
-          <div class="col-md-4">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-
-                <h3><strong> Create a Meal </strong>  </h3>
-              </div>
-
-              <div class="panel-body">
-                {% if badTime %}
+{% if badTime %}
                 <div class="alert alert-danger alert-dismissable">
                  <button type="button" class="close" data-dismiss="alert" 
                  aria-hidden="true">
@@ -103,6 +94,17 @@
              Sorry, the signup period for this meal has expired. Meal signup must occur at least 1 hour before the meal's start time. 
            </div>
            {% endif %}
+
+    <div class="row clearfix">
+          <div class="col-md-4">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+
+                <h3><strong> Create a Meal </strong>  </h3>
+              </div>
+
+              <div class="panel-body">
+                
            <form role="form" id="findMealForm" method="POST" action="/find-a-meal/">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
