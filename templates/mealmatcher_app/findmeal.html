@@ -214,8 +214,10 @@
 
                       <td>
                       {% if meal.location == "WH" %} Whitman
-                      {% elif meal.location == "BW" %} Butler/Wilson
-                      {% elif meal.location == "RM" %} Rocky/Mathey
+                      {% elif meal.location == "BW" %} Butler
+                      {% elif meal.location == "RM" %} Rocky
+                      {% elif meal.location == "WB" %} Wilson
+                      {% elif meal.location == "MR" %} Mathey
                       {% elif meal.location == "F" %} Forbes
                       {% endif %}
                       </td>
@@ -262,10 +264,12 @@
                       {% endif %}
       var time = "{{ meal.date|date:"g:i A" }}"
       var location = {% if meal.location == "WH" %} "Whitman"
-                      {% elif meal.location == "BW" %} "Butler/Wilson"
-                      {% elif meal.location == "RM" %} "Rocky/Mathey"
-                      {% elif meal.location == "F" %} "Forbes"
-                      {% endif %}
+                        {% elif meal.location == "BW" %} "Butler"
+                        {% elif meal.location == "RM" %} "Rocky"
+                        {% elif meal.location == "WB" %} "Wilson"
+                        {% elif meal.location == "MR" %} "Mathey"
+                        {% elif meal.location == "F" %} "Forbes"
+                        {% endif %};
       var edit_title = "Join " + meal_time + " at " + time + ", " + date + " at " + location;
       bootbox.dialog({
         title: edit_title,
@@ -322,10 +326,12 @@ var events = [
             {% endif %},
           location: 
             {% if meal.location == "WH" %} "Whitman"
-            {% elif meal.location == "BW" %} "Butler/Wilson"
-            {% elif meal.location == "RM" %} "Rocky/Mathey"
-            {% elif meal.location == "F" %} "Forbes"
-            {% endif %},
+                        {% elif meal.location == "BW" %} "Butler"
+                        {% elif meal.location == "RM" %} "Rocky"
+                        {% elif meal.location == "WB" %} "Wilson"
+                        {% elif meal.location == "MR" %} "Mathey"
+                        {% elif meal.location == "F" %} "Forbes"
+                        {% endif %},
         },
         {% endif %}
       {% endfor %}

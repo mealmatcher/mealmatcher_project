@@ -22,13 +22,10 @@ from django.template.loader import get_template
 # index is the app homepage
 @login_required
 def index(request):
-	base_url = request.build_absolute_uri()
-	print base_url
-	first_name = request.user.first_name
-
 	context_dict = {'user': request.user, 'first_name': request.user.first_name, 'last_name': request.user.last_name, 'username': request.user.username}
 	return render(request, 'mealmatcher_app/index_new.html', context_dict)
 
+# used to contain logic for editing attire of a meal
 @login_required
 def edit_attire(request): #TODO: add email support
 	if request.method == "POST":
@@ -52,8 +49,7 @@ def edit_attire(request): #TODO: add email support
 				return HttpResponseRedirect('/my-meals/')
 		else:
 			print form.errors
-		#return view_meals(request)
-	return HttpResponseRedirect('/my-meals/')
+	return render(request, 'mealmatcher_app/error.html')
 
 def match_meal(attire1, my_user_profile, matched_meal):
 	matched_meal.attire2 = attire1
