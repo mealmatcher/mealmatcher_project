@@ -237,3 +237,27 @@ hr.small {
 footer {
     padding: 100px 0;
 }
+
+.jumbotron{
+background-color: orange;
+color: white;
+/*background-color:transparent !important;
+*//*background-color:none !important;*/
+}
+
+.orange{
+    color: orange;
+}
+
+.black{
+    color: black;
+}
+
+.white{
+    color: white;
+}
+
+.resize-food-photos{
+    width: 50%;
+    height: auto;
+}
