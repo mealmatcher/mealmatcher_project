@@ -14,11 +14,15 @@ a.hovering:hover span{
 .callout {z-index:20;position:absolute;top:30px;border:0;left:-12px;}
     
 /*CSS3 extras*/
-/*a.tooltip span
+a.tooltip span
 {
     border-radius:4px;
     box-shadow: 5px 5px 8px #CCC;
-}*/
+}
+
+.label-as-badge {
+    border-radius: 1em;
+}
 
 .centered
 {

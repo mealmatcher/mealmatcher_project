@@ -385,7 +385,7 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 		if meal.to_be_removed():
 			meals.remove(meal)
 			meal.delete()
-		elif meal.is_ongoing():
+		elif meal.is_ongoing(): # or meal.is_matched(): #DEBUG: get an ongoing meal
 			meals.remove(meal)
 			ongoing_meal = meal
 			if ongoing_meal.users.all()[0] == my_user_profile:   # user1, give attire2

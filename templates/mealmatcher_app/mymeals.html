@@ -96,24 +96,66 @@
       {% endif %}
 
       {% if ongoing_meal %}
-      <div class="alert alert-success">
-        <h5 class="change-font-size">Upcoming/Ongoing Meal for
-          {% if ongoing_meal.meal_time == "B" %} breakfast
-          {% elif ongoing_meal.meal_time == "L" %} lunch
-          {% elif ongoing_meal.meal_time == "D" %} dinner
-          {% elif ongoing_meal.meal_time == "R" %} brunch
-          {% endif %}
-          at 
-          {% if ongoing_meal.location == "WH" %} Whitman
-              {% elif ongoing_meal.location == "BW" %} Butler
-              {% elif ongoing_meal.location == "RM" %} Rocky
-              {% elif ongoing_meal.location == "WB" %} Wilson
-              {% elif ongoing_meal.location == "MR" %} Mathey
-              {% elif ongoing_meal.location == "F" %} Forbes
-              {% endif %}
-          at
-          {{ ongoing_meal.date|date:"g:i A" }}
-        </h5>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Happening Now!</h4>
+        </div>
+
+        <div class="panel-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Meal</th>
+                <th>Time</th>
+                <th>Location</th>
+                <th>My Attire</th>
+                <th>Their attire</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <td>
+              <tr class="success">
+                <td>
+                {% if ongoing_meal.meal_time == "B" %} Breakfast
+                {% elif ongoing_meal.meal_time == "L" %} Lunch
+                {% elif ongoing_meal.meal_time == "D" %} Dinner
+                {% elif ongoing_meal.meal_time == "R" %} Brunch
+                {% endif %}
+                </td>
+
+                <td>{{ ongoing_meal.date|date:"g:i A" }}</td>
+
+                <td>
+                {% if ongoing_meal.location == "WH" %} Whitman
+                {% elif ongoing_meal.location == "BW" %} Butler
+                {% elif ongoing_meal.location == "RM" %} Rocky
+                {% elif ongoing_meal.location == "WB" %} Wilson
+                {% elif ongoing_meal.location == "MR" %} Mathey
+                {% elif ongoing_meal.location == "F" %} Forbes
+                {% endif %}
+                </td>
+
+                <td>{% if ongoing_meal.is_matched %} 
+                      {% with ongoing_meal.users.all.0 as user1 %}
+                        {% if user1 == user_profile %}
+                          {{ ongoing_meal.attire1 }} 
+                        {% else %}
+                          {{ ongoing_meal.attire2 }} 
+                        {% endif %}
+                      {% endwith %}
+                    {% else %} 
+                      {{ ongoing_meal.attire1 }} 
+                    {% endif %}
+                </td>
+
+                <td>{{ongoing_attire2}}</td>
+
+                <!-- <td><button type="submit" class="btn btn-default" id="editButton_{{ ongoing_meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       {% endif %}
 
@@ -121,9 +163,9 @@
 
       {% if username %}
         <div class="panel panel-default">
-          <!-- <div class="panel-heading">
-            <h3><strong> My Meals </strong>  </h3>
-          </div> -->
+          <div class="panel-heading">
+            <h4>Upcoming Meals</h4>
+          </div>
 
           <div class="panel-body">
             {% if meals %}
@@ -155,18 +197,23 @@
                   {% endif %}
                 >
                   <td>
-                  {% if meal == new_meal %}
-                    <span class="badge">NEW!</span>
-                  {% endif %}
-                  {% if meal.date.weekday == 0 %} Mon
-                  {% elif meal.date.weekday == 1 %} Tue
-                  {% elif meal.date.weekday == 2 %} Wed
-                  {% elif meal.date.weekday == 3 %} Thr
-                  {% elif meal.date.weekday == 4 %} Fri
-                  {% elif meal.date.weekday == 5 %} Sat
-                  {% elif meal.date.weekday == 6 %} Sun
-                  {% endif %}
-                  {{ meal.date.month}}/{{ meal.date.day }}
+                    
+                  <!-- </td> -->
+                  <!-- <td> -->
+                  
+                    {% if meal.date.weekday == 0 %} Mon
+                    {% elif meal.date.weekday == 1 %} Tue
+                    {% elif meal.date.weekday == 2 %} Wed
+                    {% elif meal.date.weekday == 3 %} Thr
+                    {% elif meal.date.weekday == 4 %} Fri
+                    {% elif meal.date.weekday == 5 %} Sat
+                    {% elif meal.date.weekday == 6 %} Sun
+                    {% endif %}
+                    {{ meal.date.month}}/{{ meal.date.day }}
+                    {% if meal == new_meal %}
+                      <!-- <span class="badge">NEW!</span> -->
+                      <span class="label label-success label-as-badge">NEW!</span>
+                    {% endif %}
                   </td>
 
                   <td>
@@ -228,11 +275,10 @@
       {% if username %}
         {% if expired_meals %}
         <div class="panel panel-default">
-          <!-- <div class="panel-heading">
-            <h3><strong> My Meals </strong>  </h3>
-          </div> -->
-          <div class="panel-body">
+          <div class="panel-heading">
             <h4>Past Meals</h4>
+          </div>
+          <div class="panel-body">
             <table class="table">
               <thead>
                 <tr>
