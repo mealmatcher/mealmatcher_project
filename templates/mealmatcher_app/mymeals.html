@@ -347,7 +347,7 @@
                   <td>Expired</td>
                   <td><button type="submit" class="btn btn-default" id="feedback_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
                   <td>
-                    <form role="form" method="POST" action="/delete-meal/">
+                    <form role="form" method="POST" action="/delete-meal/" id="deleteSubmitForm_{{ meal.id }}">
                       {% csrf_token %}
                       <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
                       <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}"><span class="glyphicon glyphicon-remove"></span></button>
@@ -482,6 +482,34 @@
           });
           
         });
+
+    $('#deleteSubmitForm_{{ meal.id }}').submit(function(e) {
+        var currentForm = this;
+        e.preventDefault();
+        var date = "{{ meal.date.month}}/{{ meal.date.day }}"
+        var meal_time = {% if meal.meal_time == "B" %} "breakfast"
+                        {% elif meal.meal_time == "L" %} "lunch"
+                        {% elif meal.meal_time == "D" %} "dinner"
+                        {% elif meal.meal_time == "R" %} "brunch"
+                        {% endif %}
+        var time = "{{ meal.date|date:"g:i A" }}"
+        var location = {% if meal.location == "WH" %} "Whitman"
+                        {% elif meal.location == "BW" %} "Butler"
+                        {% elif meal.location == "RM" %} "Rocky"
+                        {% elif meal.location == "WB" %} "Wilson"
+                        {% elif meal.location == "MR" %} "Mathey"
+                        {% elif meal.location == "F" %} "Forbes"
+                        {% endif %};
+        var confirmation_message = "Are you sure you want to remove " + 
+                                   meal_time + " at " + time + ", " + date + " at " + location + 
+                                   " from your meal history?";
+        bootbox.confirm(confirmation_message, function(result) {
+            if (result) {
+                console.log("meal deleted: " + "{{meal.id}}")
+                currentForm.submit();
+            }
+        });
+    });
       {% endfor %}
     {% endif %}
   {% endif %}
