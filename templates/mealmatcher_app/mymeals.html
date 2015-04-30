@@ -136,8 +136,8 @@
                 <th>Location</th>
                 <th>My Attire</th>
                 <th>Matched?</th>
-                <th></th> <!-- just making sure the line extends across: -->
-                <th></th>
+                <th>Edit attire</th> <!-- just making sure the line extends across: -->
+                <th>Delete</th>
                 <!-- <th>Edit Attire</th> -->
                 <!-- <th>Delete Meal</th> -->
               </tr>
@@ -211,7 +211,7 @@
                   <form role="form" method="POST" action="/delete-meal/" id="deleteSubmitForm_{{ meal.id }}">
                     {% csrf_token %}
                     <input type="text" name="idToDelete" value="{{ meal.id }}" hidden = true />
-                    <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}" {% if meal.is_matched %} disabled=true {% endif %}><span class="glyphicon glyphicon-trash"></span></button>
+                    <button type="submit" class="btn btn-danger" id="deleteSubmitButton_{{ meal.id }}"><span {% if meal.is_matched %} class="glyphicon glyphicon-ban-circle" {% else %}class="glyphicon glyphicon-trash" {% endif %}></span></button> <!-- {% if meal.is_matched %} disabled=true {% endif %}-->
                   </form>
                 </td>
               </tr>
@@ -235,7 +235,8 @@
               <th>Time</th>
               <th>Location</th>
               <th>My Attire</th>
-              <th>Matched?</th>
+              <th>Status</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -409,6 +410,10 @@
                         {% endif %};
         var confirmation_message = "Are you sure you want to remove " + 
                                    meal_time + " at " + time + ", " + date + " at " + location + "?";
+        {% if meal.is_matched %}
+          var confirmation_message = confirmation_message + " <br> You will be cancelling a matched meal. " + 
+                                      "Repeated cancels on matched meals will result in temporary suspension from joining meals."; 
+        {% endif %}
         bootbox.confirm(confirmation_message, function(result) {
             if (result) {
                 console.log("meal deleted: " + "{{meal.id}}")

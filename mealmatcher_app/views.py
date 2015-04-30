@@ -428,7 +428,7 @@ def find_meals(request):
 		mealsCopy = list(meals)
 		for meal in mealsCopy:
 			if meal.is_expired() or meal.is_matched():
-				print meal
+				# print meal
 				meals.remove(meal)
 
 		context_dict = {
