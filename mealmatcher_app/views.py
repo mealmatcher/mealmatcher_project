@@ -328,27 +328,24 @@ def find_meals(request):
 					#mailer user
 					user2 = matched_meal.users.all()[0].user.username
 
-					matched_meal.users.add(my_user_profile)
-					new_meal = None
-
 					#mailer
 					if not EmailTemplate.objects.all():
 						EmailTemplate.objects.create(
 							name='match_email',
 							subject='Good Day from MealMatcher!',
-							html_content=get_template('mealmatcher_app/match_email.html'),
+							html_content=render_to_string('mealmatcher_app/match_email.html'),
 							#'MEAL INCOMING, {{ name }}! DATE - {{ datetime }} MEAL - {{ meal }} LOCATION - {{ location }} YOUR GUEST ATTIRE - {{ attire }}',
 						)
 						EmailTemplate.objects.create(
 							name='warn_email',
 							subject='Good Day from MealMatcher!',
-							html_content=get_template('mealmatcher_app/warn_email.html'),
+							html_content=render_to_string('mealmatcher_app/warn_email.html'),
 							#html_content='Meal incoming, {{ name }}! Your {{ meal }} on {{ datetime }} at {{ location }} has been unmatched, but we put you back in the pool for other matches!',
 						)
 						EmailTemplate.objects.create(
 							name='delete_email',
 							subject='Good Day from MealMatcher!',
-							html_content=get_template('mealmatcher_app/delete_email.html'),
+							html_content=render_to_string('mealmatcher_app/delete_email.html'),
 							#'MEAL INCOMING, {{ name }}! Your {{ meal }} on {{ datetime }} at {{ location }} has been unmatched, but we put you back in the pool for other matches!',
 						)
 
@@ -359,14 +356,14 @@ def find_meals(request):
 					mail.send(
 						[username + '@princeton.edu'],
 						'princeton.meal.matcher@gmail.com',
-						template=get_template('mealmatcher_app/match_email.html'),
+						template='match_email',
 						context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
 						priority='now',
 					)
 					mail.send(
 						[user2 + '@princeton.edu'],
 						'princeton.meal.matcher@gmail.com',
-						template=get_template('mealmatcher_app/match_email.html'),
+						template='match_email',
 						context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
 						priority='now',
 					)
