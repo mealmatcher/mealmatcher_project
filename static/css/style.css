@@ -231,3 +231,7 @@ img {
     max-width: 50%;
     height: auto;
 }
+
+.font-larger{
+  font-size: 20px;
+}
