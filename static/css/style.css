@@ -14,11 +14,26 @@ a.hovering:hover span{
 .callout {z-index:20;position:absolute;top:30px;border:0;left:-12px;}
     
 /*CSS3 extras*/
-/*a.tooltip span
+a.tooltip span
 {
     border-radius:4px;
     box-shadow: 5px 5px 8px #CCC;
-}*/
+}
+
+/*body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 700;
+}
+*/
+.label-as-badge {
+    border-radius: 1em;
+}
 
 .centered
 {
@@ -230,4 +245,8 @@ body {
 img {
     max-width: 50%;
     height: auto;
+}
+
+.font-larger{
+  font-size: 20px;
 }

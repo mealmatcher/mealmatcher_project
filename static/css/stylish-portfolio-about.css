@@ -265,3 +265,7 @@ color: white;
 .gray{
     color: gray;
 }
+
+.re-align{
+    line-height: -300px;
+}
