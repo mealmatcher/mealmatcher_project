@@ -447,6 +447,8 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 	expired_meals = []
 	removed_meals = []
 	ongoing_meal = None
+	ongoing_attire2 = None
+	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 
 	# generate list of meals 
 	for meal in copy:
@@ -456,6 +458,10 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 		elif meal.is_ongoing():
 			meals.remove(meal)
 			ongoing_meal = meal
+			if ongoing_meal.users.all()[0] == my_user_profile:   # user1, give attire2
+				ongoing_attire2 = ongoing_meal.attire2
+			elif ongoing_meal.users.all()[1] == my_user_profile: # user2, give attire1
+				ongoing_attire2 = ongoing_meal.attire1
 		elif meal.is_expired():
 			meals.remove(meal)
 			expired_meals.append(meal)
@@ -468,7 +474,7 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 
 	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'deleted_meal':deleted_meal, 
 					'user_profile': my_user_profile, 'expired_meals': expired_meals, 'removed_meals': removed_meals,
-					'ongoing_meal': ongoing_meal}
+					'ongoing_meal': ongoing_meal, 'ongoing_attire2': ongoing_attire2,}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 
 # unsupported now 
