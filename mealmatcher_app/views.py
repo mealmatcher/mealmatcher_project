@@ -356,14 +356,14 @@ def find_meals(request):
 					mail.send(
 						[username + '@princeton.edu'],
 						'princeton.meal.matcher@gmail.com',
-						template=match_email,
+						template='match_email',
 						context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
 						priority='now',
 					)
 					mail.send(
 						[user2 + '@princeton.edu'],
 						'princeton.meal.matcher@gmail.com',
-						template=match_email,
+						template='match_email',
 						context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
 						priority='now',
 					)
