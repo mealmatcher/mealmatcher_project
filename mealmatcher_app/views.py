@@ -57,7 +57,8 @@ def edit_attire(request): # TODO: add email support by Andreas
 				return error(request)
 
 		else: # form data is invalid. print errors, give error page
-			print 'edit_attire error: edit meal form was invalid ' + form.errors
+			print 'edit_attire error: edit meal form was invalid '
+			print form.errors
 			return error(request)
 
 	else: # not a POST -- this url should not have been reached, redirect to mymeals page
@@ -232,7 +233,8 @@ def join_meal(request):
 				return error(request)
 
 		else: # form is not valid, redirect to error 
-			print 'join_meal error: ' + form.errors
+			print 'join_meal error: '
+			print form.errors
 			return error(request)
 
 	else: # not a GET, redirect to find-a-meal
@@ -416,8 +418,29 @@ def find_meals(request):
 				 # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
 				return view_meals(request, new_meal=new_meal) 
 
+			# error signing up meal at badTime or expiredTime -- render page, with errors
+			else:
+				today = django_timezone.now()
+				# grab the open meals
+				# meals = list(Meal.objects.exclude().order_by('date')) # allows own meals 
+				meals = list(Meal.objects.exclude(users__user=request.user).order_by('date')) # prevents own meals
+				mealsCopy = list(meals)
+				for meal in mealsCopy:
+					if meal.is_expired() or meal.is_matched():
+						# print meal
+						meals.remove(meal)
+
+				context_dict = {
+					# for find meal form:
+					'form':form, 'dateObj': today, 'date': {'month':today.month, 'day':today.day}, 'badTime': badTime, 'expiredTime': expiredTime, 
+					# for open meals:
+					'username':request.user.username, 'meals':meals, 'user_profile': UserProfile.objects.filter(user=request.user)[0]
+					}
+				return render(request, 'mealmatcher_app/findmeal.html', context_dict)
+
 		else: # form data not valid -- print errors, redirect to error
-			print 'find-a-meal error: meal form was invalid ' + form.errors
+			print 'find-a-meal error: meal form was invalid ' 
+			print form.errors
 			return error(request)
 
 	# not a GET, render the normal find-a-meal page
@@ -575,7 +598,8 @@ def delete_meal(request):
 				return error(request)
 
 		else: # errors with form -- redirect to error page
-			print 'delete_meal error: delete meal form was invalid ' + form.errors
+			print 'delete_meal error: delete meal form was invalid '
+			print form.errors
 			return error(request)
 
 	# received a GET, redirect to my-meals 
