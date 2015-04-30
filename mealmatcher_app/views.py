@@ -328,9 +328,6 @@ def find_meals(request):
 					#mailer user
 					user2 = matched_meal.users.all()[0].user.username
 
-					matched_meal.users.add(my_user_profile)
-					new_meal = None
-
 					#mailer
 					if not EmailTemplate.objects.all():
 						EmailTemplate.objects.create(
