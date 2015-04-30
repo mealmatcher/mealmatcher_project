@@ -242,6 +242,7 @@
                   <th>Location</th>
                   <th>My Attire</th>
                   <th>Status</th>
+                  <th>Feedback</th>
                   <th>Delete</th>
                 </tr>
               </thead>
@@ -295,6 +296,7 @@
                   </td>
 
                   <td>Expired</td>
+                  <td><button type="submit" class="btn btn-default" id="feedback_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
                   <td>
                     <form role="form" method="POST" action="/delete-meal/">
                       {% csrf_token %}
@@ -397,6 +399,40 @@
             }
         });
     });
+
+    
+      {% endfor %}
+    {% endif %}
+
+  {% if expired_meals %}
+    {% for meal in expired_meals %}
+    $( "#feedback_{{ meal.id }}" ).click(function(e) { 
+            e.preventDefault();
+            console.log("meal feedback: " + "{{meal.id}}");
+            var username = "{{ username }}"
+           var date = "{{ meal.date.month}}/{{ meal.date.day }}";
+           var meal_time = {% if meal.meal_time == "B" %} "breakfast"
+                           {% elif meal.meal_time == "L" %} "lunch"
+                           {% elif meal.meal_time == "D" %} "dinner"
+                           {% elif meal.meal_time == "R" %} "brunch"
+                           {% endif %};
+           var time = "{{ meal.date|date:"g:i A" }}";
+           var location = {% if meal.location == "WH" %} "Whitman"
+                          {% elif meal.location == "BW" %} "Butler"
+                          {% elif meal.location == "RM" %} "Rocky"
+                          {% elif meal.location == "WB" %} "Wilson"
+                          {% elif meal.location == "MR" %} "Mathey"
+                          {% elif meal.location == "F" %} "Forbes"
+                          {% endif %};
+          var form_date = "{{ meal.date|date:"Y-m-d+H:i" }}"
+          var feedback_title = "Meal Feedback for " + meal_time + " at " + time + ", " + date + " at " + location
+          bootbox.dialog({
+            title: feedback_title,
+            message: '<iframe src="https://docs.google.com/forms/d/1kf4zvMt6sA6XDX_hJpyJ-Lz77mtxf9Yn-e8HPWoOH-4/viewform?entry.2071466262=' + 
+            username + '&entry.1023788659=' + form_date + '&entry.1066727998=' + location + '&entry.1632406614embedded=true" width="80%" height="730" frameborder="0" marginheight="0" marginwidth="100px" >Loading...</iframe>',
+          });
+          
+        });
       {% endfor %}
     {% endif %}
   {% endif %}
@@ -463,9 +499,9 @@
   
 </script> 
 
-
+<!-- 
 <h4>Feedback Form</h4>
-<iframe src="https://docs.google.com/forms/d/1kf4zvMt6sA6XDX_hJpyJ-Lz77mtxf9Yn-e8HPWoOH-4/viewform?embedded=true" width="80%" height="730" frameborder="0" marginheight="0" marginwidth="100px" >Loading...</iframe>
+<iframe src="https://docs.google.com/forms/d/1kf4zvMt6sA6XDX_hJpyJ-Lz77mtxf9Yn-e8HPWoOH-4/viewform?entry.2071466262=Name&entry.1023788659=0001-01-01+13:01&entry.1632406614embedded=true" width="80%" height="730" frameborder="0" marginheight="0" marginwidth="100px" >Loading...</iframe> -->
 
 
 </body>
