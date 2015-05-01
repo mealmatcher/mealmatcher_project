@@ -104,7 +104,8 @@ def match_meal(attire1, my_user_profile, matched_meal):
 
 	#mailer users
 	user1 = matched_meal.users.all()[1].user.first_name
-	user2 = matched_meal.users.all()[0].user.first_name		
+	user2 = matched_meal.users.all()[0].user.first_name	
+	user1net = matched_meal.users.all()[1].user.username
 	user2net = matched_meal.users.all()[0].user.username	
 
 	#mailer
@@ -127,7 +128,7 @@ def match_meal(attire1, my_user_profile, matched_meal):
 
 	#mailer view
 	mail.send(
-		[username + '@princeton.edu'],
+		[user1net + '@princeton.edu'],
 		'princeton.meal.matcher@gmail.com',
 		subject='Your Meal Has Matched!',
 		html_message=render_to_string('mealmatcher_app/match_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
@@ -143,7 +144,7 @@ def match_meal(attire1, my_user_profile, matched_meal):
 
 	'''if (datetime_obj.hour == 1):
 		mail.send(
-			[username + '@princeton.edu'],
+			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
 			scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
@@ -157,7 +158,7 @@ def match_meal(attire1, my_user_profile, matched_meal):
 	else:
 		hour = datetime_obj.hour - 1
 		mail.send(
-			[username + '@princeton.edu'],
+			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
 			scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, hour),
