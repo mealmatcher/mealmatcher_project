@@ -426,7 +426,23 @@ def find_meals(request):
 		else: # form data not valid -- print errors, redirect to error
 			print 'find-a-meal error: meal form was invalid ' 
 			print form.errors
-			return error(request)
+			today = django_timezone.now()
+			# grab the open meals
+			# meals = list(Meal.objects.exclude().order_by('date')) # allows own meals 
+			meals = list(Meal.objects.exclude(users__user=request.user).order_by('date')) # prevents own meals
+			mealsCopy = list(meals)
+			for meal in mealsCopy:
+				if meal.is_expired() or meal.is_matched():
+					# print meal
+					meals.remove(meal)
+
+			context_dict = {
+				# for find meal form:
+				'form':form, 'dateObj': today, 'date': {'month':today.month, 'day':today.day}, 'badTime': badTime, 'expiredTime': expiredTime, 
+				# for open meals:
+				'username':request.user.username, 'meals':meals, 'user_profile': UserProfile.objects.filter(user=request.user)[0]
+				}
+			return render(request, 'mealmatcher_app/findmeal.html', context_dict)
 
 	# not a GET, render the normal find-a-meal page
 	else: 
