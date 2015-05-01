@@ -131,14 +131,14 @@ def match_meal(attire1, my_user_profile, matched_meal):
 		[user1net + '@princeton.edu'],
 		'princeton.meal.matcher@gmail.com',
 		subject='Your Meal Has Matched!',
-		html_message=render_to_string('mealmatcher_app/match_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
+		html_message=render_to_string('mealmatcher_app/match_email.html', {'name': user1, 'datetime': matched_meal.date, 'meal': matched_meal.meal_time, 'location': matched_meal.location, 'attire': matched_meal.attire1}),
 		priority='now',
 	)
 	mail.send(
 		[user2net + '@princeton.edu'],
 		'princeton.meal.matcher@gmail.com',
 		subject='Your Meal Has Matched!',
-		html_message=render_to_string('mealmatcher_app/match_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2}),
+		html_message=render_to_string('mealmatcher_app/match_email.html', {'name': user2, 'datetime': matched_meal.date, 'meal': matched_meal.meal_time, 'location': matched_meal.location, 'attire': matched_meal.attire2}),
 		priority='now',
 	)
 
