@@ -565,7 +565,7 @@
                         
                         <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right:18px; padding-bottom:9px; padding-left:0;">
                         
-                            <a href="*|ARCHIVE|*" target="_blank">View this email in your browser</a>
+                            
                         </td>
                     </tr>
                 </tbody></table>
@@ -655,7 +655,7 @@
                         
                         <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right: 18px; padding-bottom: 9px; padding-left: 18px;">
                         
-                            <h3>Dear User,</h3>
+                            <h3>Dear {{ name }},</h3>
 
                         </td>
                     </tr>
@@ -676,7 +676,7 @@
                         
                             You have received a match for your meal!<br>
 <br>
-Check out some of the details below.
+Check out some of the details below. Make sure to meet your fellow meal goer by the card swipe area of the respective Residential College Dining Hall.
 <ul>
 	<li>Date: {{ datetime }}</li>
 	<li>Meal: {{ meal }}</li>
@@ -742,14 +742,14 @@ Sincerely,<br>
                         <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right: 18px; padding-bottom: 9px; padding-left: 18px;">
                         
                             <em>Copyright © 2015 Mealmatcher, All rights reserved.</em><br>
-*|IFNOT:ARCHIVE_PAGE|* *|LIST:DESCRIPTION|*<br>
+<br>
 <br>
 <strong>Our mailing address is:</strong><br>
 princeton.meal.matcher@gmail.com<br>
 <br>
 <a class="utilityLink" href="*|UNSUB|*">unsubscribe from this list</a>&nbsp;&nbsp;&nbsp; <a class="utilityLink" href="*|UPDATE_PROFILE|*">update subscription preferences</a>&nbsp;<br>
 <br>
-*|IF:REWARDS|* *|HTML:REWARDS|* *|END:IF|*
+
                         </td>
                     </tr>
                 </tbody></table>
