@@ -578,6 +578,32 @@ def delete_meal(request):
 					user1 = mealToDelete.users.all()[0].user.first_name
 					user1net = mealToDelete.users.all()[0].user.username
 
+					send_meal = mealToDelete.meal_time
+					send_location = mealToDelete.location
+
+					#mailer
+					if (send_meal == "B"):
+						send_meal = "Breakfast"
+					elif (send_meal == "L"):
+						send_meal = "Lunch"
+					elif (send_meal == "D"):
+						send_meal = "Dinner"
+					else:
+						send_meal = "Brunch"
+
+					if (send_location == "BW"):
+						send_location = "Butler"
+					elif (send_location == "WB"):
+						send_location = "Wilson"
+					elif (send_location == "RM"):
+						send_location = "Rocky"
+					elif (send_location == "MR"):
+						send_location = "Mathey"
+					elif (send_location == "WH"):
+						send_location = "Whitman"
+					else:
+						send_location = "Forbes"
+
 					# make sure the remaining user is shifted to user1, i.e. shift the attire
 					if mealToDelete.users.all()[0] == myProfile:
 						#mailer
@@ -585,40 +611,13 @@ def delete_meal(request):
 						user2net = mealToDelete.users.all()[1].user.username
 
 						mealToDelete.attire1 = mealToDelete.attire2
-						
-
-						meal = mealToDelete.meal_time
-						location = mealToDelete.location
-
-						#mailer
-						if (meal == "B"):
-							meal = "Breakfast"
-						elif (meal == "L"):
-							meal = "Lunch"
-						elif (meal == "D"):
-							meal = "Dinner"
-						else:
-							meal = "Brunch"
-
-						if (location == "BW"):
-							location = "Butler"
-						elif (location == "WB"):
-							location = "Wilson"
-						elif (location == "RM"):
-							location = "Rocky"
-						elif (location == "MR"):
-							location = "Mathey"
-						elif (location == "WH"):
-							location = "Whitman"
-						else:
-							location = "Forbes"
 
 						#mailer
 						mail.send(
 							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							subject='You\'ve been returned to the Match Pool',
-							html_message=render_to_string('mealmatcher_app/delete_email.html', {'name': user2, 'datetime': mealToDelete.date, 'meal': meal, 'location': location}),
+							html_message=render_to_string('mealmatcher_app/delete_email.html', {'name': user2, 'datetime': mealToDelete.date, 'meal': send_meal, 'location': send_location}),
 							priority='now',
 						)
 						status = False
@@ -628,7 +627,7 @@ def delete_meal(request):
 							[user1net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							subject='You\'ve been returned to the Match Pool',
-							html_message=render_to_string('mealmatcher_app/delete_email.html', {'name': user1, 'datetime': mealToDelete.date, 'meal': meal, 'location': location}),
+							html_message=render_to_string('mealmatcher_app/delete_email.html', {'name': user1, 'datetime': mealToDelete.date, 'meal': send_meal, 'location': send_location}),
 							priority='now',
 						)
 
