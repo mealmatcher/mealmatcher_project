@@ -170,17 +170,39 @@
     <div class="col-md-8">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3><strong>Open Meals</strong></h3>
+          <h3><strong>Open Meals</strong>
+          </h3>
+          <body>
+            
+          </body>
         </div>
         <div class="panel-body">
           <div class="col-md-6 clearfix">
               <!-- <h2>Open Meals</h2> -->
               <!-- &nbsp -->
               <div id="mini-clndr" class="clearfix"></div>
+              <a class="hovering"><i class="fa fa-info-circle"></i>
+                <span>
+                  <img class="callout" src="{% static "img/callout.gif" %}" />
+                  Select a day to highlight matching meals!
+                  <br /> 
+                  If there are no meals that day, use the form to make one.
+                </span>
+              </a>
+              <!-- <div style="display:table-cell;">
+                <div style="margin-left:auto;margin-right:auto;">
+                  Select a day to find meals!
+                </div>
+              </div> -->
 
               <script id="calendar-template" type="text/template">
+
                 <div class="controls">
-                  <div class="clndr-previous-button">&lsaquo;</div><div class="month unselectable"><%= month %></div><div class="clndr-next-button">&rsaquo;</div>
+                  <div class="clndr-previous-button">&lsaquo;</div>
+                  <div class="month unselectable">
+                  <%= month %>
+                  </div>
+                  <div class="clndr-next-button">&rsaquo;</div>
                 </div>
 
                 <div class="clndr-grid">
@@ -193,6 +215,7 @@
                     </div>
                   </div>
                 </div>
+                
               </script>
           </div>
 

@@ -127,7 +127,10 @@
                 {% endif %}
                 </td>
 
-                <td>{{ ongoing_meal.date|date:"g:i A" }}</td>
+                <td>
+                {{ ongoing_meal.date|date:"g:i A" }}
+                <span class="label label-success label-as-badge">ONGOING!</span>
+                </td>
 
                 <td>
                 {% if ongoing_meal.location == "WH" %} Whitman
