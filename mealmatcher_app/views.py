@@ -102,43 +102,42 @@ def match_meal(attire1, my_user_profile, matched_meal):
 
 	# matched_meal.users.add(dummyProfile)
 
+	#mailer users
+	user1 = matched_meal.users.all()[1].user.first_name
+	user2 = matched_meal.users.all()[0].user.first_name		
+	user2net = matched_meal.users.all()[0].user.username	
+
 	#mailer
-	if not EmailTemplate.objects.all():
+	'''if not EmailTemplate.objects.all():
 		EmailTemplate.objects.create(
 			name='match_email',
 			subject='Good Day from MealMatcher!',
-			html_content=get_template('mealmatcher_app/match_email.html'),
-			#'MEAL INCOMING, {{ name }}! DATE - {{ datetime }} MEAL - {{ meal }} LOCATION - {{ location }} YOUR GUEST ATTIRE - {{ attire }}',
+			html_content=render_to_string('mealmatcher_app/match_email.html'),
 		)
 		EmailTemplate.objects.create(
 			name='warn_email',
 			subject='Good Day from MealMatcher!',
-			html_content=get_template('mealmatcher_app/warn_email.html'),
-			#html_content='Meal incoming, {{ name }}! Your {{ meal }} on {{ datetime }} at {{ location }} has been unmatched, but we put you back in the pool for other matches!',
+			html_content=render_to_string('mealmatcher_app/warn_email.html'),
 		)
 		EmailTemplate.objects.create(
 			name='delete_email',
 			subject='Good Day from MealMatcher!',
-			html_content=get_template('mealmatcher_app/delete_email.html'),
-			#'MEAL INCOMING, {{ name }}! Your {{ meal }} on {{ datetime }} at {{ location }} has been unmatched, but we put you back in the pool for other matches!',
-		)
-
-
-	#html_content=render_to_string('match_email_html.html'),
+			html_content=render_to_string('mealmatcher_app/delete_email.html'),
+		)'''
 
 	#mailer view
 	mail.send(
 		[username + '@princeton.edu'],
 		'princeton.meal.matcher@gmail.com',
-		template=get_template('mealmatcher_app/match_email.html'),
-		context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+		subject='Your Meal Has Matched!',
+		html_message=render_to_string('mealmatcher_app/match_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
 		priority='now',
 	)
 	mail.send(
-		[user2 + '@princeton.edu'],
+		[user2net + '@princeton.edu'],
 		'princeton.meal.matcher@gmail.com',
-		template=get_template('mealmatcher_app/match_email.html'),
-		context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+		subject='Your Meal Has Matched!',
+		html_message=render_to_string('mealmatcher_app/match_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2}),
 		priority='now',
 	)
 
@@ -146,15 +145,13 @@ def match_meal(attire1, my_user_profile, matched_meal):
 		mail.send(
 			[username + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
-			template='warn_email',
-			context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
 			scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
 		)
 		mail.send(
-			[user2 + '@princeton.edu'],
+			[user2net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
-			template='warn_email',
-			context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2}),
 			scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
 		)
 	else:
@@ -162,15 +159,13 @@ def match_meal(attire1, my_user_profile, matched_meal):
 		mail.send(
 			[username + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
-			template='warn_email',
-			context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
 			scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, hour),
 		)
 		mail.send(
-			[user2 + '@princeton.edu'],
+			[user2net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
-			template='warn_email',
-			context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2}),
 			scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, hour),
 		)'''
 
@@ -325,46 +320,42 @@ def find_meals(request):
 
 					# BELOW: all MAIL stuff in this if block section
 
-					#mailer user
-					user2 = matched_meal.users.all()[0].user.username
+					#mailer users
+					user1 = matched_meal.users.all()[1].user.first_name
+					user2 = matched_meal.users.all()[0].user.first_name		
+					user2net = matched_meal.users.all()[0].user.username	
 
 					#mailer
-					if not EmailTemplate.objects.all():
+					'''if not EmailTemplate.objects.all():
 						EmailTemplate.objects.create(
 							name='match_email',
 							subject='Good Day from MealMatcher!',
 							html_content=render_to_string('mealmatcher_app/match_email.html'),
-							#'MEAL INCOMING, {{ name }}! DATE - {{ datetime }} MEAL - {{ meal }} LOCATION - {{ location }} YOUR GUEST ATTIRE - {{ attire }}',
 						)
 						EmailTemplate.objects.create(
 							name='warn_email',
 							subject='Good Day from MealMatcher!',
 							html_content=render_to_string('mealmatcher_app/warn_email.html'),
-							#html_content='Meal incoming, {{ name }}! Your {{ meal }} on {{ datetime }} at {{ location }} has been unmatched, but we put you back in the pool for other matches!',
 						)
 						EmailTemplate.objects.create(
 							name='delete_email',
 							subject='Good Day from MealMatcher!',
 							html_content=render_to_string('mealmatcher_app/delete_email.html'),
-							#'MEAL INCOMING, {{ name }}! Your {{ meal }} on {{ datetime }} at {{ location }} has been unmatched, but we put you back in the pool for other matches!',
-						)
-
-
-					#html_content=render_to_string('match_email_html.html'),
+						)'''
 
 					#mailer view
 					mail.send(
 						[username + '@princeton.edu'],
 						'princeton.meal.matcher@gmail.com',
-						template='match_email',
-						context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+						subject='Your Meal Has Matched!',
+						html_message=render_to_string('mealmatcher_app/match_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
 						priority='now',
 					)
 					mail.send(
-						[user2 + '@princeton.edu'],
+						[user2net + '@princeton.edu'],
 						'princeton.meal.matcher@gmail.com',
-						template='match_email',
-						context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+						subject='Your Meal Has Matched!',
+						html_message=render_to_string('mealmatcher_app/match_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2}),
 						priority='now',
 					)
 
@@ -372,15 +363,13 @@ def find_meals(request):
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='warn_email',
-							context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
 							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
 						)
 						mail.send(
-							[user2 + '@princeton.edu'],
+							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='warn_email',
-							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2}),
 							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
 						)
 					else:
@@ -388,15 +377,13 @@ def find_meals(request):
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='warn_email',
-							context={'name': username, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1},
+							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
 							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, hour),
 						)
 						mail.send(
-							[user2 + '@princeton.edu'],
+							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='warn_email',
-							context={'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2},
+							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2}),
 							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, hour),
 						)'''
 					# what's this? -- Kevin
@@ -557,31 +544,31 @@ def delete_meal(request):
 				else:
 					myProfile = UserProfile.objects.filter(user=request.user)[0]
 					status = True
-					user1 = mealToDelete.users.all()[0].user.username
+					user1 = mealToDelete.users.all()[0].user.first_name
+					user1net = mealToDelete.users.all()[0].user.username
 
 					# make sure the remaining user is shifted to user1, i.e. shift the attire
 					if mealToDelete.users.all()[0] == myProfile:
 						#mailer
-						user2 = mealToDelete.users.all()[1].user.username
+						user2 = mealToDelete.users.all()[1].user.first_name
+						user2net = mealToDelete.users.all()[1].user.username
 
 						mealToDelete.attire1 = mealToDelete.attire2
 						
 						#mailer
 						mail.send(
-							[user2 + '@princeton.edu'],
+							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='delete_email',
-							context={'name': user2, 'datetime': mealToDelete.date, 'meal': mealToDelete.meal_time, 'location': mealToDelete.location},
+							html_message=render_to_string('mealmatcher_app/delete_email.html', {'name': user2, 'datetime': mealToDelete.date, 'meal': mealToDelete.meal_time, 'location': mealToDelete.location}),
 							priority='now',
 						)
 						status = False
 					#mailer
 					if status:
 						mail.send(
-							[user1 + '@princeton.edu'],
+							[user1net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							template='delete_email',
-							context={'name': user1, 'datetime': mealToDelete.date, 'meal': mealToDelete.meal_time, 'location': mealToDelete.location},
+							html_message=render_to_string('mealmatcher_app/delete_email.html', {'name': user1, 'datetime': mealToDelete.date, 'meal': mealToDelete.meal_time, 'location': mealToDelete.location}),
 							priority='now',
 						)
 
