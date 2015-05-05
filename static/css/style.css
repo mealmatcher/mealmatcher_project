@@ -88,7 +88,7 @@ body {
 }
 #mini-clndr .clndr .controls {
   padding: 14px;
-  background-color: #414141;
+  background-color: #404040;
   color: white;
   text-align: center;
 }
@@ -135,7 +135,7 @@ body {
 }
 #mini-clndr .clndr-grid .days-container {
   width: 100%;
-  background-color: #3883a3;
+  background-color: #2196F3;
 }
 #mini-clndr .clndr-grid .days-container .days .headers .day-header {
   float: left;
@@ -155,7 +155,7 @@ body {
   padding: 24px 0;
   text-align: center;
   color: #4f4f4f;
-  background-color: #ebebeb;
+  background-color: #eee;
   border-bottom: 2px solid white;
   /*background-image: url('http://kylestetz.github.io/CLNDR/css/./triangle.svg');*/
   background-size: cover;
@@ -172,7 +172,7 @@ body {
   /*padding-bottom: 4px;*/
   /*border-bottom: 2px solid #3883a3;*/
   color: white;
-  background-color: #0D77B6;
+  background-color: #2196F3;
   -webkit-transition: background-color 0.5s;
   -moz-transition: background-color 0.5s;
   -ms-transition: background-color 0.5s;
