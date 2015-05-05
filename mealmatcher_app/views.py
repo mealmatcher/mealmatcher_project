@@ -695,7 +695,9 @@ def delete_meal(request):
 
 			else: # did not get a meal to delete, redirect to error
 				print 'delete_meal error: no meal found with idToDelete'
-				return error(request)
+				# return error(request)
+				# you get here by refreshing after deleting a meal
+				return view_meals(request)
 
 		else: # errors with form -- redirect to error page
 			print 'delete_meal error: delete meal form was invalid '
