@@ -50,8 +50,9 @@ def edit_attire(request): # TODO: add email support by Andreas
 				user1 = mealToEdit.users.all()[0].user.first_name
 				user1net = mealToEdit.users.all()[0].user.username
 
-				user2 = mealToEdit.users.all()[1].user.first_name
-				user2net = mealToEdit.users.all()[1].user.username
+				if mealToEdit.is_matched():
+					user2 = mealToEdit.users.all()[1].user.first_name
+					user2net = mealToEdit.users.all()[1].user.username
 
 				send_meal = mealToEdit.meal_time
 				send_location = mealToEdit.location
@@ -92,7 +93,7 @@ def edit_attire(request): # TODO: add email support by Andreas
 						priority='now',
 					)
 
-				elif mealToEdit.users.all()[1] == my_user_profile: # change user2 attire
+				elif mealToEdit.is_matched() and mealToEdit.users.all()[1] == my_user_profile: # change user2 attire
 					mealToEdit.attire2 = newAttire
 					mealToEdit.save()
 
