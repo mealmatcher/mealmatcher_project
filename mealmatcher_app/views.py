@@ -24,7 +24,7 @@ from django.template.loader import get_template
 def index(request):
 	context_dict = {'user': request.user, 'first_name': request.user.first_name, 
 					'last_name': request.user.last_name, 'username': request.user.username}
-	return render(request, 'mealmatcher_app/index_new.html', context_dict)
+	return render(request, 'mealmatcher_app/index_new_replaced.html', context_dict)
 
 # used to contain logic for editing attire of a meal in my-meals 
 # redirects to my-meals if success, error page if failure in saving, and my-meals if 
