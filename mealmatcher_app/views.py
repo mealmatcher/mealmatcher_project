@@ -45,12 +45,67 @@ def edit_attire(request): # TODO: add email support by Andreas
 			if len(matchingMeals) >= 1:
 				mealToEdit = matchingMeals[0]
 				my_user_profile = UserProfile.objects.filter(user=request.user)[0]
+
+
+				user1 = mealToEdit.users.all()[0].user.first_name
+				user1net = mealToEdit.users.all()[0].user.username
+
+				user2 = mealToEdit.users.all()[1].user.first_name
+				user2net = mealToEdit.users.all()[1].user.username
+
+				send_meal = mealToEdit.meal_time
+				send_location = mealToEdit.location
+
+				#mailer
+				if (send_meal == "B"):
+					send_meal = "Breakfast"
+				elif (send_meal == "L"):
+					send_meal = "Lunch"
+				elif (send_meal == "D"):
+					send_meal = "Dinner"
+				else:
+					send_meal = "Brunch"
+
+				if (send_location == "BW"):
+					send_location = "Butler"
+				elif (send_location == "WB"):
+					send_location = "Wilson"
+				elif (send_location == "RM"):
+					send_location = "Rocky"
+				elif (send_location == "MR"):
+					send_location = "Mathey"
+				elif (send_location == "WH"):
+					send_location = "Whitman"
+				else:
+					send_location = "Forbes"
+
 				if mealToEdit.users.all()[0] == my_user_profile: # change user1 attire
 					mealToEdit.attire1 = newAttire
 					mealToEdit.save()
+
+					#mailer
+					mail.send(
+						[user2net + '@princeton.edu'],
+						'princeton.meal.matcher@gmail.com',
+						subject='Notification About Your Partner\'s Attire',
+						html_message=render_to_string('mealmatcher_app/attire_alert_email.html', {'name': user2, 'datetime': mealToEdit.date, 'meal': send_meal, 'location': send_location, 'attire': mealToEdit.attire1}),
+						priority='now',
+					)
+
 				elif mealToEdit.users.all()[1] == my_user_profile: # change user2 attire
 					mealToEdit.attire2 = newAttire
 					mealToEdit.save()
+
+					#mailer
+					mail.send(
+						[user1net + '@princeton.edu'],
+						'princeton.meal.matcher@gmail.com',
+						subject='YNotification About Your Partner\'s Attire',
+						html_message=render_to_string('mealmatcher_app/attire_alert_email.html', {'name': user1, 'datetime': mealToEdit.date, 'meal': send_meal, 'location': send_location, 'attire': mealToEdit.attire2}),
+						priority='now',
+					)
+
+
 				return HttpResponseRedirect('/my-meals/')
 			else:
 				print 'edit_attire error: no meal found with that id'
