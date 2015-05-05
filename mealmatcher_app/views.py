@@ -100,7 +100,7 @@ def edit_attire(request): # TODO: add email support by Andreas
 					mail.send(
 						[user1net + '@princeton.edu'],
 						'princeton.meal.matcher@gmail.com',
-						subject='YNotification About Your Partner\'s Attire',
+						subject='Notification About Your Partner\'s Attire',
 						html_message=render_to_string('mealmatcher_app/attire_alert_email.html', {'name': user1, 'datetime': mealToEdit.date, 'meal': send_meal, 'location': send_location, 'attire': mealToEdit.attire2}),
 						priority='now',
 					)
