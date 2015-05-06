@@ -436,7 +436,7 @@ def find_meals(request):
 						priority='now',
 					)
 
-					'''if (datetime_obj.hour == 1):
+					if (datetime_obj.hour == 1):
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
@@ -450,19 +450,19 @@ def find_meals(request):
 							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
 						)
 					else:
-						hour = datetime_obj.hour - 1
+						send_hour = datetime_obj.hour - 1
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire1}),
-							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, hour),
+							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour),
 						)
 						mail.send(
 							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire2}),
-							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, hour),
-						)'''
+							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour),
+						)
 					
 
 				else: # no matches, make a new Meal and add it to the database
