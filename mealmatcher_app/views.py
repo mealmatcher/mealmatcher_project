@@ -208,7 +208,7 @@ def match_meal(attire1, my_user_profile, matched_meal):
 		priority='now',
 	)
 
-	'''if (datetime_obj.hour == 1):
+	if (datetime_obj.hour == 1):
 		mail.send(
 			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
@@ -236,7 +236,7 @@ def match_meal(attire1, my_user_profile, matched_meal):
 			subject='Your Meal Is Approaching!',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2}),
 			scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, hour),
-		)'''
+		)
 
 
 	print matched_meal.attire2
