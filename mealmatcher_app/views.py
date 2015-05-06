@@ -713,13 +713,14 @@ def delete_meal(request):
 
 # login page
 def site_login(request):
-	#base_url = request.build_absolute_uri()
 	base_url = 'http://' + request.META['HTTP_HOST']
 	print base_url
-	# user is logged in, redirect to index page
+
+	# the user is now logged in. return to homepage
 	if request.user.is_authenticated():
 		return HttpResponseRedirect('/')
-	# user is not logged in. go through CAS stuff
+
+	# the user is not logged in. CAS authentication, get or make user/userprofile 
 	else: 
 		ticket = request.GET.get('ticket')
 		if not ticket:
@@ -727,22 +728,32 @@ def site_login(request):
 		else:
 			source = urllib2.urlopen('https://fed.princeton.edu/cas/serviceValidate?service=' + base_url + '/login/&ticket=' + ticket)
 			content = source.read()
-			if 'authenticationSuccess' in content:      # success in authentication
+
+			# success with CAS, retrieve/make user
+			if 'authenticationSuccess' in content: 
+				# hardcoded to get netid -- may change if CAS changes
 				regexp = re.search('<cas:user>.*</cas:user>', content)
-				netid = regexp.group(0)[10:-11]
-				if User.objects.filter(username=netid): # in the database. Log them in
+				netid = regexp.group(0)[10:-11] 
+
+				# Look for user in database. If found, log them in
+				if User.objects.filter(username=netid): 
 					username = netid
 					password = netid
 					user = authenticate(username=username, password=password)
 					if user: 
 						user_profile = UserProfile.objects.filter(user=user)
-						if not user_profile:
-							profile = UserProfile(user=user)
-							print 'made the profile'
+						if not user_profile:  # find the userprofile, or make a new one 
+							new_profile = UserProfile(user=user)
+							new_profile.save()
+							print 'made the profile for ' + netid
 						django_login(request, user)
 						return HttpResponseRedirect('')
-					else:
-						return error(request, login_error=True) # render the login_error page
+						
+					# return login_error. user authentication failed 
+					else: 
+						return error(request, login_error=True) 
+
+				# User not in database. Make new User and UserProfile accounts
 				else:
 					username = netid
 					password = netid
@@ -753,18 +764,25 @@ def site_login(request):
 					first_name = regexp_name.group(0).split(',')[1][1:-11]
 					if '.' in first_name: # has a middle inital
 						first_name = first_name[:-3]
-					newuser = User(username=username, password=password, email= (netid + '@princeton.edu'), 
+
+					new_user = User(username=username, password=password, email= (netid + '@princeton.edu'), 
 									first_name=first_name, last_name=last_name)
-					newuser.save()
-					newuser.set_password(newuser.password)
-					newuser.save()
-					profile = UserProfile(user = newuser)
+					new_user.save()
+					new_user.set_password(new_user.password)
+					new_user.save()
+					print 'made the new user for ' + netid
+
+					profile = UserProfile(user = new_user)
 					profile.save()
-					newuser = authenticate(username=username, password=password)
-					django_login(request, newuser)
-					print first_name + ' @@ ' + last_name + ' account created '
+					print 'made the profile for ' + netid
+
+					new_user = authenticate(username=username, password=password)
+					django_login(request, new_user)
 					return HttpResponseRedirect('')
-			else: # redirect to try again
+
+			# CAS authentication failed -- redirect to try again	
+			# note: this will cause an infinite loop error if CAS is down, and render that failure in the browser.
+			else: 
 				return HttpResponseRedirect('https://fed.princeton.edu/cas/login?service=' + base_url + '/login/')
 
 
