@@ -213,13 +213,13 @@ def match_meal(attire1, my_user_profile, matched_meal):
 			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire1}),
-			scheduled_time=datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, 12),
+			scheduled_time=datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, 12),
 		)
 		mail.send(
 			[user2net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire2}),
-			scheduled_time=datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, 12),
+			scheduled_time=datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, 12),
 		)
 	else:
 		hour = matched_meal.date.hour - 1
@@ -228,14 +228,14 @@ def match_meal(attire1, my_user_profile, matched_meal):
 			'princeton.meal.matcher@gmail.com',
 			subject='Your Meal Is Approaching!',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire1}),
-			scheduled_time=datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, hour),
+			scheduled_time=datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, hour),
 		)
 		mail.send(
 			[user2net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			subject='Your Meal Is Approaching!',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire2}),
-			scheduled_time=datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, hour),
+			scheduled_time=datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, hour),
 		)
 
 
@@ -441,13 +441,13 @@ def find_meals(request):
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire1}),
-							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
+							scheduled_time=datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
 						)
 						mail.send(
 							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire2}),
-							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
+							scheduled_time=datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
 						)
 					else:
 						send_hour = datetime_obj.hour - 1
@@ -455,13 +455,13 @@ def find_meals(request):
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire1}),
-							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour),
+							scheduled_time=datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour),
 						)
 						mail.send(
 							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire2}),
-							scheduled_time=datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour),
+							scheduled_time=datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour),
 						)
 					
 
