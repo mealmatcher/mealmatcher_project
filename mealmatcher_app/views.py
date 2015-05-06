@@ -227,14 +227,14 @@ def match_meal(attire1, my_user_profile, matched_meal):
 			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			subject='Your Meal Is Approaching!',
-			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': matched_meal.date, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire1}),
+			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire1}),
 			scheduled_time=datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, hour),
 		)
 		mail.send(
 			[user2net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			subject='Your Meal Is Approaching!',
-			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': matched_meal.date, 'meal': meal_time, 'location': location, 'attire': matched_meal.attire2}),
+			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire2}),
 			scheduled_time=datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, hour),
 		)
 
