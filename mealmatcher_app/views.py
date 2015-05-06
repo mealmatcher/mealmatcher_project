@@ -111,12 +111,12 @@ def edit_attire(request): # TODO: add email support by Andreas
 				return HttpResponseRedirect('/my-meals/')
 			else:
 				print 'edit_attire error: no meal found with that id'
-				return error(request)
+				return error(request, login_error=False)
 
 		else: # form data is invalid. print errors, give error page
 			print 'edit_attire error: edit meal form was invalid '
 			print form.errors
-			return error(request)
+			return error(request, login_error=False)
 
 	else: # not a POST -- this url should not have been reached, redirect to mymeals page
 		print 'edit_attire error: edit page attemped access without a GET'
@@ -294,20 +294,20 @@ def join_meal(request):
 
 			else: # did not get a meal to join, redirect to error
 				print 'join_meal error: no meal found with idToJoin'
-				return error(request)
+				return error(request, login_error=False)
 
 		else: # form is not valid, redirect to error 
 			print 'join_meal error: '
 			print form.errors
-			return error(request)
+			return error(request, login_error=False)
 
 	else: # not a GET, redirect to find-a-meal
 		return HttpResponseRedirect('/find-a-meal/')
 
 # error page view
-@login_required
-def error(request):
-	return render(request, 'mealmatcher_app/error.html')
+def error(request, login_error=False):
+	context_dict = {'login_error': login_error,}
+	return render(request, 'mealmatcher_app/error.html', context_dict)
 
 
 @login_required
@@ -702,7 +702,7 @@ def delete_meal(request):
 		else: # errors with form -- redirect to error page
 			print 'delete_meal error: delete meal form was invalid '
 			print form.errors
-			return error(request)
+			return error(request, login_error=False)
 
 	# received a GET, redirect to my-meals 
 	else: 
@@ -739,7 +739,7 @@ def site_login(request):
 						django_login(request, user)
 						return HttpResponseRedirect('')
 					else:
-						return HttpResponse('Fatal error trying to log in '+ netid)
+						return error(request, login_error=True) # render the login_error page
 				else:
 					username = netid
 					password = netid
@@ -759,7 +759,7 @@ def site_login(request):
 					profile.save()
 					newuser = authenticate(username=username, password=password)
 					django_login(request, newuser)
-					print first_name + ' @@ ' + last_name
+					print first_name + ' @@ ' + last_name + ' account created '
 					return HttpResponseRedirect('')
 			else: # redirect to try again
 				return HttpResponseRedirect('https://fed.princeton.edu/cas/login?service=' + base_url + '/login/')
