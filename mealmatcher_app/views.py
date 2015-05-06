@@ -20,10 +20,13 @@ from django import template
 from django.template.loader import get_template
 
 # index is the app homepage
-@login_required
 def index(request):
-	context_dict = {'user': request.user, 'first_name': request.user.first_name, 
-					'last_name': request.user.last_name, 'username': request.user.username}
+	if request.user.is_authenticated():
+		context_dict = {'user': request.user, 'first_name': request.user.first_name, 
+						'last_name': request.user.last_name, 'username': request.user.username, 'logged_in':True }
+	else:
+		context_dict = {'user': None, 'first_name': None, 
+						'last_name': None, 'username': None, 'logged_in': False}
 	return render(request, 'mealmatcher_app/index_new_replaced.html', context_dict)
 
 # used to contain logic for editing attire of a meal in my-meals 
