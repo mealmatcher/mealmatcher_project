@@ -94,14 +94,15 @@ body {
 }
 #mini-clndr .clndr .controls .clndr-previous-button {
   float: left;
-  text-align: left;
+  text-align: center;
 }
 #mini-clndr .clndr .controls .clndr-next-button {
   float: right;
-  text-align: right;
+  text-align: center;
 }
 #mini-clndr .clndr .controls .clndr-previous-button,
 #mini-clndr .clndr .controls .clndr-next-button {
+  padding-top: 4px;
   width: 30px;
   cursor: pointer;
   -webkit-user-select: none;
