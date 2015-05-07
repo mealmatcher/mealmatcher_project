@@ -50,12 +50,16 @@ def edit_attire(request): # TODO: add email support by Andreas
 				my_user_profile = UserProfile.objects.filter(user=request.user)[0]
 
 
-				user1 = mealToEdit.users.all()[0].user.first_name
-				user1net = mealToEdit.users.all()[0].user.username
+				# user1 = mealToEdit.users.all()[0].user.first_name
+				# user1net = mealToEdit.users.all()[0].user.username
+				user1 = User.objects.filter(username=mealToEdit.user1)[0].first_name
+				user1net = mealToEdit.user1
 
 				if mealToEdit.is_matched():
-					user2 = mealToEdit.users.all()[1].user.first_name
-					user2net = mealToEdit.users.all()[1].user.username
+					# user2 = mealToEdit.users.all()[1].user.first_name
+					# user2net = mealToEdit.users.all()[1].user.username
+					user2 = User.objects.filter(username=mealToEdit.user2)[0].first_name
+					user2net = mealToEdit.user2
 
 				send_meal = mealToEdit.meal_time
 				send_location = mealToEdit.location
@@ -83,7 +87,8 @@ def edit_attire(request): # TODO: add email support by Andreas
 				else:
 					send_location = "Forbes"
 
-				if mealToEdit.users.all()[0] == my_user_profile: # change user1 attire
+				#if mealToEdit.users.all()[0] == my_user_profile: # change user1 attire
+				if mealToEdit.user1 == request.user.username:
 					mealToEdit.attire1 = newAttire
 					mealToEdit.save()
 
@@ -97,7 +102,8 @@ def edit_attire(request): # TODO: add email support by Andreas
 							priority='now',
 						)
 
-				elif mealToEdit.is_matched() and mealToEdit.users.all()[1] == my_user_profile: # change user2 attire
+				#elif mealToEdit.is_matched() and mealToEdit.users.all()[1] == my_user_profile: # change user2 attire
+				elif mealToEdit.is_matched() and mealToEdit.user2 == request.user.username:
 					mealToEdit.attire2 = newAttire
 					mealToEdit.save()
 
@@ -127,10 +133,12 @@ def edit_attire(request): # TODO: add email support by Andreas
 		return HttpResponseRedirect('/my-meals/')
 
 # helper function, used by join meals to add a second user to the meal
-def match_meal(attire1, my_user_profile, matched_meal):
+def match_meal(attire1, my_user_profile, matched_meal, request):
 	matched_meal.attire2 = attire1
 	matched_meal.save()
 	matched_meal.users.add(my_user_profile) # add my_user_profile as the second user
+	matched_meal.save()
+	matched_meal.user2 = request.user.username
 	matched_meal.save()
 
 	# TODO below: Email support -- notifications for both
@@ -163,10 +171,15 @@ def match_meal(attire1, my_user_profile, matched_meal):
 	# matched_meal.users.add(dummyProfile)
 
 	#mailer users
-	user1 = matched_meal.users.all()[1].user.first_name
-	user2 = matched_meal.users.all()[0].user.first_name	
-	user1net = matched_meal.users.all()[1].user.username
-	user2net = matched_meal.users.all()[0].user.username	
+	# user1 = matched_meal.users.all()[1].user.first_name
+	# user2 = matched_meal.users.all()[0].user.first_name	
+	# user1net = matched_meal.users.all()[1].user.username
+	# user2net = matched_meal.users.all()[0].user.username	
+
+	user1 = User.objects.filter(username=matched_meal.user2)[0].first_name
+	user2 = User.objects.filter(username=matched_meal.user1)[0].first_name
+	user1net = matched_meal.user2
+	user2net = matched_meal.user1
 
 	#mailer
 
@@ -212,39 +225,43 @@ def match_meal(attire1, my_user_profile, matched_meal):
 	)
 
 	if (matched_meal.date.hour == 1):
+		datetime_obj_new = datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, 12, matched_meal.date.minute)
+		datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
 		mail.send(
 			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire1}),
-			scheduled_time=datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, 12),
+			scheduled_time=datetime_obj_new,
 		)
 		mail.send(
 			[user2net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire2}),
-			scheduled_time=datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, 12),
+			scheduled_time=datetime_obj_new,
 		)
 	else:
 		hour = matched_meal.date.hour - 1
+		datetime_obj_new = datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, hour, matched_meal.date.minute)
+		datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
 		mail.send(
 			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			subject='Your Meal Is Approaching!',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire1}),
-			scheduled_time=datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, hour),
+			scheduled_time= datetime_obj_new,
 		)
 		mail.send(
 			[user2net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
 			subject='Your Meal Is Approaching!',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire2}),
-			scheduled_time=datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, hour),
+			scheduled_time=datetime_obj_new,
 		)
 
 
-	print matched_meal.attire2
-	matched_meal.users.add(my_user_profile)
-	matched_meal.save()
+	# print matched_meal.attire2
+	# matched_meal.users.add(my_user_profile)
+	# matched_meal.save()
 
 
 # join_meal contains the majority of logic of joining a meal with the open meals interface
@@ -292,7 +309,7 @@ def join_meal(request):
 				# can join the meal, use match_meal to add user to the meal and send emails, and redirect to my-meals page
 				else:
 					my_user_profile = UserProfile.objects.filter(user=request.user)[0]
-					match_meal(join_attire, my_user_profile, mealToJoin)
+					match_meal(join_attire, my_user_profile, mealToJoin, request)
 					return view_meals(request, new_meal=mealToJoin)
 
 			else: # did not get a meal to join, redirect to error
@@ -388,14 +405,19 @@ def find_meals(request):
 					matched_meal.save()
 					matched_meal.users.add(my_user_profile)
 					matched_meal.save()
+					matched_meal.user2 = request.user.username
+					matched_meal.save()
 					new_meal = matched_meal
 
 					# BELOW: all MAIL stuff in this if block section
 
 					#mailer users
-					user1 = matched_meal.users.all()[1].user.first_name
-					user2 = matched_meal.users.all()[0].user.first_name		
-					user2net = matched_meal.users.all()[0].user.username	
+					user1 = User.objects.filter(username=matched_meal.user2)[0].first_name
+					user2 = User.objects.filter(username=matched_meal.user1)[0].first_name
+					user2net = matched_meal.user1
+					# user1 = matched_meal.users.all()[1].user.first_name
+					# user2 = matched_meal.users.all()[0].user.first_name		
+					# user2net = matched_meal.users.all()[0].user.username	
 
 					meal = meal_time
 					meal_location = location
@@ -440,31 +462,35 @@ def find_meals(request):
 					)
 
 					if (datetime_obj.hour == 1):
+						datetime_obj_new = datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12, datetime_obj.minute)
+						datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire1}),
-							scheduled_time=datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
+							scheduled_time=datetime_obj_new,
 						)
 						mail.send(
 							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire2}),
-							scheduled_time=datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12),
+							scheduled_time=datetime_obj_new,
 						)
 					else:
 						send_hour = datetime_obj.hour - 1
+						datetime_obj_new = datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour, datetime_obj.minute)
+						datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire1}),
-							scheduled_time=datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour),
+							scheduled_time=datetime_obj_new,
 						)
 						mail.send(
 							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire2}),
-							scheduled_time=datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour),
+							scheduled_time=datetime_obj_new,
 						)
 					
 
@@ -472,6 +498,8 @@ def find_meals(request):
 					new_meal = Meal(date = datetime_obj, location=location, meal_time=meal_time, attire1=attire1)
 					new_meal.save()                     
 					new_meal.users.add(my_user_profile)
+					new_meal.save()
+					new_meal.user1 = request.user.username
 					new_meal.save()
 
 				 # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
@@ -558,9 +586,11 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 		elif meal.is_ongoing(): # or meal.is_matched(): #DEBUG: get an ongoing meal
 			meals.remove(meal)
 			ongoing_meal = meal
-			if ongoing_meal.users.all()[0] == my_user_profile:   # user1, give attire2
+			#if ongoing_meal.users.all()[0] == my_user_profile:   # user1, give attire2
+			if ongoing_meal.user1 == request.user.username:
 				ongoing_attire2 = ongoing_meal.attire2
-			elif ongoing_meal.users.all()[1] == my_user_profile: # user2, give attire1
+			#elif ongoing_meal.users.all()[1] == my_user_profile: # user2, give attire1
+			elif ongoing_meal.user2 == request.user.username:
 				ongoing_attire2 = ongoing_meal.attire1
 		elif meal.is_expired():
 			meals.remove(meal)
@@ -614,13 +644,22 @@ def delete_meal(request):
 					# otherwise shift user and attire, 
 					else:
 						myProfile = UserProfile.objects.filter(user=request.user)[0]
-						if mealToDelete.users.all()[0] == myProfile: #user 1 
+						#if mealToDelete.users.all()[0] == myProfile: # delete user 1 
+						if mealToDelete.user1 == request.user.username:
 							mealToDelete.attire1 = mealToDelete.attire2
+							mealToDelete.save()
 							mealToDelete.attire2 = ""
 							mealToDelete.save()
+							mealToDelete.user1 = request.user.username
+							mealToDelete.save()
+							mealToDelete.user2 = ""
+							mealToDelete.save()
 
-						else: # user2
+
+						else: # delete user2
 							mealToDelete.attire2 = ""
+							mealToDelete.save()
+							mealToDelete.user2 = ""
 							mealToDelete.save()
 
 						mealToDelete.users.remove(myProfile)
@@ -635,8 +674,10 @@ def delete_meal(request):
 				else:
 					myProfile = UserProfile.objects.filter(user=request.user)[0]
 					status = True
-					user1 = mealToDelete.users.all()[0].user.first_name
-					user1net = mealToDelete.users.all()[0].user.username
+					#user1 = mealToDelete.users.all()[0].user.first_name
+					#user1net = mealToDelete.users.all()[0].user.username
+					user1 = Users.objects.filter(username=mealToDelete.user1)[0].first_name
+					user1net = mealToDelete.user1
 
 					send_meal = mealToDelete.meal_time
 					send_location = mealToDelete.location
@@ -665,12 +706,17 @@ def delete_meal(request):
 						send_location = "Forbes"
 
 					# make sure the remaining user is shifted to user1, i.e. shift the attire
-					if mealToDelete.users.all()[0] == myProfile:
+					#if mealToDelete.users.all()[0] == myProfile:
+					if mealToDelete.user1 == request.user.username:
 						#mailer
-						user2 = mealToDelete.users.all()[1].user.first_name
-						user2net = mealToDelete.users.all()[1].user.username
-
+						# user2 = mealToDelete.users.all()[1].user.first_name
+						# user2net = mealToDelete.users.all()[1].user.username
+						user2 = Users.objects.filter(username=mealToDelete.user2)[0].first_name
+						user2net = mealToDelete.user2
 						mealToDelete.attire1 = mealToDelete.attire2
+						mealToDelete.save()
+						mealToDelete.user1 = mealToDelete.user2
+						mealToDelete.save()
 
 						#mailer
 						mail.send(
@@ -691,8 +737,12 @@ def delete_meal(request):
 							priority='now',
 						)
 
+					# clear user2 info, after shifting
 					mealToDelete.attire2 = ""
+					mealToDelete.save()
 					mealToDelete.users.remove(myProfile)
+					mealToDelete.save()
+					mealToDelete.user2 = ""
 					mealToDelete.save()
 				return view_meals(request, deleted_meal=mealToDelete)
 

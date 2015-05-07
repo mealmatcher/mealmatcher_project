@@ -97,6 +97,6 @@ class MealForm(forms.ModelForm):
   class Meta:
     model = Meal
     fields = ('date_mdy', 'meal_time', 'date_time', 'location', 'attire1',)
-    exclude = ('date', 'attire2', 'users',)
+    exclude = ('date', 'attire2', 'users', 'user1', 'user2',)
 
 
