@@ -11,11 +11,6 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
-  <!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
-  <!--script src="js/less-1.3.3.min.js"></script-->
-  <!--append ‘#!watch’ to the browser URL, then refresh the page. -->
-  
   <!-- <link href="{% static "css/bootstrap.css" %}" rel="stylesheet"> -->
   <link href="{% static "css/paper.css" %}" rel="stylesheet">
   <link href="{% static "css/style.css" %}" rel="stylesheet">
@@ -58,14 +53,11 @@
             <li class="active">
               <a href="/find-a-meal/">Find a Meal</a>
             </li>
-            <!-- <li>
-              <a href="/open-meals/">Open Meals</a>
-            </li> -->
             <li>
               <a href="/my-meals/">My Meals</a>
             </li>
-            
           </ul>
+
           <ul class="nav navbar-nav navbar-right">
             <li>
              <a href="/#about">About</a>
@@ -78,72 +70,57 @@
         
       </nav>
 
-{% if badTime %}
-                <div class="alert alert-danger alert-dismissable">
-                 <button type="button" class="close" data-dismiss="alert" 
-                 aria-hidden="true">
-                 &times;
-               </button>
-               Sorry, you already have a meal at that time.
-             </div>
-             {% endif %}
-             {% if expiredTime %}
-             <div class="alert alert-danger alert-dismissable">
-               <button type="button" class="close" data-dismiss="alert" 
-               aria-hidden="true">
-               &times;
-             </button>
-             Sorry, the signup period for this meal has expired. Meal signup must occur at least 1 hour before the meal's start time. 
-           </div>
-           {% endif %}
+    {% if badTime %}
+      <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" 
+          aria-hidden="true">
+          &times;
+        </button>
+        Sorry, you already have a meal at that time.
+      </div>
+    {% endif %}
 
-    <div class="row clearfix">
-          <div class="col-md-4">
-            <div class="panel panel-default">
-              <div class="panel-heading">
+    {% if expiredTime %}
+      <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" 
+          aria-hidden="true">
+          &times;
+        </button>
+        Sorry, the signup period for this meal has expired. Meal signup must occur at least 1 hour before the meal's start time. 
+      </div>
+    {% endif %}
 
-                <h3><strong> Create a Meal </strong>  </h3>
-              </div>
+      <div class="row clearfix">
+        <div class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
 
-              <div class="panel-body">
-                
-           <form role="form" id="findMealForm" method="POST" action="/find-a-meal/">
+              <h3><strong> Create a Meal </strong>  </h3>
+            </div>
+
+            <div class="panel-body">
+              
+          <form role="form" id="findMealForm" method="POST" action="/find-a-meal/">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
             {{ hidden }}
             {% endfor %}
             {% for field in form.visible_fields %}
             <div class="form-group input-group">
-              {% if forloop.counter == 1 %}
-              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <span class="input-group-addon"><i class=
+              {% if forloop.counter == 1 %}"fa fa-calendar"
+              {% elif forloop.counter == 2 %}"fa fa-cutlery"
+              {% elif forloop.counter == 3 %}"fa fa-clock-o"
+              {% elif forloop.counter == 4 %}"fa fa-map-marker"
+              {% elif forloop.counter == 5 %}"fa fa-child"
               {% endif %}
-
-              {% if forloop.counter == 2 %}
-              <span class="input-group-addon"><i class="fa fa-cutlery"></i></span>
-              {% endif %}
-
-              {% if forloop.counter == 3 %}
-              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-              {% endif %}
-
-              {% if forloop.counter == 4 %}
-              <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-              {% endif %}
-
-
-              {% if forloop.counter == 5 %}
-              <span class="input-group-addon"><i class="fa fa-child"></i></span>
-
-
-              {% endif %}
+              ></i></span>
 
               {{ field.errors }}
               {{ field }}
 
               {% if forloop.counter == 5 %}
-
               <span class="input-group-addon">
-                
                 <a class="hovering"><i class="fa fa-info-circle"></i>
                   <span>
                     <img class="callout" src="{% static "img/callout.gif" %}" />
@@ -152,17 +129,16 @@
                   </span>
                 </a>
               </span>
-
               {% endif %}
             </div>
             {% endfor %}
             <input href="#" type="submit" name="submitButton" id="submitButton" class="btn btn-success" value="Match Me!" />
-          </form>
-          <hr /> 
-          <a href="https://campusdining.princeton.edu/dining/_Foodpro/location.asp" target="_blank"> Dining Hall Menus</a>
-        </div>
+        </form>
+        <hr /> 
+        <a href="https://campusdining.princeton.edu/dining/_Foodpro/location.asp" target="_blank"> Dining Hall Menus</a>
       </div>
     </div>
+  </div>
 
 
     <div class="col-md-8">
@@ -176,8 +152,6 @@
         </div>
         <div class="panel-body">
           <div class="col-md-6 clearfix">
-              <!-- <h2>Open Meals</h2> -->
-              <!-- &nbsp -->
               <div id="mini-clndr" class="clearfix"></div>
               <a class="hovering"><i class="fa fa-info-circle"></i>
                 <span>
@@ -187,11 +161,6 @@
                   If there are no meals that day, use the form to make one.
                 </span>
               </a>
-              <!-- <div style="display:table-cell;">
-                <div style="margin-left:auto;margin-right:auto;">
-                  Select a day to find meals!
-                </div>
-              </div> -->
 
               <script id="calendar-template" type="text/template">
 
@@ -235,14 +204,6 @@
                   {% if not meal.is_matched %}
                     <tr id="{{meal.id}}" class= "">
                       <td>
-                      <!-- {% if meal.date.weekday == 0 %} Monday
-                      {% elif meal.date.weekday == 1 %} Tuesday
-                      {% elif meal.date.weekday == 2 %} Wednesday
-                      {% elif meal.date.weekday == 3 %} Thursday
-                      {% elif meal.date.weekday == 4 %} Friday
-                      {% elif meal.date.weekday == 5 %} Saturday
-                      {% elif meal.date.weekday == 6 %} Sunday
-                      {% endif %} -->
                       {{ meal.date.month}}/{{ meal.date.day }}
                       </td>
 
@@ -266,7 +227,7 @@
                       {% endif %}
                       </td>
                       <td>
-                          <button type="submit" class="btn btn-primary" id="joinMealButton_{{ meal.id }}"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button type="submit" class="btn btn-primary" id="joinMealButton_{{ meal.id }}"><span class="glyphicon glyphicon-plus"></span></button>
                       </td>
                     </tr>
                   {% endif %}
@@ -307,13 +268,13 @@
                       {% elif meal.meal_time == "R" %} "brunch"
                       {% endif %}
       var time = "{{ meal.date|date:"g:i A" }}"
-      var location = {% if meal.location == "WH" %} "Whitman"
-                        {% elif meal.location == "BW" %} "Butler"
-                        {% elif meal.location == "RM" %} "Rocky"
-                        {% elif meal.location == "WB" %} "Wilson"
-                        {% elif meal.location == "MR" %} "Mathey"
-                        {% elif meal.location == "F" %} "Forbes"
-                        {% endif %};
+      var location =  {% if meal.location == "WH" %} "Whitman"
+                      {% elif meal.location == "BW" %} "Butler"
+                      {% elif meal.location == "RM" %} "Rocky"
+                      {% elif meal.location == "WB" %} "Wilson"
+                      {% elif meal.location == "MR" %} "Mathey"
+                      {% elif meal.location == "F" %} "Forbes"
+                      {% endif %};
       var edit_title = "Join " + meal_time + " at " + time + ", " + date + " at " + location;
       bootbox.dialog({
         title: edit_title,
@@ -371,22 +332,21 @@ var events = [
             {% endif %},
           location: 
             {% if meal.location == "WH" %} "Whitman"
-                        {% elif meal.location == "BW" %} "Butler"
-                        {% elif meal.location == "RM" %} "Rocky"
-                        {% elif meal.location == "WB" %} "Wilson"
-                        {% elif meal.location == "MR" %} "Mathey"
-                        {% elif meal.location == "F" %} "Forbes"
-                        {% endif %},
+            {% elif meal.location == "BW" %} "Butler"
+            {% elif meal.location == "RM" %} "Rocky"
+            {% elif meal.location == "WB" %} "Wilson"
+            {% elif meal.location == "MR" %} "Mathey"
+            {% elif meal.location == "F" %} "Forbes"
+            {% endif %},
         },
         {% endif %}
       {% endfor %}
     {% endif %}
   {% endif %}
-  // { date: currentMonth + '-' + '10', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' },
 ];
 
 var miniCalDiv = $('#mini-clndr')
-{% if username %} // TODO(drew) switch back it if meals
+{% if username %}
   if (miniCalDiv) {
     miniCalDiv.clndr({
       template: $('#calendar-template').html(),
@@ -422,12 +382,10 @@ var miniCalDiv = $('#mini-clndr')
             }
           }
         },
-        onMonthChange: function(month) {
-          // console.log('you just went to ' + month.format('MMMM, YYYY'));
-        },
-        doneRendering: function() {
-          // console.log('this would be a fine place to attach custom event handlers.');
-        }
+        // onMonthChange: function(month) {
+        // },
+        // doneRendering: function() {
+        // }
       },
       adjacentDaysChangeMonth: false,
     });
@@ -436,6 +394,8 @@ var miniCalDiv = $('#mini-clndr')
 {% endif %}
 
 
+
+// uncomment to limit open meals list height with scrollbar
 // $(function() {  
 //     var window_height = $(window).height();
 //     var content_height = window_height - 600;
@@ -449,15 +409,12 @@ var miniCalDiv = $('#mini-clndr')
 //     $('.meals-table-div').height(content_height);
 // });
 
-
-
 ///////////////////////////////////////////////////
 // FIND MEAL FORM:
 ///////////////////////////////////////////////////
 
 
-  var meal_timess = {
-    // NOTE(drew): these keys must match the options in the meal selection dropdown
+  var meal_time_ranges = {
     Breakfast: [
     ["7:30", "8:00"],
     ["7:45", "8:30"],
@@ -515,7 +472,7 @@ var miniCalDiv = $('#mini-clndr')
   var updateTimes = function() {
     var meal = $('#mealDropdown').find(":selected").text();
 
-    var meal_times = meal_timess[meal];
+    var meal_times = meal_time_ranges[meal];
 
     $("select#timeDropdown").empty();
     for (var i = 0; i < meal_times.length; i++) {
@@ -534,21 +491,19 @@ var miniCalDiv = $('#mini-clndr')
   }
 
   // set up dates dropdown:
-  // NOTE: the date should only ever come from a time variable (not a string). Potential security risk otherwise
-  // TODO: hook these up in view and make sure names are correct
   var month_lengths = [
-  31,
-  28,
-  31,
-  30,
-  31,
-  30,
-  31,
-  31,
-  30,
-  31,
-  30,
-  31,
+    31,
+    28,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31,
   ];
   var today_month = Number("{{ dateObj.month }}");
   var today_day = Number("{{ dateObj.day }}");
@@ -571,7 +526,6 @@ var miniCalDiv = $('#mini-clndr')
     }
 
     // TODO leap year support
-    // TODO display weekdays
     today_day++;
     if (today_day > month_lengths[today_month-1]) {
       today_day = "1";
@@ -594,7 +548,6 @@ var miniCalDiv = $('#mini-clndr')
 
   var today_weekday = Number("{{ dateObj.weekday}}");
   var todayIsWeekend = is_weekend(today_weekday);
-  // var prevWasWeekend = todayIsWeekend;
   var updateMealTimes = function(isWeekend) {
     // HACK
     $("select#mealDropdown").empty();
@@ -619,10 +572,7 @@ var miniCalDiv = $('#mini-clndr')
       .html("Dinner")
       );
 
-    // if (isWeekend !== prevWasWeekend) {
-      updateTimes();
-    // }
-    // prevWasWeekend = isWeekend;
+    updateTimes();
   };
   updateMealTimes(todayIsWeekend);
   updateTimes();
