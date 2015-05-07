@@ -225,7 +225,7 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 	)
 
 	if (matched_meal.date.hour == 1):
-		datetime_obj_new = datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, 12, matched_meal.date.minute)
+		datetime_obj_new = datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, 24, matched_meal.date.minute)
 		datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
 		mail.send(
 			[user1net + '@princeton.edu'],
@@ -462,7 +462,7 @@ def find_meals(request):
 					)
 
 					if (datetime_obj.hour == 1):
-						datetime_obj_new = datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 12, datetime_obj.minute)
+						datetime_obj_new = datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 24, datetime_obj.minute)
 						datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
 						mail.send(
 							[username + '@princeton.edu'],
