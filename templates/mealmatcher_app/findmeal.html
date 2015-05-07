@@ -147,7 +147,7 @@
                 <a class="hovering"><i class="fa fa-info-circle"></i>
                   <span>
                     <img class="callout" src="{% static "img/callout.gif" %}" />
-                    Don't worry if you don't know for sure yet.<br />
+                    Don't worry if you don't know!<br />
                     This can be changed up to 1 hour before.
                   </span>
                 </a>
@@ -165,7 +165,6 @@
     </div>
 
 
-  {% if username %} <!-- TODO(drew) switch back if meals -->
     <div class="col-md-8">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -220,6 +219,7 @@
 
           <div class="col-md-6 meals-table-div clearfix" >
             &nbsp
+            {% if username %} <!-- switch to meals to hide table when empty -->
             <table class="table table-dots">
               <thead>
                 <tr>
@@ -273,12 +273,12 @@
                 {% endfor %}
               </tbody>
             </table>
+            {% else %}
+              <h3> <strong>No open meals found!</h3> </strong>
+            {% endif %}
           </div>
         </div>
       </div>
-    {% else %}
-      <h3> <strong>No open meals found!</h3> </strong>
-    {% endif %}
     </div>
     
 
