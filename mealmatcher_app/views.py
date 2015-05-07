@@ -20,10 +20,13 @@ from django import template
 from django.template.loader import get_template
 
 # index is the app homepage
-@login_required
 def index(request):
-	context_dict = {'user': request.user, 'first_name': request.user.first_name, 
-					'last_name': request.user.last_name, 'username': request.user.username}
+	if request.user.is_authenticated():
+		context_dict = {'user': request.user, 'first_name': request.user.first_name, 
+						'last_name': request.user.last_name, 'username': request.user.username, 'logged_in':True }
+	else:
+		context_dict = {'user': None, 'first_name': None, 
+						'last_name': None, 'username': None, 'logged_in': False}
 	return render(request, 'mealmatcher_app/index_new_replaced.html', context_dict)
 
 # used to contain logic for editing attire of a meal in my-meals 
@@ -111,12 +114,12 @@ def edit_attire(request): # TODO: add email support by Andreas
 				return HttpResponseRedirect('/my-meals/')
 			else:
 				print 'edit_attire error: no meal found with that id'
-				return error(request)
+				return error(request, login_error=False)
 
 		else: # form data is invalid. print errors, give error page
 			print 'edit_attire error: edit meal form was invalid '
 			print form.errors
-			return error(request)
+			return error(request, login_error=False)
 
 	else: # not a POST -- this url should not have been reached, redirect to mymeals page
 		print 'edit_attire error: edit page attemped access without a GET'
@@ -294,20 +297,20 @@ def join_meal(request):
 
 			else: # did not get a meal to join, redirect to error
 				print 'join_meal error: no meal found with idToJoin'
-				return error(request)
+				return error(request, login_error=False)
 
 		else: # form is not valid, redirect to error 
 			print 'join_meal error: '
 			print form.errors
-			return error(request)
+			return error(request, login_error=False)
 
 	else: # not a GET, redirect to find-a-meal
 		return HttpResponseRedirect('/find-a-meal/')
 
 # error page view
-@login_required
-def error(request):
-	return render(request, 'mealmatcher_app/error.html')
+def error(request, login_error=False):
+	context_dict = {'login_error': login_error,}
+	return render(request, 'mealmatcher_app/error.html', context_dict)
 
 
 @login_required
@@ -702,7 +705,7 @@ def delete_meal(request):
 		else: # errors with form -- redirect to error page
 			print 'delete_meal error: delete meal form was invalid '
 			print form.errors
-			return error(request)
+			return error(request, login_error=False)
 
 	# received a GET, redirect to my-meals 
 	else: 
@@ -710,13 +713,14 @@ def delete_meal(request):
 
 # login page
 def site_login(request):
-	#base_url = request.build_absolute_uri()
 	base_url = 'http://' + request.META['HTTP_HOST']
 	print base_url
-	# user is logged in, redirect to index page
+
+	# the user is now logged in. return to homepage
 	if request.user.is_authenticated():
 		return HttpResponseRedirect('/')
-	# user is not logged in. go through CAS stuff
+
+	# the user is not logged in. CAS authentication, get or make user/userprofile 
 	else: 
 		ticket = request.GET.get('ticket')
 		if not ticket:
@@ -724,22 +728,32 @@ def site_login(request):
 		else:
 			source = urllib2.urlopen('https://fed.princeton.edu/cas/serviceValidate?service=' + base_url + '/login/&ticket=' + ticket)
 			content = source.read()
-			if 'authenticationSuccess' in content:      # success in authentication
+
+			# success with CAS, retrieve/make user
+			if 'authenticationSuccess' in content: 
+				# hardcoded to get netid -- may change if CAS changes
 				regexp = re.search('<cas:user>.*</cas:user>', content)
-				netid = regexp.group(0)[10:-11]
-				if User.objects.filter(username=netid): # in the database. Log them in
+				netid = regexp.group(0)[10:-11] 
+
+				# Look for user in database. If found, log them in
+				if User.objects.filter(username=netid): 
 					username = netid
 					password = netid
 					user = authenticate(username=username, password=password)
 					if user: 
 						user_profile = UserProfile.objects.filter(user=user)
-						if not user_profile:
-							profile = UserProfile(user=user)
-							print 'made the profile'
+						if not user_profile:  # find the userprofile, or make a new one 
+							new_profile = UserProfile(user=user)
+							new_profile.save()
+							print 'made the profile for ' + netid
 						django_login(request, user)
 						return HttpResponseRedirect('')
-					else:
-						return HttpResponse('Fatal error trying to log in '+ netid)
+						
+					# return login_error. user authentication failed 
+					else: 
+						return error(request, login_error=True) 
+
+				# User not in database. Make new User and UserProfile accounts
 				else:
 					username = netid
 					password = netid
@@ -750,18 +764,25 @@ def site_login(request):
 					first_name = regexp_name.group(0).split(',')[1][1:-11]
 					if '.' in first_name: # has a middle inital
 						first_name = first_name[:-3]
-					newuser = User(username=username, password=password, email= (netid + '@princeton.edu'), 
+
+					new_user = User(username=username, password=password, email= (netid + '@princeton.edu'), 
 									first_name=first_name, last_name=last_name)
-					newuser.save()
-					newuser.set_password(newuser.password)
-					newuser.save()
-					profile = UserProfile(user = newuser)
+					new_user.save()
+					new_user.set_password(new_user.password)
+					new_user.save()
+					print 'made the new user for ' + netid
+
+					profile = UserProfile(user = new_user)
 					profile.save()
-					newuser = authenticate(username=username, password=password)
-					django_login(request, newuser)
-					print first_name + ' @@ ' + last_name
+					print 'made the profile for ' + netid
+
+					new_user = authenticate(username=username, password=password)
+					django_login(request, new_user)
 					return HttpResponseRedirect('')
-			else: # redirect to try again
+
+			# CAS authentication failed -- redirect to try again	
+			# note: this will cause an infinite loop error if CAS is down, and render that failure in the browser.
+			else: 
 				return HttpResponseRedirect('https://fed.princeton.edu/cas/login?service=' + base_url + '/login/')
 
 

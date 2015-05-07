@@ -81,7 +81,11 @@
       <img src="{% static "img/chicken_and_waffles.jpg" %}"/>
       </div> -->
       <div>
-      <h1><center>Sorry, {{user.first_name}}. We have encountered an error while processing your request :( </center></h1>
+      <h1><center> 
+        {% if login_error %} Sorry. We encountered an error while logging you in. This may be the result of Princeton CAS being down. 
+        {% else %} Sorry, {{user.first_name}}. We have encountered an error while processing your request :( 
+        {% endif %} 
+      </center></h1>
       <h2><center><small>Here are some chicken and waffles to make you feel better! To report this error, contact us at princeton.meal.matcher@gmail.com </center></small></h2>
       </div>
       &nbsp
