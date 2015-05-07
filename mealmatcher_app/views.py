@@ -230,12 +230,14 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 		mail.send(
 			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
+			subject='Your Meal Is Approaching!',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire1}),
 			scheduled_time=datetime_obj_new,
 		)
 		mail.send(
 			[user2net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
+			subject='Your Meal Is Approaching!',
 			html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': matched_meal.date, 'meal': meal, 'location': location, 'attire': matched_meal.attire2}),
 			scheduled_time=datetime_obj_new,
 		)
@@ -467,12 +469,14 @@ def find_meals(request):
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
+							subject='Your Meal Is Approaching!',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire1}),
 							scheduled_time=datetime_obj_new,
 						)
 						mail.send(
 							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
+							subject='Your Meal Is Approaching!',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire2}),
 							scheduled_time=datetime_obj_new,
 						)
@@ -483,12 +487,14 @@ def find_meals(request):
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
+							subject='Your Meal Is Approaching!',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire1}),
 							scheduled_time=datetime_obj_new,
 						)
 						mail.send(
 							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
+							subject='Your Meal Is Approaching!',
 							html_message=render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': datetime_obj, 'meal': meal, 'location': meal_location, 'attire': matched_meal.attire2}),
 							scheduled_time=datetime_obj_new,
 						)
