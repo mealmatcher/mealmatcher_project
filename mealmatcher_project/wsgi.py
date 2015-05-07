@@ -13,6 +13,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mealmatcher_project.settings")
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 
+#comment out these lines to run locally 
 from django.core.wsgi import get_wsgi_application
 from dj_static import Cling
 
