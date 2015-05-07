@@ -462,7 +462,7 @@ def find_meals(request):
 						meal_location = "Forbes"
 
 					dateinfo = datetime_obj.strftime('%I:%M %p')
-					mealinfo = meal + ' ' + dateinfo + ' at ' + location
+					mealinfo = meal + ' ' + dateinfo + ' at ' + meal_location
 					subjectline = 'Your ' + mealinfo + ' has been matched!'
 
 					#mailer view
