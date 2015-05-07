@@ -60,9 +60,6 @@
             <li>
               <a href="/find-a-meal/">Find a Meal</a>
             </li>
-            <!-- <li>
-              <a href="/open-meals/">Open Meals</a>
-            </li> -->
             <li class="active">
               <a href="/my-meals/">My Meals</a>
             </li>
@@ -101,7 +98,7 @@
       {% if ongoing_meal %}
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h4>Happening Now!</h4>
+          <h4>Happening within an hour!</h4>
         </div>
 
         <div class="panel-body">
@@ -156,8 +153,6 @@
                 </td>
 
                 <td>{{ongoing_attire2}}</td>
-
-                <!-- <td><button type="submit" class="btn btn-default" id="editButton_{{ ongoing_meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td> -->
               </tr>
             </tbody>
           </table>
@@ -184,10 +179,8 @@
                   <th>Location</th>
                   <th>My Attire</th>
                   <th>Matched?</th>
-                  <th>Edit attire</th> <!-- just making sure the line extends across: -->
+                  <th>Edit attire</th>
                   <th>Delete</th>
-                  <!-- <th>Edit Attire</th> -->
-                  <!-- <th>Delete Meal</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -203,9 +196,6 @@
                   {% endif %}
                 >
                   <td>
-                    
-                  <!-- </td> -->
-                  <!-- <td> -->
                   
                     {% if meal.date.weekday == 0 %} Mon
                     {% elif meal.date.weekday == 1 %} Tue
@@ -217,7 +207,6 @@
                     {% endif %}
                     {{ meal.date.month}}/{{ meal.date.day }}
                     {% if meal == new_meal %}
-                      <!-- <span class="badge">NEW!</span> -->
                       <span class="label label-success label-as-badge">NEW!</span>
                     {% endif %}
                   </td>
@@ -231,7 +220,6 @@
                   </td>
 
                   <td>{{ meal.date|date:"g:i A" }}</td>
-                  <!-- <td>{{ meal.date.hour}}:{{meal.date.minute}}</td> -->
 
                   <td>
                   {% if meal.location == "WH" %} Whitman
@@ -257,8 +245,6 @@
                   </td>
 
                   <td>{% if meal.is_matched %} Yes! {% else %} Not yet {% endif %}</td>
-                  <!-- TODO(drew) use a button group or a dropdown or something? -->
-                  <!-- TODO(drew) disable edit if meal is too soon -->
                   <td><button type="submit" class="btn btn-default" id="editButton_{{ meal.id }}" ><span class="glyphicon glyphicon-edit"></span></button></td>
                   <td>
                     <form role="form" method="POST" action="/delete-meal/" id="deleteSubmitForm_{{ meal.id }}">
@@ -366,31 +352,35 @@
     {% endif %}
     </div>
   </div>
-
 </div>
 
 <script>
-  {% if username %}
-    {% if meals %}
-      {% for meal in meals %}
+function GetMealTimeStr(mealTimeCode) {
+  if (mealTimeCode === "B") return "breakfast";
+  if (mealTimeCode === "L") return "lunch";
+  if (mealTimeCode === "D") return "dinner";
+  if (mealTimeCode === "R") return "brunch";
+};
+function GetMealLocStr(mealLocCode) {
+  if (mealLocCode === "WH") return "Whitman";
+  if (mealLocCode === "BW") return "Butler";
+  if (mealLocCode === "RM") return "Rocky";
+  if (mealLocCode === "WB") return "Wilson";
+  if (mealLocCode === "MR") return "Mathey";
+  if (mealLocCode === "F") return "Forbes";
+};
+
+{% if username %}
+  {% if meals %}
+    {% for meal in meals %}
       $( "#editButton_{{ meal.id }}" ).click(function(e) { 
-          e.preventDefault();
-          console.log("meal edited: " + "{{meal.id}}");
-         var date = "{{ meal.date.month}}/{{ meal.date.day }}";
-         var meal_time = {% if meal.meal_time == "B" %} "breakfast"
-                         {% elif meal.meal_time == "L" %} "lunch"
-                         {% elif meal.meal_time == "D" %} "dinner"
-                         {% elif meal.meal_time == "R" %} "brunch"
-                         {% endif %};
-         var time = "{{ meal.date|date:"g:i A" }}";
-         var location = {% if meal.location == "WH" %} "Whitman"
-                        {% elif meal.location == "BW" %} "Butler"
-                        {% elif meal.location == "RM" %} "Rocky"
-                        {% elif meal.location == "WB" %} "Wilson"
-                        {% elif meal.location == "MR" %} "Mathey"
-                        {% elif meal.location == "F" %} "Forbes"
-                        {% endif %};
-         var edit_title = "Edit Attire for " + meal_time + " at " + time + ", " + date + " at " + location;
+        e.preventDefault();
+
+        var date = "{{ meal.date.month}}/{{ meal.date.day }}";
+        var meal_time = GetMealTimeStr("{{meal.meal_time}}");
+        var location = GetMealLocStr("{{meal.location}}");
+        var time = "{{ meal.date|date:"g:i A" }}";
+        var edit_title = "Edit Attire for " + meal_time + " at " + time + ", " + date + " at " + location;
         bootbox.dialog({
           title: edit_title,
           message: '<form role="form" method="POST" action="/edit-attire/" id="editSubmitForm_{{ meal.id }}"> ' + 
@@ -419,25 +409,15 @@
           
           }
         });
-        
       });
+
       $('#deleteSubmitForm_{{ meal.id }}').submit(function(e) {
         var currentForm = this;
         e.preventDefault();
         var date = "{{ meal.date.month}}/{{ meal.date.day }}"
-        var meal_time = {% if meal.meal_time == "B" %} "breakfast"
-                        {% elif meal.meal_time == "L" %} "lunch"
-                        {% elif meal.meal_time == "D" %} "dinner"
-                        {% elif meal.meal_time == "R" %} "brunch"
-                        {% endif %}
+        var meal_time = GetMealTimeStr("{{meal.meal_time}}");
+        var location = GetMealLocStr("{{meal.location}}");
         var time = "{{ meal.date|date:"g:i A" }}"
-        var location = {% if meal.location == "WH" %} "Whitman"
-                        {% elif meal.location == "BW" %} "Butler"
-                        {% elif meal.location == "RM" %} "Rocky"
-                        {% elif meal.location == "WB" %} "Wilson"
-                        {% elif meal.location == "MR" %} "Mathey"
-                        {% elif meal.location == "F" %} "Forbes"
-                        {% endif %};
         var confirmation_message = "Are you sure you want to remove " + 
                                    meal_time + " at " + time + ", " + date + " at " + location + "?";
         {% if meal.is_matched %}
@@ -446,143 +426,56 @@
         {% endif %}
         bootbox.confirm(confirmation_message, function(result) {
             if (result) {
-                console.log("meal deleted: " + "{{meal.id}}")
+                // console.log("meal deleted: " + "{{meal.id}}");
                 currentForm.submit();
             }
         });
-    });
-
-    
-      {% endfor %}
-    {% endif %}
+      });
+    {% endfor %}
+  {% endif %}
 
   {% if expired_meals %}
     {% for meal in expired_meals %}
-    $( "#feedback_{{ meal.id }}" ).click(function(e) { 
-            e.preventDefault();
-            console.log("meal feedback: " + "{{meal.id}}");
-            var username = "{{ username }}"
-           var date = "{{ meal.date.month}}/{{ meal.date.day }}";
-           var meal_time = {% if meal.meal_time == "B" %} "breakfast"
-                           {% elif meal.meal_time == "L" %} "lunch"
-                           {% elif meal.meal_time == "D" %} "dinner"
-                           {% elif meal.meal_time == "R" %} "brunch"
-                           {% endif %};
-           var time = "{{ meal.date|date:"g:i A" }}";
-           var location = {% if meal.location == "WH" %} "Whitman"
-                          {% elif meal.location == "BW" %} "Butler"
-                          {% elif meal.location == "RM" %} "Rocky"
-                          {% elif meal.location == "WB" %} "Wilson"
-                          {% elif meal.location == "MR" %} "Mathey"
-                          {% elif meal.location == "F" %} "Forbes"
-                          {% endif %};
-          var form_date = "{{ meal.date|date:"Y-m-d+H:i" }}"
-          var feedback_title = "Meal Feedback for " + meal_time + " at " + time + ", " + date + " at " + location
-          bootbox.dialog({
-            title: feedback_title,
-            message: '<iframe src="https://docs.google.com/forms/d/1kf4zvMt6sA6XDX_hJpyJ-Lz77mtxf9Yn-e8HPWoOH-4/viewform?entry.2071466262=' + 
-            username + '&entry.1023788659=' + form_date + '&entry.1066727998=' + location + '&entry.1632406614embedded=true" width="80%" height="730" frameborder="0" marginheight="0" marginwidth="100px" >Loading...</iframe>',
-          });
-          
-        });
+      $( "#feedback_{{ meal.id }}" ).click(function(e) { 
+        e.preventDefault();
+        // console.log("meal feedback: " + "{{meal.id}}");
 
-    $('#deleteSubmitForm_{{ meal.id }}').submit(function(e) {
+        var username = "{{ username }}"
+        var date = "{{ meal.date.month}}/{{ meal.date.day }}";
+        var time = "{{ meal.date|date:"g:i A" }}";
+        var meal_time = GetMealTimeStr("{{meal.meal_time}}");
+        var location = GetMealLocStr("{{meal.location}}");
+        var form_date = "{{ meal.date|date:"Y-m-d+H:i" }}"
+        var feedback_title = "Meal Feedback for " + meal_time + " at " + time + ", " + date + " at " + location
+        bootbox.dialog({
+          title: feedback_title,
+          message: '<iframe src="https://docs.google.com/forms/d/1kf4zvMt6sA6XDX_hJpyJ-Lz77mtxf9Yn-e8HPWoOH-4/viewform?entry.2071466262=' + 
+          username + '&entry.1023788659=' + form_date + '&entry.1066727998=' + location + '&entry.1632406614embedded=true" width="80%" height="730" frameborder="0" marginheight="0" marginwidth="100px" >Loading...</iframe>',
+        });        
+      });
+
+      $('#deleteSubmitForm_{{ meal.id }}').submit(function(e) {
         var currentForm = this;
         e.preventDefault();
         var date = "{{ meal.date.month}}/{{ meal.date.day }}"
-        var meal_time = {% if meal.meal_time == "B" %} "breakfast"
-                        {% elif meal.meal_time == "L" %} "lunch"
-                        {% elif meal.meal_time == "D" %} "dinner"
-                        {% elif meal.meal_time == "R" %} "brunch"
-                        {% endif %}
+        var meal_time = GetMealTimeStr("{{meal.meal_time}}");
+        var location = GetMealLocStr("{{meal.location}}");
         var time = "{{ meal.date|date:"g:i A" }}"
-        var location = {% if meal.location == "WH" %} "Whitman"
-                        {% elif meal.location == "BW" %} "Butler"
-                        {% elif meal.location == "RM" %} "Rocky"
-                        {% elif meal.location == "WB" %} "Wilson"
-                        {% elif meal.location == "MR" %} "Mathey"
-                        {% elif meal.location == "F" %} "Forbes"
-                        {% endif %};
         var confirmation_message = "Are you sure you want to remove " + 
                                    meal_time + " at " + time + ", " + date + " at " + location + 
                                    " from your meal history?";
         bootbox.confirm(confirmation_message, function(result) {
-            if (result) {
-                console.log("meal deleted: " + "{{meal.id}}")
-                currentForm.submit();
-            }
+          if (result) {
+            // console.log("meal deleted: " + "{{meal.id}}")
+            currentForm.submit();
+          }
         });
-    });
-      {% endfor %}
-    {% endif %}
+      });
+    {% endfor %}
   {% endif %}
+{% endif %}
 
-  // CALENDAR STUFF
-  // var currentMonth = moment().format('YYYY-MM');
-  // var nextMonth    = moment().add('month', 1).format('YYYY-MM');
-  // var events = [
-  //   {% if username %}
-  //     {% if meals %}
-  //       {% for meal in meals %}
-  //       { 
-  //         date: '{{ meal.date|date:"Y-m-d" }}',
-  //         prettyDate: '{{ meal.date|date:"n/j" }}',
-  //         time: '{{ meal.date|date:"g:i A" }}',
-  //         is_matched: '{{ meal.is_matched }}' == "true",
-  //         title: 
-  //           {% if meal.meal_time == "B" %} "Breakfast"
-  //           {% elif meal.meal_time == "L" %} "Lunch"
-  //           {% elif meal.meal_time == "D" %} "Dinner"
-  //           {% elif meal.meal_time == "R" %} "Brunch"
-  //           {% endif %},
-  //         location: 
-  //           {% if meal.location == "WH" %} "Whitman"
-  //           {% elif meal.location == "BW" %} "Butler/Wilson"
-  //           {% elif meal.location == "RM" %} "Rocky/Mathey"
-  //           {% elif meal.location == "F" %} "Forbes"
-  //           {% endif %},
-  //       },
-  //       {% endfor %}
-  //     {% endif %}
-  //   {% endif %}
-  //   // { date: currentMonth + '-' + '10', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' },
-  // ];
-
-  // var miniCalDiv = $('#mini-clndr')
-
-  // if (miniCalDiv) {
-  //   miniCalDiv.clndr({
-  //     template: $('#calendar-template').html(),
-  //     events: events,
-  //     clickEvents: {
-  //       click: function(target) {
-  //         if(target.events.length) {
-  //           var daysContainer = $('#mini-clndr').find('.days-container');
-  //           daysContainer.toggleClass('show-events', true);
-  //           $('#mini-clndr').find('.x-button').click( function() {
-  //             daysContainer.toggleClass('show-events', false);
-  //           });
-  //         }
-  //       },
-  //       onMonthChange: function(month) {
-  //         // console.log('you just went to ' + month.format('MMMM, YYYY'));
-  //       },
-  //       doneRendering: function() {
-  //         // console.log('this would be a fine place to attach custom event handlers.');
-  //       }
-  //     },
-  //     adjacentDaysChangeMonth: true
-  //   });
-  // }
-  // else console.log("miniCalDiv not found");
-
-  
 </script> 
-
-<!-- 
-<h4>Feedback Form</h4>
-<iframe src="https://docs.google.com/forms/d/1kf4zvMt6sA6XDX_hJpyJ-Lz77mtxf9Yn-e8HPWoOH-4/viewform?entry.2071466262=Name&entry.1023788659=0001-01-01+13:01&entry.1632406614embedded=true" width="80%" height="730" frameborder="0" marginheight="0" marginwidth="100px" >Loading...</iframe> -->
-
 
 </body>
 </html>
