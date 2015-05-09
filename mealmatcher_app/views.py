@@ -95,6 +95,7 @@ def edit_attire(request): # TODO: add email support by Andreas
 					dateinfo = mealToEdit.date.strftime('%I:%M %p')
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 					subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
+					print subjectline
 
 					#mailer
 					if mealToEdit.is_matched():
@@ -114,7 +115,7 @@ def edit_attire(request): # TODO: add email support by Andreas
 					dateinfo = mealToEdit.date.strftime('%I:%M %p')
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 					subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
-
+					print subjectline
 
 					#mailer
 					mail.send(
@@ -217,9 +218,12 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 	else:
 		location = "Forbes"
 
+	matched_meal.date = pytz.timezone(timezone.get_default_timezone_name()).localize(matched_meal.date)
+	matched_meal.save()
 	dateinfo = matched_meal.date.strftime('%I:%M %p')
 	mealinfo = meal + ' ' + dateinfo + ' at ' + location
 	subjectline = 'Your ' + mealinfo + ' has been matched!'
+	print subjectline
 	#mailer view
 	mail.send(
 		[user1net + '@princeton.edu'],
@@ -464,7 +468,7 @@ def find_meals(request):
 					dateinfo = datetime_obj.strftime('%I:%M %p')
 					mealinfo = meal + ' ' + dateinfo + ' at ' + meal_location
 					subjectline = 'Your ' + mealinfo + ' has been matched!'
-
+					print subjectline
 					#mailer view
 					mail.send(
 						[username + '@princeton.edu'],
@@ -729,11 +733,12 @@ def delete_meal(request):
 						send_location = "Whitman"
 					else:
 						send_location = "Forbes"
-
+					# mealToDelete.date = pytz.timezone(timezone.get_default_timezone_name()).localize(mealToDelete.date)
+					# mealToDelete.save()
 					dateinfo = mealToDelete.date.strftime('%I:%M %p')
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 					subjectline = 'Your ' + mealinfo + ' has been unmatched.'
-
+					print subjectline
 					# make sure the remaining user is shifted to user1, i.e. shift the attire
 					#if mealToDelete.users.all()[0] == myProfile:
 					if mealToDelete.user1 == request.user.username:
@@ -762,7 +767,7 @@ def delete_meal(request):
 						mail.send(
 							[user1net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
-							subject='subjectline',
+							subject=subjectline,
 							html_message=render_to_string('mealmatcher_app/delete_email.html', {'name': user1, 'datetime': mealToDelete.date, 'meal': send_meal, 'location': send_location}),
 							priority='now',
 						)
