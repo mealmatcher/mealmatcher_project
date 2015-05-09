@@ -140,8 +140,8 @@
                 </td>
 
                 <td>{% if ongoing_meal.is_matched %} 
-                      {% with ongoing_meal.users.all.0 as user1 %}
-                        {% if user1 == user_profile %}
+                      {% with ongoing_meal.user1 as user1 %}
+                        {% if user1 == username %}
                           {{ ongoing_meal.attire1 }} 
                         {% else %}
                           {{ ongoing_meal.attire2 }} 
@@ -232,8 +232,8 @@
                   </td>
 
                   <td>{% if meal.is_matched %} 
-                        {% with meal.users.all.0 as user1 %}
-                          {% if user1 == user_profile %}
+                        {% with meal.user1 as user1 %}
+                          {% if user1 == username %}
                             {{ meal.attire1 }} 
                           {% else %}
                             {{ meal.attire2 }} 
@@ -321,8 +321,8 @@
                   </td>
 
                   <td>{% if meal.is_matched %} 
-                        {% with meal.users.all.0 as user1 %}
-                          {% if user1 == user_profile %}
+                        {% with meal.user1 as user1 %}
+                          {% if user1 == username %}
                             {{ meal.attire1 }} 
                           {% else %}
                             {{ meal.attire2 }} 
