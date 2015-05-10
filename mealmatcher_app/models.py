@@ -9,6 +9,7 @@ from django.utils import timezone
 class UserProfile(models.Model):
 	# required to link UserProfile to User
 	user = models.OneToOneField(User)
+	disabled_status = models.NullBooleanField()
 	def __unicode__(self):
 		return self.user.username
 
@@ -43,6 +44,7 @@ class Meal(models.Model):
 	attire1 = models.CharField('Person 1 Attire', max_length=100, blank=True)
 	attire2 = models.CharField('Person 2 Attire', max_length=100, blank=True) # can be blank
 
+	# usernames of the two people, to go with attire
 	user1 = models.CharField('Person 1 username', max_length=100, blank=True)
 	user2 = models.CharField('Person 2 username', max_length=100, blank=True)
 
