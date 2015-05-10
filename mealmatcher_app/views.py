@@ -29,11 +29,19 @@ def index(request):
 						'last_name': None, 'username': None, 'logged_in': False}
 	return render(request, 'mealmatcher_app/index_new_replaced.html', context_dict)
 
+def disabled_user(request):
+	return HttpResponse('Sorry, you have been disabled.')
+	# return render(request, 'mealmatcher_app/disabled-user.html')
+
 # used to contain logic for editing attire of a meal in my-meals 
 # redirects to my-meals if success, error page if failure in saving, and my-meals if 
 # the URL is attempted to be accessed without a POST
 @login_required
 def edit_attire(request): # TODO: add email support by Andreas
+	# If user is currently disabled, redirected to disabled-user page
+	if UserProfile.objects.filter(user=request.user)[0].disabled_status:
+		return disabled_user(request)
+
 	if request.method == "POST":
 		form = EditAttireForm(request.POST)
 
@@ -142,6 +150,10 @@ def edit_attire(request): # TODO: add email support by Andreas
 
 # helper function, used by join meals to add a second user to the meal
 def match_meal(attire1, my_user_profile, matched_meal, request):
+	# If user is currently disabled, redirected to disabled-user page
+	if UserProfile.objects.filter(user=request.user)[0].disabled_status:
+		return disabled_user(request)
+
 	matched_meal.attire2 = attire1
 	matched_meal.save()
 	matched_meal.users.add(my_user_profile) # add my_user_profile as the second user
@@ -282,6 +294,10 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 # redirects to my-meals if success, error page if there are errors
 @login_required
 def join_meal(request):
+	# If user is currently disabled, redirected to disabled-user page
+	if UserProfile.objects.filter(user=request.user)[0].disabled_status:
+		return disabled_user(request)
+
 	if request.method == 'POST':
 		form = JoinMealForm(request.POST)
 
@@ -340,18 +356,21 @@ def join_meal(request):
 
 # error page view
 def error(request, login_error=False):
+	# If user is currently disabled, redirected to disabled-user page
+	if UserProfile.objects.filter(user=request.user)[0].disabled_status:
+		return disabled_user(request)
+
 	context_dict = {'login_error': login_error,}
 	return render(request, 'mealmatcher_app/error.html', context_dict)
-
-
-@login_required
-def about(request):
-	return render(request, 'mealmatcher_app/about.html')
 
 # find-meals page, used to find meals and view/join open meals
 # redirects to mymeals with the latest meal upon success
 @login_required
 def find_meals(request):
+	# If user is currently disabled, redirected to disabled-user page
+	if UserProfile.objects.filter(user=request.user)[0].disabled_status:
+		return disabled_user(request)
+
 	username = request.user.username
 	myUserProfiles = UserProfile.objects.filter(user=request.user)
 	my_user_profile = myUserProfiles[0]
@@ -595,6 +614,10 @@ def find_meals(request):
 # view-meals page -- redirects to itself, contains buttons for deleting and editing
 @login_required
 def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
+	# If user is currently disabled, redirected to disabled-user page
+	if UserProfile.objects.filter(user=request.user)[0].disabled_status:
+		return disabled_user(request)
+
 	meals = list(Meal.objects.filter(users__user=request.user).order_by('date'))
 	copy = list(meals)
 	expired_meals = []
@@ -635,6 +658,7 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 # unsupported now 
 @login_required
 def open_meals(request):
+
 	# meals = list(Meal.objects.order_by('date'))
 	meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
 	mealsCopy = list(meals)
@@ -649,6 +673,10 @@ def open_meals(request):
 
 @login_required
 def delete_meal(request):
+	# If user is currently disabled, redirected to disabled-user page
+	if UserProfile.objects.filter(user=request.user)[0].disabled_status:
+		return disabled_user(request)
+
 	if request.method == 'POST': # http post, process the data
 		form = DeleteMealForm(request.POST)
 
@@ -823,11 +851,15 @@ def site_login(request):
 					if user: 
 						user_profile = UserProfile.objects.filter(user=user)
 						if not user_profile:  # find the userprofile, or make a new one 
-							new_profile = UserProfile(user=user)
+							new_profile = UserProfile(user=user, disabled_status=False)
 							new_profile.save()
-							print 'made the profile for ' + netid
 						django_login(request, user)
-						return HttpResponseRedirect('')
+
+						# If user is currently disabled, redirected to disabled-user page
+						if user_profile and user_profile[0].disabled_status:
+							return disabled_user(request)
+						else:	
+							return HttpResponseRedirect('')
 						
 					# return login_error. user authentication failed 
 					else: 
@@ -850,11 +882,9 @@ def site_login(request):
 					new_user.save()
 					new_user.set_password(new_user.password)
 					new_user.save()
-					print 'made the new user for ' + netid
 
-					profile = UserProfile(user = new_user)
+					profile = UserProfile(user = new_user, disabled_status=False)
 					profile.save()
-					print 'made the profile for ' + netid
 
 					new_user = authenticate(username=username, password=password)
 					django_login(request, new_user)
