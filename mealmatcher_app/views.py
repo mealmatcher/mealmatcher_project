@@ -92,10 +92,9 @@ def edit_attire(request): # TODO: add email support by Andreas
 					mealToEdit.attire1 = newAttire
 					mealToEdit.save()
 
-					dateinfo = mealToEdit.date.strftime('%I:%M %p')
+					dateinfo = (mealToEdit.date-datetime.timedelta(hours=4)).strftime('%I:%M %p')
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 					subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
-					print subjectline
 
 					#mailer
 					if mealToEdit.is_matched():
@@ -112,10 +111,9 @@ def edit_attire(request): # TODO: add email support by Andreas
 					mealToEdit.attire2 = newAttire
 					mealToEdit.save()
 
-					dateinfo = mealToEdit.date.strftime('%I:%M %p')
+					dateinfo = (mealToEdit.date-datetime.timedelta(hours=4)).strftime('%I:%M %p')
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 					subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
-					print subjectline
 
 					#mailer
 					mail.send(
@@ -195,7 +193,7 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 
 	meal = matched_meal.meal_time
 	location = matched_meal.location
-
+	
 	if (meal == "B"):
 		meal = "Breakfast"
 	elif (meal == "L"):
@@ -218,12 +216,10 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 	else:
 		location = "Forbes"
 
-	matched_meal.date = pytz.timezone(timezone.get_default_timezone_name()).localize(matched_meal.date)
-	matched_meal.save()
-	dateinfo = matched_meal.date.strftime('%I:%M %p')
+	dateinfo = (matched_meal.date - datetime.timedelta(hours=4)).strftime('%I:%M %p')
 	mealinfo = meal + ' ' + dateinfo + ' at ' + location
 	subjectline = 'Your ' + mealinfo + ' has been matched!'
-	print subjectline
+
 	#mailer view
 	mail.send(
 		[user1net + '@princeton.edu'],
@@ -242,9 +238,8 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 
 	subjectline = 'Reminder: ' + mealinfo + ' is approaching!'
 	if (matched_meal.date.hour == 1):
-		datetime_obj_new = datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, 24, matched_meal.date.minute)
-		datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
-		
+		datetime_obj_new = matched_meal.date - datetime.timedelta(hours=1)
+		# print 'email scheduled at ' + datetime_obj_new.strftime('%I:%M %p %Z')
 		mail.send(
 			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
@@ -260,9 +255,8 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 			scheduled_time=datetime_obj_new,
 		)
 	else:
-		hour = matched_meal.date.hour - 1
-		datetime_obj_new = datetime.datetime(matched_meal.date.year, matched_meal.date.month, matched_meal.date.day, hour, matched_meal.date.minute)
-		datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
+		datetime_obj_new = matched_meal.date - datetime.timedelta(hours=1)
+		# print 'email scheduled at ' + datetime_obj_new.strftime('%I:%M %p %Z')
 		mail.send(
 			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
@@ -393,7 +387,7 @@ def find_meals(request):
 			# set the timezone to Eastern 
 			datetime_obj = datetime.datetime(year, month, day, hour, minute)
 			datetime_obj = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj)
-
+			print datetime_obj.strftime('%I:%M %p %Z')
 			# check for multiple meals at the same mealtime -- prevent signup 
 			same_time = list(Meal.objects.filter(meal_time=meal_time, users__user=User.objects.filter(username=username)))
 			for meal in same_time:
@@ -468,7 +462,6 @@ def find_meals(request):
 					dateinfo = datetime_obj.strftime('%I:%M %p')
 					mealinfo = meal + ' ' + dateinfo + ' at ' + meal_location
 					subjectline = 'Your ' + mealinfo + ' has been matched!'
-					print subjectline
 					#mailer view
 					mail.send(
 						[username + '@princeton.edu'],
@@ -486,9 +479,11 @@ def find_meals(request):
 					)
 
 					subjectline = 'Reminder: ' + mealinfo + ' is approaching!'
+					# print subjectline
 					if (datetime_obj.hour == 1):
-						datetime_obj_new = datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 24, datetime_obj.minute)
-						datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
+						datetime_obj_new = matched_meal.date - datetime.timedelta(hours=1)
+						# datetime_obj_new = datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 24, datetime_obj.minute)
+						# datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
@@ -504,9 +499,10 @@ def find_meals(request):
 							scheduled_time=datetime_obj_new,
 						)
 					else:
-						send_hour = datetime_obj.hour - 1
-						datetime_obj_new = datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour, datetime_obj.minute)
-						datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
+						# send_hour = datetime_obj.hour - 1
+						# datetime_obj_new = datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour, datetime_obj.minute)
+						# datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
+						datetime_obj_new = matched_meal.date - datetime.timedelta(hours=1)
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
@@ -733,12 +729,11 @@ def delete_meal(request):
 						send_location = "Whitman"
 					else:
 						send_location = "Forbes"
-					# mealToDelete.date = pytz.timezone(timezone.get_default_timezone_name()).localize(mealToDelete.date)
-					# mealToDelete.save()
-					dateinfo = mealToDelete.date.strftime('%I:%M %p')
+					
+
+					dateinfo = (mealToDelete.date - datetime.timedelta(hours=4)).strftime('%I:%M %p')
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
-					subjectline = 'Your ' + mealinfo + ' has been unmatched.'
-					print subjectline
+					subjectline = 'Your ' + mealinfo + ' has been cancelled!'
 					# make sure the remaining user is shifted to user1, i.e. shift the attire
 					#if mealToDelete.users.all()[0] == myProfile:
 					if mealToDelete.user1 == request.user.username:
