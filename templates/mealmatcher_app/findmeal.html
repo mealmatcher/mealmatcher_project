@@ -128,7 +128,9 @@
                   <span>
                     <img class="callout" src="{% static "img/callout.gif" %}" />
                     Don't worry if you don't know!<br />
-                    This can be changed up to 1 hour before.
+                    This can be changed up to 1 hour before.<br>
+                    Please be as descriptive as possible; <br>
+                    this is the only way for your match to find you.
                   </span>
                 </a>
               </span>
@@ -286,7 +288,7 @@
           '<input type="text" name="idToJoin" value="{{ meal.id }}" hidden = true > '+ 
           '<div id="error_msg" class="alert alert-danger" hidden = true></div>' +
           'What will you be wearing to this meal? <input type="text" name="newAttire" maxlength=100 id="attireinput" size="42">' + 
-          '<a class="hovering"><i class="fa fa-info-circle"></i><span><img class="callout" src="{% static "img/callout.gif" %}" />Don\'t worry if you don\'t know for sure yet.<br />This can be changed up to 1 hour before.</span></a>' + '</form>',
+          '<a class="hovering"><i class="fa fa-info-circle"></i><span><img class="callout" src="{% static "img/callout.gif" %}" />Don\'t worry if you don\'t know for sure yet.<br />This can be changed up to 1 hour before.<br>Please be as descriptive as possible;<br>this is the only way for your match to find you.</span></a>' + '</form>',
         buttons: {
           success: {
             label: "Confirm",
