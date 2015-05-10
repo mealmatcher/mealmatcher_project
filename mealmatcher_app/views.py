@@ -30,8 +30,8 @@ def index(request):
 	return render(request, 'mealmatcher_app/index_new_replaced.html', context_dict)
 
 def disabled_user(request):
-	return HttpResponse('Sorry, you have been disabled.')
-	# return render(request, 'mealmatcher_app/disabled-user.html')
+	#return HttpResponse('Sorry, you have been disabled.')
+	return render(request, 'mealmatcher_app/disabled_user.html')
 
 # used to contain logic for editing attire of a meal in my-meals 
 # redirects to my-meals if success, error page if failure in saving, and my-meals if 
