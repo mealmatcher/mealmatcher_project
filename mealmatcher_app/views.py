@@ -666,22 +666,6 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 					'ongoing_meal': ongoing_meal, 'ongoing_attire2': ongoing_attire2,}
 	return render(request, 'mealmatcher_app/mymeals.html', context_dict)
 
-# unsupported now 
-@login_required
-def open_meals(request):
-
-	# meals = list(Meal.objects.order_by('date'))
-	meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
-	mealsCopy = list(meals)
-	for meal in mealsCopy:
-		if meal.is_expired():
-			print meal
-			meals.remove(meal)
-
-	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
-	context_dict = {'username':request.user.username, 'meals':meals, 'user_profile': my_user_profile}
-	return render(request, 'mealmatcher_app/openmeals.html', context_dict)
-
 @login_required
 def delete_meal(request):
 	# If user is currently disabled, redirected to disabled-user page
