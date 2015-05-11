@@ -744,8 +744,8 @@ def delete_meal(request):
 					user1net = mealToDelete.user1
 
 					datetime_obj_new = mealToDelete.date - datetime.timedelta(hours=1)
-					warn_emailToDelete1 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[mealToDelete.user1 + '@princeton.edu'])
-					warn_emailToDelete2 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[mealToDelete.user2 + '@princeton.edu'])
+					warn_emailToDelete1 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[mealToDelete.user1 + '@princeton.edu'])[0]
+					warn_emailToDelete2 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[mealToDelete.user2 + '@princeton.edu'])[0]
 					warn_emailToDelete1.delete()
 					warn_emailToDelete2.delete()
 
