@@ -3,7 +3,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
-# from django.db.models import Q
 from django.contrib.auth import login as django_login
 from mealmatcher_app.models import UserProfile, Meal
 from mealmatcher_app.forms import MealForm, DeleteMealForm, JoinMealForm, EditAttireForm
@@ -30,15 +29,15 @@ def index(request):
 						'last_name': None, 'username': None, 'logged_in': False}
 	return render(request, 'mealmatcher_app/index_new_replaced.html', context_dict)
 
+# view rendered when the user is manually disabled
 def disabled_user(request):
-	#return HttpResponse('Sorry, you have been disabled.')
 	return render(request, 'mealmatcher_app/disabled_user.html')
 
 # used to contain logic for editing attire of a meal in my-meals 
 # redirects to my-meals if success, error page if failure in saving, and my-meals if 
 # the URL is attempted to be accessed without a POST
 @login_required
-def edit_attire(request): # TODO: add email support by Andreas
+def edit_attire(request): 
 	# If user is currently disabled, redirected to disabled-user page
 	if UserProfile.objects.filter(user=request.user)[0].disabled_status:
 		return disabled_user(request)
@@ -46,14 +45,14 @@ def edit_attire(request): # TODO: add email support by Andreas
 	if request.method == "POST":
 		form = EditAttireForm(request.POST)
 
-		# verify form data, and attire size. #TODO: form security check by kevin 
+		# verify form data, and attire size. 
 		if form.is_valid():
 			data = form.cleaned_data
 			newAttire = data['newAttire']
 			if len(newAttire) > 100: newAttire = newAttire[0:100] 
 			matchingMeals = Meal.objects.filter(id=data['idToEdit']) 
 
-			# got a meal, see whether user is user1 or user2 by order
+			# got a meal, see whether user is user1 or user2 
 			if len(matchingMeals) >= 1:
 				mealToEdit = matchingMeals[0]
 				my_user_profile = UserProfile.objects.filter(user=request.user)[0]
@@ -96,7 +95,7 @@ def edit_attire(request): # TODO: add email support by Andreas
 				else:
 					send_location = "Forbes"
 
-				#if mealToEdit.users.all()[0] == my_user_profile: # change user1 attire
+				# change user1 attire
 				if mealToEdit.user1 == request.user.username:
 					mealToEdit.attire1 = newAttire
 					mealToEdit.save()
@@ -120,7 +119,7 @@ def edit_attire(request): # TODO: add email support by Andreas
 							priority='now',
 						)
 
-				#elif mealToEdit.is_matched() and mealToEdit.users.all()[1] == my_user_profile: # change user2 attire
+				# change user2 attire
 				elif mealToEdit.is_matched() and mealToEdit.user2 == request.user.username:
 					mealToEdit.attire2 = newAttire
 					mealToEdit.save()
@@ -146,17 +145,16 @@ def edit_attire(request): # TODO: add email support by Andreas
 
 				return HttpResponseRedirect('/my-meals/')
 			else:
-				print 'edit_attire error: no meal found with that id'
+				# print 'edit_attire error: no meal found with that id'
 				return error(request, login_error=False)
 
 		else: # form data is invalid. print errors, give error page
-			print 'edit_attire error: edit meal form was invalid '
-			print form.errors
+			# print 'edit_attire error: edit meal form was invalid '
+			# print form.errors
 			return error(request, login_error=False)
 
 	else: # not a POST -- this url should not have been reached, redirect to mymeals page
-		print 'edit_attire error: edit page attemped access without a GET'
-		# return render(request, 'mealmatcher_app/error.html')
+		# print 'edit_attire error: edit page attemped access without a GET'
 		return HttpResponseRedirect('/my-meals/')
 
 # helper function, used by join meals to add a second user to the meal
@@ -171,41 +169,6 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 	matched_meal.save()
 	matched_meal.user2 = request.user.username
 	matched_meal.save()
-
-	# TODO below: Email support -- notifications for both
-	#mailer user 
-	# matchedUsers = matched_meal.users.all()
-	# TODO error if not found
-	# if len(matchedUsers) > 0:
-	# user2 = matchedUsers[0].user.username
-
-	# print(type(matched_meal.users))
-	# print(type(my_user_profile))
-
-	# HACK(drew): match with dummy user for debug
-	# dummyProfile = None
-	# dummyUser = None
-	# dummyUsers = User.objects.filter(username="nobody")
-	# if len(dummyUsers) == 0:
-	# 	username = "nobody"
-	# 	password = "nobody"
-	# 	dummyUser = User(username=username, password=password, email= ("nobody" + '@princeton.edu'))
-	# 	dummyUser.save()
-	# 	dummyUser.set_password(dummyUser.password)
-	# 	dummyUser.save()
-	# 	dummyProfile = UserProfile(user = dummyUser)
-	# 	dummyProfile.save()
-	# else:
-	# 	dummyUser = dummyUsers[0]
-	# 	dummyProfile = UserProfile.objects.filter(user=dummyUser)[0]
-
-	# matched_meal.users.add(dummyProfile)
-
-	#mailer users
-	# user1 = matched_meal.users.all()[1].user.first_name
-	# user2 = matched_meal.users.all()[0].user.first_name	
-	# user1net = matched_meal.users.all()[1].user.username
-	# user2net = matched_meal.users.all()[0].user.username	
 
 	user1 = User.objects.filter(username=matched_meal.user2)[0].first_name
 	user2 = User.objects.filter(username=matched_meal.user1)[0].first_name
@@ -262,7 +225,6 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 	subjectline = 'Reminder: ' + mealinfo + ' is approaching!'
 	if (matched_meal.date.hour == 1):
 		datetime_obj_new = matched_meal.date - datetime.timedelta(hours=1)
-		# print 'email scheduled at ' + datetime_obj_new.strftime('%I:%M %p %Z')
 		mail.send(
 			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
@@ -279,7 +241,6 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 		)
 	else:
 		datetime_obj_new = matched_meal.date - datetime.timedelta(hours=1)
-		# print 'email scheduled at ' + datetime_obj_new.strftime('%I:%M %p %Z')
 		mail.send(
 			[user1net + '@princeton.edu'],
 			'princeton.meal.matcher@gmail.com',
@@ -296,11 +257,6 @@ def match_meal(attire1, my_user_profile, matched_meal, request):
 		)
 
 
-	# print matched_meal.attire2
-	# matched_meal.users.add(my_user_profile)
-	# matched_meal.save()
-
-
 # join_meal contains the majority of logic of joining a meal with the open meals interface
 # redirects to my-meals if success, error page if there are errors
 @login_required
@@ -312,7 +268,7 @@ def join_meal(request):
 	if request.method == 'POST':
 		form = JoinMealForm(request.POST)
 
-		# validate the form data. TODO -- security checks by Kevin
+		# validate the form data.
 		if form.is_valid():
 			data = form.cleaned_data
 			join_attire = data['newAttire'] # attire of the person signing up
@@ -354,12 +310,12 @@ def join_meal(request):
 					return view_meals(request, new_meal=mealToJoin)
 
 			else: # did not get a meal to join, redirect to error
-				print 'join_meal error: no meal found with idToJoin'
+				# print 'join_meal error: no meal found with idToJoin'
 				return error(request, login_error=False)
 
 		else: # form is not valid, redirect to error 
-			print 'join_meal error: '
-			print form.errors
+			# print 'join_meal error: '
+			# print form.errors
 			return error(request, login_error=False)
 
 	else: # not a GET, redirect to find-a-meal
@@ -397,7 +353,7 @@ def find_meals(request):
 			year = django_timezone.now().year
 			location = data['location']
 			meal_time = data['meal_time']
-			attire1 = data['attire1'] # TODO - validate the attire1 security by Kevin
+			attire1 = data['attire1'] 
 			date_md = data['date_mdy'].split('/')
 			month = int(date_md[0])
 			day = int(date_md[1])
@@ -417,7 +373,7 @@ def find_meals(request):
 			# set the timezone to Eastern 
 			datetime_obj = datetime.datetime(year, month, day, hour, minute)
 			datetime_obj = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj)
-			print datetime_obj.strftime('%I:%M %p %Z')
+
 			# check for multiple meals at the same mealtime -- prevent signup 
 			same_time = list(Meal.objects.filter(meal_time=meal_time, users__user=User.objects.filter(username=username)))
 			for meal in same_time:
@@ -452,8 +408,6 @@ def find_meals(request):
 					matched_meal.user2 = request.user.username
 					matched_meal.save()
 					new_meal = matched_meal
-
-					# BELOW: all MAIL stuff in this if block section
 
 					#mailer users
 					user1 = User.objects.filter(username=matched_meal.user2)[0].first_name
@@ -509,11 +463,8 @@ def find_meals(request):
 					)
 
 					subjectline = 'Reminder: ' + mealinfo + ' is approaching!'
-					# print subjectline
 					if (datetime_obj.hour == 1):
 						datetime_obj_new = matched_meal.date - datetime.timedelta(hours=1)
-						# datetime_obj_new = datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, 24, datetime_obj.minute)
-						# datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
 						mail.send(
 							[username + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
@@ -529,9 +480,6 @@ def find_meals(request):
 							scheduled_time=datetime_obj_new,
 						)
 					else:
-						# send_hour = datetime_obj.hour - 1
-						# datetime_obj_new = datetime.datetime(datetime_obj.year, datetime_obj.month, datetime_obj.day, send_hour, datetime_obj.minute)
-						# datetime_obj_new = pytz.timezone(timezone.get_default_timezone_name()).localize(datetime_obj_new)
 						datetime_obj_new = matched_meal.date - datetime.timedelta(hours=1)
 						mail.send(
 							[username + '@princeton.edu'],
@@ -557,19 +505,17 @@ def find_meals(request):
 					new_meal.user1 = request.user.username
 					new_meal.save()
 
-				 # HACK(drew) redirecting to my meals page after meal creation AND ALSO passing an extra arg
+				 # redirecting to my meals page after meal creation AND ALSO passing an extra arg
 				return view_meals(request, new_meal=new_meal) 
 
 			# error signing up meal at badTime or expiredTime -- render page, with errors
 			else:
 				today = django_timezone.now()
 				# grab the open meals
-				# meals = list(Meal.objects.exclude().order_by('date')) # allows own meals 
-				meals = list(Meal.objects.exclude(users__user=request.user).order_by('date')) # prevents own meals
+				meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
 				mealsCopy = list(meals)
 				for meal in mealsCopy:
 					if meal.is_expired() or meal.is_matched():
-						# print meal
 						meals.remove(meal)
 
 				context_dict = {
@@ -580,17 +526,15 @@ def find_meals(request):
 					}
 				return render(request, 'mealmatcher_app/findmeal.html', context_dict)
 
-		else: # form data not valid -- print errors, redirect to error
-			print 'find-a-meal error: meal form was invalid ' 
-			print form.errors
+		else: # form data not valid -- print errors, rerender page
+			# print 'find-a-meal error: meal form was invalid ' 
+			# print form.errors
 			today = django_timezone.now()
 			# grab the open meals
-			# meals = list(Meal.objects.exclude().order_by('date')) # allows own meals 
-			meals = list(Meal.objects.exclude(users__user=request.user).order_by('date')) # prevents own meals
+			meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
 			mealsCopy = list(meals)
 			for meal in mealsCopy:
 				if meal.is_expired() or meal.is_matched():
-					# print meal
 					meals.remove(meal)
 
 			context_dict = {
@@ -605,13 +549,11 @@ def find_meals(request):
 	else: 
 		form = MealForm()
 		today = django_timezone.now()
-		# grab the open meals
-		# meals = list(Meal.objects.exclude().order_by('date')) # allows own meals 
-		meals = list(Meal.objects.exclude(users__user=request.user).order_by('date')) # prevents own meals
+		# grab the open meals 
+		meals = list(Meal.objects.exclude(users__user=request.user).order_by('date'))
 		mealsCopy = list(meals)
 		for meal in mealsCopy:
 			if meal.is_expired() or meal.is_matched():
-				# print meal
 				meals.remove(meal)
 
 		context_dict = {
@@ -624,7 +566,7 @@ def find_meals(request):
 
 # view-meals page -- redirects to itself, contains buttons for deleting and editing
 @login_required
-def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal extra arg so we can highlight it when redirecting after form submission
+def view_meals(request, new_meal=None, deleted_meal=None): # new_meal extra arg so we can highlight it when redirecting after form submission
 	# If user is currently disabled, redirected to disabled-user page
 	if UserProfile.objects.filter(user=request.user)[0].disabled_status:
 		return disabled_user(request)
@@ -642,24 +584,19 @@ def view_meals(request, new_meal=None, deleted_meal=None): # HACK(drew) new_meal
 		if meal.to_be_removed():
 			meals.remove(meal)
 			meal.delete()
-		elif meal.is_ongoing(): # or meal.is_matched(): #DEBUG: get an ongoing meal
+		elif meal.is_ongoing():
 			meals.remove(meal)
 			ongoing_meal = meal
-			#if ongoing_meal.users.all()[0] == my_user_profile:   # user1, give attire2
+			# user1, give attire2
 			if ongoing_meal.user1 == request.user.username:
 				ongoing_attire2 = ongoing_meal.attire2
-			#elif ongoing_meal.users.all()[1] == my_user_profile: # user2, give attire1
+			# user2, give attire1
 			elif ongoing_meal.user2 == request.user.username:
 				ongoing_attire2 = ongoing_meal.attire1
 		elif meal.is_expired():
 			meals.remove(meal)
 			expired_meals.append(meal)
 	my_user_profile = UserProfile.objects.filter(user=request.user)[0]
-
-	# put new meals at the front of the list (disabled)
-	# if new_meal and new_meal in meals:
-	# 	meals.remove(new_meal)
-	# 	meals.insert(0, new_meal)
 
 	context_dict = {'username':request.user.username, 'meals':meals, 'new_meal':new_meal, 'deleted_meal':deleted_meal, 
 					'user_profile': my_user_profile, 'expired_meals': expired_meals, 'removed_meals': removed_meals,
@@ -718,12 +655,10 @@ def delete_meal(request):
 				elif not mealToDelete.is_matched():
 					mealToDelete.delete()
 
-				# TODO(drew) only allow dropping out if meal isn't too soon
+				# not expired, is matched, delete the appropriate user to shift, send emails
 				else:
 					myProfile = UserProfile.objects.filter(user=request.user)[0]
 					status = True
-					#user1 = mealToDelete.users.all()[0].user.first_name
-					#user1net = mealToDelete.users.all()[0].user.username
 					user1 = User.objects.filter(username=mealToDelete.user1)[0].first_name
 					user1net = mealToDelete.user1
 
@@ -764,11 +699,8 @@ def delete_meal(request):
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 					subjectline = 'Your ' + mealinfo + ' has been cancelled!'
 					# make sure the remaining user is shifted to user1, i.e. shift the attire
-					#if mealToDelete.users.all()[0] == myProfile:
 					if mealToDelete.user1 == request.user.username:
 						#mailer
-						# user2 = mealToDelete.users.all()[1].user.first_name
-						# user2net = mealToDelete.users.all()[1].user.username
 						user2 = User.objects.filter(username=mealToDelete.user2)[0].first_name
 						user2net = mealToDelete.user2
 						mealToDelete.attire1 = mealToDelete.attire2
@@ -806,14 +738,13 @@ def delete_meal(request):
 				return view_meals(request, deleted_meal=mealToDelete)
 
 			else: # did not get a meal to delete, redirect to error
-				print 'delete_meal error: no meal found with idToDelete'
-				# return error(request)
-				# you get here by refreshing after deleting a meal
+				# print 'delete_meal error: no meal found with idToDelete'
+				# you can get here by refreshing after deleting a meal
 				return view_meals(request)
 
 		else: # errors with form -- redirect to error page
-			print 'delete_meal error: delete meal form was invalid '
-			print form.errors
+			# print 'delete_meal error: delete meal form was invalid '
+			# print form.errors
 			return error(request, login_error=False)
 
 	# received a GET, redirect to my-meals 
@@ -823,7 +754,6 @@ def delete_meal(request):
 # login page
 def site_login(request):
 	base_url = 'http://' + request.META['HTTP_HOST']
-	print base_url
 
 	# the user is now logged in. return to homepage
 	if request.user.is_authenticated():
