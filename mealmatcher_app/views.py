@@ -105,7 +105,7 @@ def edit_attire(request): # TODO: add email support by Andreas
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 					subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
 
-					datetime_obj_new = mealToDelete.date - datetime.timedelta(hours=1)
+					datetime_obj_new = mealToEdit.date - datetime.timedelta(hours=1)
 					warn_emailToEdit2 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[user2net + '@princeton.edu'])
 					warn_emailToEdit2.html_message = render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': mealToEdit.date, 'meal': send_meal, 'location': send_location, 'attire': mealToEdit.attire1})
 					warn_emailToEdit2.save()
@@ -129,7 +129,7 @@ def edit_attire(request): # TODO: add email support by Andreas
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 					subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
 
-					datetime_obj_new = mealToDelete.date - datetime.timedelta(hours=1)
+					datetime_obj_new = mealToEdit.date - datetime.timedelta(hours=1)
 					warn_emailToEdit1 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[user1net + '@princeton.edu'])
 					warn_emailToEdit1.html_message = render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': mealToEdit.date, 'meal': send_meal, 'location': send_location, 'attire': mealToEdit.attire2})
 					warn_emailToEdit1.save()
