@@ -13,6 +13,7 @@ from django.utils import timezone as django_timezone
 import urllib2, re
 # mailer lib
 from post_office.models import EmailTemplate
+from post_office.models import Email
 from post_office import mail
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -104,6 +105,11 @@ def edit_attire(request): # TODO: add email support by Andreas
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 					subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
 
+					datetime_obj_new = mealToDelete.date - datetime.timedelta(hours=1)
+					warn_emailToEdit2 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[user2net + '@princeton.edu'])
+					warn_emailToEdit2.html_message = render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': mealToEdit.date, 'meal': send_meal, 'location': send_location, 'attire': mealToEdit.attire1})
+					warn_emailToEdit2.save()
+
 					#mailer
 					if mealToEdit.is_matched():
 						mail.send(
@@ -122,6 +128,11 @@ def edit_attire(request): # TODO: add email support by Andreas
 					dateinfo = (mealToEdit.date-datetime.timedelta(hours=4)).strftime('%I:%M %p')
 					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 					subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
+
+					datetime_obj_new = mealToDelete.date - datetime.timedelta(hours=1)
+					warn_emailToEdit1 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[user1net + '@princeton.edu'])
+					warn_emailToEdit1.html_message = render_to_string('mealmatcher_app/warn_email.html', {'name': user1, 'datetime': mealToEdit.date, 'meal': send_meal, 'location': send_location, 'attire': mealToEdit.attire2})
+					warn_emailToEdit1.save()
 
 					#mailer
 					mail.send(
@@ -732,6 +743,12 @@ def delete_meal(request):
 					user1 = User.objects.filter(username=mealToDelete.user1)[0].first_name
 					user1net = mealToDelete.user1
 
+					datetime_obj_new = mealToDelete.date - datetime.timedelta(hours=1)
+					warn_emailToDelete1 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[mealToDelete.user1 + '@princeton.edu'])
+					warn_emailToDelete2 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[mealToDelete.user2 + '@princeton.edu'])
+					warn_emailToDelete1.delete()
+					warn_emailToDelete2.delete()
+
 					send_meal = mealToDelete.meal_time
 					send_location = mealToDelete.location
 
@@ -882,6 +899,14 @@ def site_login(request):
 					new_user.save()
 					new_user.set_password(new_user.password)
 					new_user.save()
+
+					mail.send(
+						[username + '@princeton.edu'],
+						'princeton.meal.matcher@gmail.com',
+						subject="Welcome to MealMatcher!",
+						html_message=render_to_string('mealmatcher_app/welcome_email.html', {'name': first_name}),
+						priority='now',
+					)
 
 					profile = UserProfile(user = new_user, disabled_status=False)
 					profile.save()
