@@ -9,7 +9,7 @@ from django.db import models
 class EditAttireForm(forms.Form): 
   idToEdit = forms.CharField(
     widget = forms.TextInput(attrs={'id': "idToEditTextbox"}),
-    max_length = 5, # note, this may not work for larger inputs
+    max_length = 5, # note, this may not work for larger inputs or as we get more meals
   )
   newAttire = forms.CharField(
     widget = forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'What will you be wearing?'}),

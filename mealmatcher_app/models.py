@@ -48,7 +48,7 @@ class Meal(models.Model):
 	user1 = models.CharField('Person 1 username', max_length=100, blank=True)
 	user2 = models.CharField('Person 2 username', max_length=100, blank=True)
 
-	users = models.ManyToManyField(UserProfile)
+	users = models.ManyToManyField(UserProfile) 
 
 	# True if there are two users associated with the meal
 	def is_matched(self):

@@ -75,13 +75,18 @@ WSGI_APPLICATION = 'mealmatcher_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-# Uncomment this when testing on local, but using these otehr settings to run on heroku
+### HEROKU DB SETTINGS: Comment this out when running on local, but uncomment when using these settings to run on heroku
 import dj_database_url
 DATABASES = {}
 DATABASES['default'] =  dj_database_url.config(default='postgres://wwzrrmdkhlzakt:rM3Ux-GV8H67N1WGgNGXuOG4tV@ec2-54-163-226-9.compute-1.amazonaws.com:5432/dc8nuaqi4u7f5')
 DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+### end of Heroku server db settings
 
-'''DATABASES = {
+# LOCAL DB SETTINGS: Comment this when running on heroku, but uncomment and use this for running on local
+# Please note: You will need to setup a localhost database at port 5432 with name mealmatcher_db, user mealmatcher_db,
+#               and password thefattestchicken (matching below) in order to run the website locally.
+'''
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'mealmatcher_db',
@@ -90,7 +95,9 @@ DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
         'HOST': 'localhost',
         'PORT': '5432',
     }
-}'''
+}
+'''
+### end of local server db settings
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
