@@ -13,16 +13,29 @@ Andreas Dias,  abdias<br>
 Valerie Morin,  vmorin<br>
 Drew Wallace,  ajpw<br>
 
-<P> The elevator speech description goes here. Temporarily this copy/pasted from the site:
-<br>
-<br>
+<P> Elevator pitch:<br>
+Have you ever gone down to the dining hall but couldn't find any of your friends, so you ended up eating alone? MealMatcher provides the solution to that problem. Our service helps Princeton students find and share meals with new people. Just choose a day, a time, and a dining hall, and we'll anonymously and randomly match you with another student to eat with! We'll send you an email notification as soon as we find someone, along with a reminder an hour before. When it's time for your meal, show up at the dining hall card swipe and meet your meal buddy!
 
-MEET, EAT, REPEAT<br>
-A (visionary) service helping Princeton students share meals with new people. Just choose a day, a time, and a dining hall, and we'll find you a match! We'll send you an email as soon as we find someone, along with a reminder an hour before. When it's time for your meal, show up at the dining hall card swipe and meet your meal buddy!
+<P> You can access a running version of our system through <a href="http://mealmatcher.herokuapp.com/">here</a>. 
+Log in through CAS to see all of the user features. 
+<br> We support meal feedback via Googleforms. The results of the feedback forms can be viewed <a href="https://docs.google.com/spreadsheets/d/1Oyr2R4zVQa9wyamR2UXO6Ybk_x-O6otLtU-kAm09ofE/edit">right here</a>. Username and password for our Google account to access it is 
+<br> username: <strong>princeton.meal.matcher</strong>  
+<br> password: <strong>thefattestchicken</strong>
+<br> We support manual user disabling not with Django admin (that had issues on Heroku but not locally, see report.pdf for more details), but by directly connecting to our database. We strongly do not recommend fiddling with our database directly due to unfamiliarity, but if needed to test disabling users, we suggest:
+<ul>
+	<li>Download PG Commander <a href="https://eggerapps.at/pgcommander/">here</a>. It is free and easy to use and allows manipulation of Postgresql databases, but for Macs only.</li>
+	<li>After downloading and installing, open PG Commander, click <strong>new favorite</strong> at the bottom left, and manually connect to the database with the following settings:</li>
+		host: <strong>ec2-54-163-226-9.compute-1.amazonaws.com</strong>
+		<br>port: <strong>5432</strong>
+		<br>user: <strong>wwzrrmdkhlzakt</strong>
+		<br>password: <strong>rM3Ux-GV8H67N1WGgNGXuOG4tV</strong>
+		<br>database: <strong>dc8nuaqi4u7f5</strong>
+	<li>Locating the userid of the user you wish to disable under the <strong>auth_user</strong> table.</li>
+	<li>Locating the userprofile associated with that user under the <strong>mealmatcher_app_userprofile</strong> table. Then right click and select <strong>Edit Rows</strong>, and change <strong>disabled_status</strong> to <strong>True</strong> to disable the user. Then hit <strong>Save</strong> to lock-in the action. Please note that <strong>disabled_status: True</strong> disables the user, while <strong>disabled_status:False</strong> or  <strong>NULL</strong> both allow the user to function normally.</li>
+</ul>
+Again, we strongly discourage manipulating our database due to unfamiliarity with our models. Feel free to contact me if you want me to manually do it for you from our computer. 
 
-<P> You can access a running version of our system through <a href="http://mealmatcher.herokuapp.com/">here</a>. Log in through CAS to see the features.
-
-<P> If something goes wrong, please contact Kevin Wang at skwang@princeton.edu.
+<P> If something goes wrong, please contact Kevin Wang at skwang@princeton.edu or 858-210-9200.
 
 <blockquote>
 <P> <a href="http://mealmatcher.herokuapp.com/"> MealMatcher home page</a>

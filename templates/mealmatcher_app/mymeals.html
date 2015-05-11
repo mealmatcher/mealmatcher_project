@@ -422,7 +422,7 @@ function GetMealLocStr(mealLocCode) {
                                    meal_time + " at " + time + ", " + date + " at " + location + "?";
         {% if meal.is_matched %}
           var confirmation_message = confirmation_message + " <br> You will be cancelling a matched meal. " + 
-                                      "Repeated cancels on matched meals will result in temporary suspension from joining meals."; 
+                                      "Your match with be sad to never meet you."; 
         {% endif %}
         bootbox.confirm(confirmation_message, function(result) {
             if (result) {
