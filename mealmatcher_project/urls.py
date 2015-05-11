@@ -6,6 +6,6 @@ urlpatterns = patterns('',
     # url(r'^$', 'mealmatcher_project.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    # url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('mealmatcher_app.urls')),
 )
