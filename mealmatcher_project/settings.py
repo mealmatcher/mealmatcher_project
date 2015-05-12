@@ -37,9 +37,9 @@ TEMPLATE_DIRS = (
 SECRET_KEY = 'dxqjz7r(f!+zh#)q=8i^_p54s*b$8+(fz0!imzcq7ip)@9c48t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mealmatcher.herokuapp.com']
 
