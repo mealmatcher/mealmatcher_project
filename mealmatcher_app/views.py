@@ -841,3 +841,7 @@ def site_logout(request):
 	logout(request) # Log user out of our system
 	return HttpResponseRedirect('https://fed.princeton.edu/cas/logout') # Log user out of CAS system
 
+# rendered when user tries to access a bad url-pattern
+def bad_url(request):
+	return HttpResponse('The requested URL ' + str(request.path) + ' was not found on this server.')
+

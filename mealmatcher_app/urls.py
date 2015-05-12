@@ -11,4 +11,5 @@ urlpatterns = patterns('',
 	url(r'^join-meal/$', views.join_meal, name='join-meal'),
 	url(r'^login/$', views.site_login, name='login'),
 	url(r'^logout/$', views.site_logout, name='logout'),
+	url(r'.*', views.bad_url, name='bad-url'),
 	)
