@@ -99,18 +99,19 @@ def edit_attire(request):
 				if mealToEdit.user1 == request.user.username:
 					mealToEdit.attire1 = newAttire
 					mealToEdit.save()
+					
+					if mealToEdit.is_matched():
+						dateinfo = (mealToEdit.date-datetime.timedelta(hours=4)).strftime('%I:%M %p')
+						mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
+						subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
 
-					dateinfo = (mealToEdit.date-datetime.timedelta(hours=4)).strftime('%I:%M %p')
-					mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
-					subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
-
-					datetime_obj_new = mealToEdit.date - datetime.timedelta(hours=1)
-					warn_emailToEdit2 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[user2net + '@princeton.edu'])[0]
-					warn_emailToEdit2.html_message = render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': mealToEdit.date, 'meal': send_meal, 'location': send_location, 'attire': mealToEdit.attire1})
-					warn_emailToEdit2.save()
+						datetime_obj_new = mealToEdit.date - datetime.timedelta(hours=1)
+						warn_emailToEdit2 = Email.objects.filter(scheduled_time=datetime_obj_new, to=[user2net + '@princeton.edu'])[0]
+						warn_emailToEdit2.html_message = render_to_string('mealmatcher_app/warn_email.html', {'name': user2, 'datetime': mealToEdit.date, 'meal': send_meal, 'location': send_location, 'attire': mealToEdit.attire1})
+						warn_emailToEdit2.save()
 
 					#mailer
-					if mealToEdit.is_matched():
+					
 						mail.send(
 							[user2net + '@princeton.edu'],
 							'princeton.meal.matcher@gmail.com',
