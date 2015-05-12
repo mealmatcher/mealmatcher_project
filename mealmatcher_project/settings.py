@@ -37,9 +37,9 @@ TEMPLATE_DIRS = (
 SECRET_KEY = 'dxqjz7r(f!+zh#)q=8i^_p54s*b$8+(fz0!imzcq7ip)@9c48t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -85,18 +85,18 @@ DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 # LOCAL DB SETTINGS: Comment this when running on heroku, but uncomment and use this for running on local
 # Please note: You will need to setup a localhost database at port 5432 with name mealmatcher_db, user mealmatcher_db,
 #               and password thefattestchicken (matching below) in order to run the website locally.
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mealmatcher_db',
-        'USER': 'mealmatcher_user',
-        'PASSWORD': 'thefattestchicken',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-'''
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'mealmatcher_db',
+#         'USER': 'mealmatcher_user',
+#         'PASSWORD': 'thefattestchicken',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
 ### end of local server db settings
 
 # Internationalization
