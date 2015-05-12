@@ -99,8 +99,10 @@ def edit_attire(request):
 				if mealToEdit.user1 == request.user.username:
 					mealToEdit.attire1 = newAttire
 					mealToEdit.save()
-					
+
 					if mealToEdit.is_matched():
+						user2 = User.objects.filter(username=mealToEdit.user2)[0].first_name
+						user2net = mealToEdit.user2
 						dateinfo = (mealToEdit.date-datetime.timedelta(hours=4)).strftime('%I:%M %p')
 						mealinfo = send_meal + ' ' + dateinfo + ' at ' + send_location
 						subjectline = 'Notification About Your Partner\'s Attire for ' + mealinfo
