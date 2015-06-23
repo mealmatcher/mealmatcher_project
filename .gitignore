@@ -7,3 +7,5 @@ mealmatcher_project/.idea/workspace.xml
 *.pyc
 staticfiles
 .idea/.name
+index_submission.html
+settings_complete.py

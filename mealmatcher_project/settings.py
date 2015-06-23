@@ -77,26 +77,26 @@ WSGI_APPLICATION = 'mealmatcher_project.wsgi.application'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 ### HEROKU DB SETTINGS: Comment this out when running on local, but uncomment when using these settings to run on heroku
-import dj_database_url
-DATABASES = {}
-DATABASES['default'] =  dj_database_url.config(default='postgres://wwzrrmdkhlzakt:rM3Ux-GV8H67N1WGgNGXuOG4tV@ec2-54-163-226-9.compute-1.amazonaws.com:5432/dc8nuaqi4u7f5')
-DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+# import dj_database_url
+# DATABASES = {}
+# DATABASES['default'] =  dj_database_url.config(default='postgres://wwzrrmdkhlzakt:rM3Ux-GV8H67N1WGgNGXuOG4tV@ec2-54-163-226-9.compute-1.amazonaws.com:5432/dc8nuaqi4u7f5')
+# DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 ### end of Heroku server db settings
 
 # LOCAL DB SETTINGS: Comment this when running on heroku, but uncomment and use this for running on local
 # Please note: You will need to setup a localhost database at port 5432 with name mealmatcher_db, user mealmatcher_db,
-#               and password thefattestchicken (matching below) in order to run the website locally.
+#               and password (matching below) in order to run the website locally.
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'mealmatcher_db',
-#         'USER': 'mealmatcher_user',
-#         'PASSWORD': 'thefattestchicken',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'mealmatcher_db',
+        'USER': 'mealmatcher_user',
+        'PASSWORD': '*****',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 ### end of local server db settings
 
@@ -123,7 +123,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 #EMAIL_HOST = 'smtp.mandrillapp.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'princeton.meal.matcher@gmail.com'
-EMAIL_HOST_PASSWORD = 'thefattestchicken'
+EMAIL_HOST_PASSWORD = '*****'
 #EMAIL_HOST_PASSWORD = 'i8wsuHLt5PmaXkxB8Ok7qg'
 
 
